@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>مصر للجامعات — AI Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --navy:       #050d1f;
+  --navy2:      #0a1628;
+  --navy3:      #0f1e36;
+  --blue:       #1a6be0;
+  --blue2:      #2a7ff0;
+  --cyan:       #00c8e8;
+  --cyan2:      #00e5ff;
+  --teal:       #0ea57a;
+  --amber:      #e0a51a;
+  --red:        #e05c1a;
+  --text:       #e8f0ff;
+  --text2:      #8ba4cc;
+  --text3:      #4d6a99;
+  --glass:      rgba(255,255,255,0.04);
+  --glass2:     rgba(255,255,255,0.08);
+  --glass3:     rgba(255,255,255,0.12);
+  --border:     rgba(0,180,255,0.12);
+  --border2:    rgba(0,180,255,0.22);
+  --glow:       0 0 40px rgba(26,107,224,0.25);
+  --glow2:      0 0 60px rgba(0,200,232,0.2);
+  --radius:     16px;
+  --radius2:    24px;
+  --font:       'Cairo', system-ui, sans-serif;
+  --mono:       'IBM Plex Mono', monospace;
+  --nav-h:      68px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--navy);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════ CANVAS BG ═══════════════════════ */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ═══════════════════════ TOPBAR — FIXED ═══════════════════════ */
+/*
+  ROOT CAUSE OF ORIGINAL BUG:
+  ─────────────────────────────────────────────────────────────────
+  The HTML has dir="rtl", so flex items flow RIGHT → LEFT.
+  The original `.topbar-nav { margin-right: auto }` means
+  "push the nav's right (= start in RTL) edge away from the logo",
+  which shoves the nav all the way left and strands the badges
+  at the far-left corner — exactly what the screenshot showed.
+
+  FIX:
+  1. Give the logo a fixed, shrunken slot (flex-shrink:0 + max-width).
+  2. Give the nav `flex: 1; min-width: 0` so it fills remaining space
+     and can shrink below its content width without forcing overflow.
+  3. Give the badges `flex-shrink: 0` so they never collapse.
+  4. Remove ALL `margin-*: auto` from the nav.
+  5. Add a hamburger toggle for mobile (≤ 768 px) so nothing is clipped.
+  ─────────────────────────────────────────────────────────────────
+*/
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  z-index: 100;
+  background: rgba(5,13,31,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  /* 
+    Use logical padding so it's direction-aware.
+    padding-inline = padding-right + padding-left in RTL.
+  */
+  padding: 0 20px;
+  gap: 8px;
+  overflow: hidden; /* never let topbar itself overflow */
+}
+
+/* ── Logo ── */
+.topbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;           /* never squish the logo */
+  min-width: 0;             /* allow text to truncate if truly needed */
+}
+
+.logo-icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--blue), var(--cyan));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 0 20px rgba(26,107,224,0.5);
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.logo-sub {
+  font-size: 10px;
+  color: var(--cyan);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* ── Nav wrapper — KEY FIX ── */
+.topbar-nav {
+  flex: 1;              /* fill all remaining space between logo and badges */
+  min-width: 0;         /* allow flex child to shrink below content size    */
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow-x: auto;     /* scroll horizontally on small screens            */
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 4px 6px;
+  /* NO margin-right / margin-left auto here — that was the bug */
+}
+
+.topbar-nav::-webkit-scrollbar { display: none; }
+
+/* Fade edges to hint at scrollability */
+.topbar-nav {
+  -webkit-mask-image: linear-gradient(
+    to left,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to left,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+}
+
+.tnav-btn {
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;       /* nav items must not shrink — allow scroll instead */
+}
+
+.tnav-btn .nav-num {
+  font-size: 10px;
+  color: var(--cyan);
+  font-weight: 700;
+  background: rgba(0,200,232,0.12);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.tnav-btn:hover {
+  color: var(--text);
+  background: var(--glass2);
+}
+
+.tnav-btn.active {
+  color: var(--cyan2);
+  background: rgba(0,200,232,0.10);
+  border: 1px solid rgba(0,200,232,0.25);
+}
+
+/* ── Badges ── */
+.topbar-badges {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;       /* never squish the badges */
+  align-items: center;
+}
+
+/* ── Mobile hamburger (hidden on desktop) ── */
+.hamburger {
+  display: none;
+  background: var(--glass2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 7px 10px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 18px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* ── Mobile drawer overlay ── */
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(5,13,31,0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  flex-direction: column;
+  padding: 24px 20px;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.mobile-nav-overlay.open {
+  display: flex;
+}
+
+.mobile-nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mobile-nav-close {
+  background: var(--glass2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.mobile-tnav-btn {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 14px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-tnav-btn:hover,
+.mobile-tnav-btn.active {
+  color: var(--cyan2);
+  background: rgba(0,200,232,0.10);
+  border-color: rgba(0,200,232,0.25);
+}
+
+/* ═══════════════════════ MAIN LAYOUT ═══════════════════════ */
+.app-shell {
+  padding-top: var(--nav-h);
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.page { display: none; animation: fadeSlide .35s ease; }
+.page.active { display: block; }
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════ HERO SECTION ═══════════════════════ */
+.hero {
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(26,107,224,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-kicker {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-kicker::before, .hero-kicker::after {
+  content: '';
+  display: block;
+  height: 1px;
+  width: 40px;
+  background: linear-gradient(to right, transparent, var(--cyan));
+}
+.hero-kicker::after { transform: scaleX(-1); }
+
+.hero-title {
+  font-size: clamp(36px, 5vw, 72px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #fff 30%, var(--cyan) 70%, var(--blue2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-badges {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 48px;
+}
+
+/* ═══════════════════════ BUTTONS ═══════════════════════ */
+.btn-primary {
+  background: linear-gradient(135deg, var(--blue), var(--cyan));
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s;
+  box-shadow: 0 4px 30px rgba(26,107,224,0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--cyan), var(--blue2));
+  opacity: 0;
+  transition: opacity .25s;
+}
+
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(26,107,224,0.6); }
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary span { position: relative; }
+
+.btn-ghost {
+  background: var(--glass2);
+  color: var(--text);
+  border: 1px solid var(--border2);
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s;
+  backdrop-filter: blur(10px);
+}
+
+.btn-ghost:hover {
+  background: var(--glass3);
+  border-color: rgba(0,200,232,0.4);
+  color: var(--cyan2);
+}
+
+/* ═══════════════════════ SECTION ═══════════════════════ */
+.section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 32px;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to left, transparent, var(--border2));
+}
+
+.section-desc {
+  color: var(--text2);
+  font-size: 15px;
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+/* ═══════════════════════ GLASS CARD ═══════════════════════ */
+.card3d {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius2);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+  cursor: default;
+}
+
+.card3d::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
+}
+
+.card3d::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(0,200,232,0.06) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity .3s;
+  pointer-events: none;
+}
+
+.card3d:hover {
+  border-color: var(--border2);
+  transform: translateY(-4px) perspective(800px) rotateX(2deg);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), var(--glow);
+}
+
+.card3d:hover::after { opacity: 1; }
+
+.card-glow-accent { box-shadow: inset 0 0 0 1px rgba(26,107,224,0.3), 0 0 40px rgba(26,107,224,0.1); }
+.card-glow-teal   { box-shadow: inset 0 0 0 1px rgba(14,165,122,0.3), 0 0 40px rgba(14,165,122,0.1); }
+.card-glow-amber  { box-shadow: inset 0 0 0 1px rgba(224,165,26,0.3), 0 0 40px rgba(224,165,26,0.1); }
+.card-glow-red    { box-shadow: inset 0 0 0 1px rgba(224,92,26,0.3), 0 0 40px rgba(224,92,26,0.1); }
+.card-glow-purple { box-shadow: inset 0 0 0 1px rgba(130,80,220,0.3), 0 0 40px rgba(130,80,220,0.1); }
+.card-glow-cyan   { box-shadow: inset 0 0 0 1px rgba(0,200,232,0.3), 0 0 40px rgba(0,200,232,0.1); }
+.card-glow-blue   { box-shadow: inset 0 0 0 1px rgba(26,107,224,0.3), 0 0 40px rgba(26,107,224,0.1); }
+
+/* ═══════════════════════ GRID LAYOUTS ═══════════════════════ */
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.grid-5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+
+/* ═══════════════════════ BADGES ═══════════════════════ */
+.badge3d {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.b-blue   { background: rgba(26,107,224,0.15);  color: #60a8ff; border: 1px solid rgba(26,107,224,0.3); }
+.b-cyan   { background: rgba(0,200,232,0.12);   color: #00e5ff; border: 1px solid rgba(0,200,232,0.3); }
+.b-teal   { background: rgba(14,165,122,0.12);  color: #3ed8a8; border: 1px solid rgba(14,165,122,0.3); }
+.b-amber  { background: rgba(224,165,26,0.12);  color: #f5c842; border: 1px solid rgba(224,165,26,0.3); }
+.b-red    { background: rgba(224,92,26,0.12);   color: #ff8a50; border: 1px solid rgba(224,92,26,0.3); }
+.b-purple { background: rgba(130,80,220,0.12);  color: #b89eff; border: 1px solid rgba(130,80,220,0.3); }
+.b-green  { background: rgba(60,200,80,0.12);   color: #60e880; border: 1px solid rgba(60,200,80,0.3); }
+
+/* ═══════════════════════ STAT CARDS ═══════════════════════ */
+.stat-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: all .25s;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+}
+
+.stat-card.s-blue::before  { background: linear-gradient(to right, var(--blue), var(--cyan)); }
+.stat-card.s-teal::before  { background: linear-gradient(to right, var(--teal), #00d4a8); }
+.stat-card.s-amber::before { background: linear-gradient(to right, var(--amber), #ffca28); }
+.stat-card.s-red::before   { background: linear-gradient(to right, var(--red), #ff5722); }
+
+.stat-card:hover { transform: translateY(-3px); border-color: var(--border2); }
+
+.stat-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, #fff, var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+/* ═══════════════════════ CARD CONTENT ═══════════════════════ */
+.card-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  margin-bottom: 16px;
+}
+
+.ci-blue   { background: rgba(26,107,224,0.15); }
+.ci-teal   { background: rgba(14,165,122,0.15); }
+.ci-amber  { background: rgba(224,165,26,0.15); }
+.ci-red    { background: rgba(224,92,26,0.15); }
+.ci-purple { background: rgba(130,80,220,0.15); }
+.ci-cyan   { background: rgba(0,200,232,0.15); }
+
+.card-h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.card-p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text2);
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+/* ═══════════════════════ SCREEN CARDS ═══════════════════════ */
+.screen-card3d {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.screen-card3d::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--blue), var(--cyan));
+  opacity: 0;
+  transition: opacity .25s;
+}
+
+.screen-card3d:hover {
+  border-color: var(--border2);
+  transform: translateX(-4px);
+}
+
+.screen-card3d:hover::before { opacity: 1; }
+
+.sc-num {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--blue);
+  opacity: 0.3;
+  font-family: var(--mono);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.sc-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.sc-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.65;
+}
+
+.sc-prompt {
+  background: rgba(26,107,224,0.08);
+  border: 1px solid rgba(26,107,224,0.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.7;
+  font-family: var(--font);
+}
+
+.sc-prompt b { color: var(--cyan); }
+
+/* ═══════════════════════ PHASE TIMELINE ═══════════════════════ */
+.phase3d {
+  position: relative;
+  padding: 28px 28px 28px 0;
+  margin-bottom: 20px;
+}
+
+.phase3d::before {
+  content: '';
+  position: absolute;
+  right: 0; top: 0;
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+}
+
+.phase3d.ph1::before { background: linear-gradient(to bottom, var(--blue), var(--cyan)); }
+.phase3d.ph2::before { background: linear-gradient(to bottom, var(--teal), #00d4a8); }
+.phase3d.ph3::before { background: linear-gradient(to bottom, var(--red), #ff5722); }
+.phase3d.ph4::before { background: linear-gradient(to bottom, var(--amber), #ffca28); }
+
+.phase-header {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.phase-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tl-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tl-row:last-child { border-bottom: none; }
+
+.week-chip {
+  min-width: 90px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mono);
+  padding: 5px 10px;
+  border-radius: 8px;
+  text-align: center;
+  background: var(--glass2);
+  border: 1px solid var(--border);
+  color: var(--cyan);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tl-text {
+  font-size: 13.5px;
+  color: var(--text2);
+  line-height: 1.65;
+}
+
+/* ═══════════════════════ DB TABLES ═══════════════════════ */
+.db-block {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.db-head {
+  background: rgba(26,107,224,0.1);
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.db-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.db-table td {
+  padding: 8px 20px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+}
+
+.db-table tr:last-child td { border-bottom: none; }
+.db-table td:first-child { font-family: var(--mono); font-size: 12px; color: var(--text); font-weight: 600; }
+.db-table td.pk { color: var(--cyan) !important; }
+.db-table td.fk { color: var(--teal) !important; }
+
+/* ═══════════════════════ API ROWS ═══════════════════════ */
+.api-row3d {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all .2s;
+}
+
+.api-row3d:last-child { border-bottom: none; }
+.api-row3d:hover { padding-right: 6px; }
+
+.method-chip {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  min-width: 52px;
+  text-align: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.m-get  { background: rgba(14,165,122,0.15); color: #3ed8a8; border: 1px solid rgba(14,165,122,0.3); }
+.m-post { background: rgba(26,107,224,0.15); color: #60a8ff; border: 1px solid rgba(26,107,224,0.3); }
+.m-put  { background: rgba(224,165,26,0.15); color: #f5c842; border: 1px solid rgba(224,165,26,0.3); }
+.m-del  { background: rgba(224,92,26,0.15);  color: #ff8a50; border: 1px solid rgba(224,92,26,0.3); }
+
+.ep-code {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.ep-desc {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+/* ═══════════════════════ AI CARDS ═══════════════════════ */
+.ai-block {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius2);
+  padding: 24px 28px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all .3s;
+}
+
+.ai-block::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(26,107,224,0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.ai-block:hover {
+  border-color: var(--border2);
+  box-shadow: var(--glow);
+}
+
+.ai-block-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress3d {
+  height: 6px;
+  background: var(--glass2);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 14px;
+}
+
+.progress-fill3d {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(to left, var(--blue), var(--cyan));
+  position: relative;
+}
+
+.progress-fill3d::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40px; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-40px); }
+  to   { transform: translateX(100%); }
+}
+
+/* ═══════════════════════ COST TABLE ═══════════════════════ */
+.cost-row3d {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--text2);
+  transition: all .2s;
+}
+
+.cost-row3d:hover { padding-right: 6px; color: var(--text); }
+.cost-row3d:last-child { border-bottom: none; font-weight: 700; color: var(--text); }
+
+/* ═══════════════════════ DASHBOARD METRICS ═══════════════════════ */
+.metric3d {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  transition: all .25s;
+}
+
+.metric3d:hover { transform: scale(1.03); border-color: var(--border2); }
+
+.metric-val3d {
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #fff, var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.metric-label3d {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* ═══════════════════════ MONO CODE ═══════════════════════ */
+.code-block {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-top: 8px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  color: var(--text2);
+  overflow-x: auto;
+}
+
+/* ═══════════════════════ COLOR SWATCHES ═══════════════════════ */
+.swatch {
+  width: 60px; height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: flex-end;
+  padding: 4px 5px;
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: transform .2s;
+}
+
+.swatch:hover { transform: scale(1.1); }
+
+/* ═══════════════════════ UX FLOW ═══════════════════════ */
+.flow-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all .2s;
+}
+
+.flow-step:hover { padding-right: 8px; }
+.flow-step:last-child { border-bottom: none; }
+
+.flow-num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--cyan));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px rgba(26,107,224,0.4);
+}
+
+.flow-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.flow-content p  { font-size: 13px; color: var(--text2); line-height: 1.65; }
+
+/* ═══════════════════════ SCALING PHASES ═══════════════════════ */
+.scale-phase {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius2);
+  padding: 24px 28px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.scale-phase .year-label {
+  font-size: 28px;
+  font-weight: 900;
+  opacity: 0.06;
+  position: absolute;
+  left: 20px;
+  bottom: 10px;
+  font-family: var(--mono);
+  pointer-events: none;
+}
+
+/* ═══════════════════════ MILESTONE ═══════════════════════ */
+.milestone-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.milestone-row:last-child { border-bottom: none; }
+
+.m-month {
+  min-width: 80px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mono);
+  padding: 5px 10px;
+  border-radius: 8px;
+  text-align: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.m-text { font-size: 13.5px; color: var(--text2); line-height: 1.6; }
+
+/* ═══════════════════════ ROLE BADGE ═══════════════════════ */
+.role-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all .25s;
+}
+
+.role-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+
+/* ═══════════════════════ FOOTER ═══════════════════════ */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  color: var(--text3);
+  font-size: 13px;
+}
+
+/* ═══════════════════════ SCROLLBAR ═══════════════════════ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,200,232,0.4); }
+
+/* ═══════════════════════ TECH STACK PILL ═══════════════════════ */
+.tech-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--glass2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--text2);
+  font-family: var(--mono);
+  transition: all .2s;
+}
+
+.tech-pill:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* ═══════════════════════ DIVIDER ═══════════════════════ */
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border2), transparent);
+  margin: 40px 0;
+}
+
+/* ═══════════════════════ CALLOUT ═══════════════════════ */
+.callout {
+  background: rgba(26,107,224,0.07);
+  border: 1px solid rgba(26,107,224,0.2);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.7;
+}
+
+.callout strong { color: var(--cyan); }
+
+/* ═══════════════════════ RESPONSIVE ═══════════════════════ */
+
+/* Tablet: hide badges, keep nav scrollable */
+@media (max-width: 1024px) {
+  .topbar-badges { display: none; }
+}
+
+/* Mobile: show hamburger, hide desktop nav */
+@media (max-width: 768px) {
+  .topbar { padding: 0 14px; gap: 10px; }
+  .topbar-nav { display: none; }          /* hide desktop nav */
+  .topbar-badges { display: none; }
+  .hamburger { display: flex; align-items: center; justify-content: center; }
+
+  .section { padding: 40px 16px; }
+  .hero { padding: 60px 16px; }
+  .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
+
+  .logo-text { font-size: 14px; }
+  .logo-sub  { font-size: 9px; }
+  .logo-icon { width: 32px; height: 32px; font-size: 15px; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 32px; }
+  .hero-sub   { font-size: 15px; }
+  .btn-primary, .btn-ghost { padding: 12px 20px; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- ══════════════ TOPBAR (FIXED) ══════════════
+     Layout in RTL (right → left):
+     [Logo]  [←────── Nav (flex:1, scrollable) ──────→]  [Badges]  [Hamburger on mobile]
+     All three sections are flex children with proper shrink rules.
+     No margin-*:auto anywhere — that was the original bug.
+-->
+<header class="topbar">
+
+  <!-- 1. Logo — always RIGHT in RTL, flex-shrink:0 -->
+  <a class="topbar-logo" href="#" onclick="showPage('vision');return false;">
+    <div class="logo-icon">🎓</div>
+    <div>
+      <div class="logo-text">مصر للجامعات</div>
+      <div class="logo-sub">AI PLATFORM</div>
+    </div>
+  </a>
+
+  <!-- 2. Desktop Nav — flex:1, scrollable, no margin:auto -->
+  <nav class="topbar-nav" id="main-nav">
+    <button class="tnav-btn active" onclick="showPage('vision')"><span class="nav-num">①</span>Vision</button>
+    <button class="tnav-btn" onclick="showPage('screens')"><span class="nav-num">②</span>Screens</button>
+    <button class="tnav-btn" onclick="showPage('ux')"><span class="nav-num">③</span>UX Flow</button>
+    <button class="tnav-btn" onclick="showPage('frontend')"><span class="nav-num">④</span>Frontend</button>
+    <button class="tnav-btn" onclick="showPage('backend')"><span class="nav-num">⑤</span>Backend</button>
+    <button class="tnav-btn" onclick="showPage('database')"><span class="nav-num">⑥</span>Database</button>
+    <button class="tnav-btn" onclick="showPage('ai')"><span class="nav-num">⑦</span>AI System</button>
+    <button class="tnav-btn" onclick="showPage('dashboard')"><span class="nav-num">⑧</span>Dashboard</button>
+    <button class="tnav-btn" onclick="showPage('roadmap')"><span class="nav-num">⑨</span>Roadmap</button>
+    <button class="tnav-btn" onclick="showPage('scaling')"><span class="nav-num">⑩</span>Scaling</button>
+  </nav>
+
+  <!-- 3. Badges — flex-shrink:0, hidden below 1024px -->
+  <div class="topbar-badges">
+    <span class="badge3d b-blue">v1.0 Startup-Ready</span>
+    <span class="badge3d b-teal">25 Screens</span>
+    <span class="badge3d b-cyan">AI-Powered</span>
+  </div>
+
+  <!-- 4. Hamburger — visible only on mobile (≤768px) -->
+  <button class="hamburger" onclick="openMobileNav()" aria-label="فتح القائمة">☰</button>
+
+</header>
+
+<!-- ══════════════ MOBILE NAV OVERLAY ══════════════ -->
+<div class="mobile-nav-overlay" id="mobile-nav">
+  <div class="mobile-nav-header">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="logo-icon">🎓</div>
+      <div>
+        <div class="logo-text">مصر للجامعات</div>
+        <div class="logo-sub">AI PLATFORM</div>
+      </div>
+    </div>
+    <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+  </div>
+
+  <button class="mobile-tnav-btn active" onclick="showPage('vision');closeMobileNav()"><span class="nav-num">①</span>Vision</button>
+  <button class="mobile-tnav-btn" onclick="showPage('screens');closeMobileNav()"><span class="nav-num">②</span>Screens</button>
+  <button class="mobile-tnav-btn" onclick="showPage('ux');closeMobileNav()"><span class="nav-num">③</span>UX Flow</button>
+  <button class="mobile-tnav-btn" onclick="showPage('frontend');closeMobileNav()"><span class="nav-num">④</span>Frontend</button>
+  <button class="mobile-tnav-btn" onclick="showPage('backend');closeMobileNav()"><span class="nav-num">⑤</span>Backend</button>
+  <button class="mobile-tnav-btn" onclick="showPage('database');closeMobileNav()"><span class="nav-num">⑥</span>Database</button>
+  <button class="mobile-tnav-btn" onclick="showPage('ai');closeMobileNav()"><span class="nav-num">⑦</span>AI System</button>
+  <button class="mobile-tnav-btn" onclick="showPage('dashboard');closeMobileNav()"><span class="nav-num">⑧</span>Dashboard</button>
+  <button class="mobile-tnav-btn" onclick="showPage('roadmap');closeMobileNav()"><span class="nav-num">⑨</span>Roadmap</button>
+  <button class="mobile-tnav-btn" onclick="showPage('scaling');closeMobileNav()"><span class="nav-num">⑩</span>Scaling</button>
+
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;">
+    <span class="badge3d b-blue">v1.0 Startup-Ready</span>
+    <span class="badge3d b-teal">25 Screens</span>
+    <span class="badge3d b-cyan">AI-Powered</span>
+  </div>
+</div>
+
+<main class="app-shell">
+
+<!-- ══════════════ PAGE 1: VISION ══════════════ -->
+<div id="page-vision" class="page active">
+
+  <div class="hero">
+    <div class="hero-kicker">Egypt College AI Platform</div>
+    <h1 class="hero-title">اختار مستقبلك بذكاء</h1>
+    <p class="hero-sub">منصة ذكاء اصطناعي متكاملة تحلل ميول الطالب وتقترح الكلية والتخصص والجامعة المناسبة مع Roadmap واضح للمسار المهني</p>
+    <div class="hero-ctas">
+      <button class="btn-primary"><span>ابدأ رحلتك الآن</span></button>
+      <button class="btn-ghost">استعرض الخطة</button>
+    </div>
+    <div class="hero-badges">
+      <span class="badge3d b-blue">700K+ طالب سنوياً</span>
+      <span class="badge3d b-teal">500+ كلية في قاعدة البيانات</span>
+      <span class="badge3d b-purple">AI توصيات مخصصة</span>
+      <span class="badge3d b-amber">MENA Expansion Ready</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">🎯 Product Vision</h2>
+    <p class="section-desc">المشكلة، الحل، والسوق المستهدف</p>
+
+    <div class="grid-3" style="margin-bottom:40px;">
+      <div class="card3d card-glow-red">
+        <div class="card-icon ci-red">⚡</div>
+        <div class="badge3d b-red" style="margin-bottom:12px;">Problem</div>
+        <h3 class="card-h3">المشكلة</h3>
+        <p class="card-p">أكتر من 700,000 طالب ثانوية عامة كل سنة في مصر بيتخبطوا في اختيار الكلية بدون توجيه حقيقي يعتمد على بياناتهم الشخصية.</p>
+      </div>
+      <div class="card3d card-glow-teal">
+        <div class="card-icon ci-teal">🚀</div>
+        <div class="badge3d b-teal" style="margin-bottom:12px;">Solution</div>
+        <h3 class="card-h3">الحل</h3>
+        <p class="card-p">منصة ذكاء اصطناعي تحلل ميول الطالب، درجاته، واهتماماته وتقترح الكلية والتخصص والجامعة المناسبة مع Roadmap واضح.</p>
+      </div>
+      <div class="card3d card-glow-purple">
+        <div class="card-icon ci-purple">🎯</div>
+        <div class="badge3d b-purple" style="margin-bottom:12px;">Target Market</div>
+        <h3 class="card-h3">السوق المستهدف</h3>
+        <p class="card-p">طلاب الثانوية العامة وأولياء الأمور في مصر — السوق الفوري 700K+ طالب سنوياً، قابل للتوسع لـ MENA.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">💡 Core Value Propositions</h2>
+    <p class="section-desc">ما الذي يجعل المنصة فريدة؟</p>
+
+    <div class="grid-3">
+      <div class="card3d">
+        <div class="card-icon ci-blue">🤖</div>
+        <div class="badge3d b-blue" style="margin-bottom:10px;">AI Matching</div>
+        <p class="card-p">توصيات مخصصة لكل طالب بناءً على Quiz + بيانات سلوكية في الوقت الفعلي</p>
+      </div>
+      <div class="card3d">
+        <div class="card-icon ci-teal">📊</div>
+        <div class="badge3d b-teal" style="margin-bottom:10px;">Real Data</div>
+        <p class="card-p">مصاريف حقيقية + فرص عمل + متوسط رواتب في السوق المصري محدثة ربع سنوياً</p>
+      </div>
+      <div class="card3d">
+        <div class="card-icon ci-amber">👨‍👩‍👧</div>
+        <div class="badge3d b-amber" style="margin-bottom:10px;">Parent Layer</div>
+        <p class="card-p">Dashboard لولي الأمر يتابع فيه تقدم ابنه واهتماماته ويشارك في القرار</p>
+      </div>
+      <div class="card3d">
+        <div class="card-icon ci-purple">🗺️</div>
+        <div class="badge3d b-purple" style="margin-bottom:10px;">Career Path</div>
+        <p class="card-p">خريطة مسار مهني واضحة من أول يوم في الكلية لحد سوق العمل الفعلي</p>
+      </div>
+      <div class="card3d">
+        <div class="card-icon ci-cyan">💬</div>
+        <div class="badge3d b-cyan" style="margin-bottom:10px;">AI Chatbot</div>
+        <p class="card-p">مساعد ذكي 24/7 يجاوب على كل أسئلة الطالب بالعربي بدقة واحترافية</p>
+      </div>
+      <div class="card3d">
+        <div class="card-icon ci-red">💰</div>
+        <div class="badge3d b-red" style="margin-bottom:10px;">Salary Predictor</div>
+        <p class="card-p">توقعات راتب بناءً على التخصص والجامعة وسنوات الخبرة باستخدام ML</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2 class="section-title">🎨 Design System</h2>
+    <p class="section-desc">الهوية البصرية للمنصة</p>
+
+    <div class="card3d" style="margin-bottom:20px;">
+      <h3 class="card-h3" style="margin-bottom:16px;">Color Palette</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div class="swatch" style="background:#1a6be0;">Primary</div>
+        <div class="swatch" style="background:#00c8e8;">Cyan</div>
+        <div class="swatch" style="background:#0ea57a;">Teal</div>
+        <div class="swatch" style="background:#e0a51a;">Amber</div>
+        <div class="swatch" style="background:#e05c1a;">Orange</div>
+        <div class="swatch" style="background:#8250dc;">Purple</div>
+        <div class="swatch" style="background:#050d1f;">Navy</div>
+        <div class="swatch" style="background:#1e2d4a;">Surface</div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card3d">
+        <h3 class="card-h3">Typography</h3>
+        <p class="card-p">Cairo — خط عربي احترافي للعناوين والنصوص. IBM Plex Mono — للكود والأرقام التقنية.</p>
+        <div class="tag-row">
+          <span class="tech-pill">Cairo 900 — Headlines</span>
+          <span class="tech-pill">Cairo 400 — Body</span>
+          <span class="tech-pill">IBM Plex Mono — Code</span>
+        </div>
+      </div>
+      <div class="card3d">
+        <h3 class="card-h3">Spacing Scale</h3>
+        <p class="card-p">4px base grid — 4, 8, 12, 16, 24, 32, 48, 64, 80px steps للتناسق الكامل في التصميم</p>
+      </div>
+      <div class="card3d">
+        <h3 class="card-h3">Border Radius</h3>
+        <p class="card-p">8px — components صغيرة. 16px — cards. 24px — panels كبيرة. 9999px — pills وbadges</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 2: SCREENS ══════════════ -->
+<div id="page-screens" class="page">
+  <div class="section">
+    <h2 class="section-title">📱 Screens & Prompts</h2>
+    <p class="section-desc">25 شاشة مصممة بالكامل مع AI prompts لكل شاشة</p>
+
+    <h3 style="font-size:17px;font-weight:700;margin-bottom:16px;color:var(--cyan);">Auth Flow (Screens 1–5)</h3>
+    <div class="grid-2" style="margin-bottom:32px;">
+      <div class="screen-card3d"><div class="sc-num">01</div><div class="sc-title">Splash / Onboarding</div><div class="sc-desc">شاشة البداية مع 3 slides توضيحية عن المنصة وزرار "ابدأ الآن" و"سجل دخول"</div><div class="sc-prompt"><b>Prompt:</b> Design an onboarding screen for an Egyptian college guidance app. Show animated illustrations of students choosing their future. Arabic RTL. Dark navy background with blue gradient accents. 3 swipeable slides.</div></div>
+      <div class="screen-card3d"><div class="sc-num">02</div><div class="sc-title">Registration</div><div class="sc-desc">اسم، رقم موبايل مصري (+20)، محافظة، نوع الحساب (طالب / ولي أمر)، كلمة السر</div><div class="sc-prompt"><b>Prompt:</b> Create a clean registration form for Egyptian students. Include fields: name, Egyptian phone (+20), governorate dropdown (27 محافظة), account type (student/parent), password. Glassmorphism style.</div></div>
+      <div class="screen-card3d"><div class="sc-num">03</div><div class="sc-title">OTP Verification</div><div class="sc-desc">6 خانات OTP + countdown timer 60s + resend button مع animation</div><div class="sc-prompt"><b>Prompt:</b> OTP verification screen with 6 input boxes, 60-second countdown timer, resend button. Auto-focus next box. Success animation on correct code. Arabic instructions.</div></div>
+      <div class="screen-card3d"><div class="sc-num">04</div><div class="sc-title">Student Profile Setup</div><div class="sc-desc">Section (علمي/أدبي/تجاري)، درجة الثانوية، المحافظة، الاهتمامات (multi-select)</div><div class="sc-prompt"><b>Prompt:</b> Student profile completion screen. Section selector (علمي/أدبي/تجاري), score input (0-410), multi-select interests chips. Progress bar showing completion %. Modern card UI.</div></div>
+      <div class="screen-card3d"><div class="sc-num">05</div><div class="sc-title">Login</div><div class="sc-desc">Phone + Password login مع "نسيت كلمة السر؟" و Social login (Google)</div><div class="sc-prompt"><b>Prompt:</b> Login screen with phone number and password fields. Forgot password link. Google OAuth button. Biometric login toggle. Remember me checkbox. Arabic RTL layout.</div></div>
+    </div>
+
+    <h3 style="font-size:17px;font-weight:700;margin-bottom:16px;color:var(--teal);">Core Platform (Screens 6–15)</h3>
+    <div class="grid-2" style="margin-bottom:32px;">
+      <div class="screen-card3d"><div class="sc-num">06</div><div class="sc-title">Home Dashboard</div><div class="sc-desc">Greeting + AI recommendation card + Quick actions + Trending colleges section</div><div class="sc-prompt"><b>Prompt:</b> Student home dashboard. Personalized greeting with name. Top 3 AI-recommended colleges as horizontal scrollable cards showing match %. Quick action buttons: Take Quiz, Find Colleges, Saved, Chat AI.</div></div>
+      <div class="screen-card3d"><div class="sc-num">07</div><div class="sc-title">University Finder</div><div class="sc-desc">Filter بالمحافظة، النوع (حكومي/خاص/أهلي)، الدرجة، المصاريف + Sort + Search bar</div><div class="sc-prompt"><b>Prompt:</b> College search and filter screen. Top search bar. Filter chips: governorate, type (gov/private/national), min score range, annual fees range. Results as cards with match %, fees, employment rate.</div></div>
+      <div class="screen-card3d"><div class="sc-num">08</div><div class="sc-title">College Details</div><div class="sc-desc">معلومات شاملة: مصاريف، درجة القبول، نسبة التوظيف، التخصصات، آراء الطلاب</div><div class="sc-prompt"><b>Prompt:</b> College detail page with hero image, key stats (fees, min score, employment rate, avg salary), specializations list, admission steps, student reviews, similar colleges. Save button with heart animation.</div></div>
+      <div class="screen-card3d"><div class="sc-num">09</div><div class="sc-title">AI Quiz</div><div class="sc-desc">15 سؤال لتحديد الشخصية والميول مع Progress bar وanimated transitions</div><div class="sc-prompt"><b>Prompt:</b> 15-question personality and interest quiz. One question per screen. 4 answer options as cards with icons. Animated progress bar. Previous/Next navigation. Estimated time remaining.</div></div>
+      <div class="screen-card3d"><div class="sc-num">10</div><div class="sc-title">Quiz Results</div><div class="sc-desc">نوع الشخصية + Top 10 توصيات كليات مرتبة بـ match score مع explanation</div><div class="sc-prompt"><b>Prompt:</b> Quiz results screen. Personality type reveal with animation. Top 10 college recommendations as ranked list with match percentage bars. Each recommendation shows why it matched.</div></div>
+      <div class="screen-card3d"><div class="sc-num">11</div><div class="sc-title">Compare Colleges</div><div class="sc-desc">مقارنة 2-3 كليات جنب بعض في table تفاعلية مع highlight للأفضل</div><div class="sc-prompt"><b>Prompt:</b> Side-by-side college comparison table. 2-3 colleges in columns. Rows: fees, min score, employment %, avg salary, location, specializations count. Highlight winner in each row with green accent.</div></div>
+    </div>
+
+    <h3 style="font-size:17px;font-weight:700;margin-bottom:16px;color:var(--amber);">AI Features (Screens 16–22)</h3>
+    <div class="grid-2" style="margin-bottom:32px;">
+      <div class="screen-card3d"><div class="sc-num">16</div><div class="sc-title">AI Chatbot</div><div class="sc-desc">chat interface كامل بالعربي مع streaming responses، suggested questions، وcollege cards</div><div class="sc-prompt"><b>Prompt:</b> AI chatbot for Egyptian college guidance. Chat bubbles RTL Arabic. Streaming text animation. Suggested questions chips at bottom. College recommendation cards appear inline in chat.</div></div>
+      <div class="screen-card3d"><div class="sc-num">17</div><div class="sc-title">Salary Predictor</div><div class="sc-desc">اختر التخصص والجامعة وسنوات الخبرة → animated chart للراتب المتوقع</div><div class="sc-prompt"><b>Prompt:</b> Salary prediction tool. Input: specialization picker, university type, years of experience slider (0-20). Output: animated bar chart showing min/median/max salary in EGP.</div></div>
+      <div class="screen-card3d"><div class="sc-num">18</div><div class="sc-title">Career Path</div><div class="sc-desc">Timeline مرئي للمسار المهني: الكلية → التدريب → الوظيفة → النمو</div><div class="sc-prompt"><b>Prompt:</b> Visual career roadmap timeline. Stages: college years → internship → first job → career growth → senior roles. Each stage has expected skills, salary range, timeline.</div></div>
+      <div class="screen-card3d"><div class="sc-num">19</div><div class="sc-title">Learning Roadmap</div><div class="sc-desc">خريطة طريق بالكورسات والمهارات المطلوبة لكل تخصص مع links للموارد</div><div class="sc-prompt"><b>Prompt:</b> Learning roadmap for chosen specialization. Skills tree visualization. Recommended online courses with platform logos. Progress tracking. Bookmark courses.</div></div>
+      <div class="screen-card3d"><div class="sc-num">20</div><div class="sc-title">Alternative Recommendations</div><div class="sc-desc">لو الطالب مش واصل للدرجة: بدائل مقترحة بناءً على similarity score</div><div class="sc-prompt"><b>Prompt:</b> Alternative colleges screen triggered when student score is below minimum. Show 5 similar alternatives with similarity score. Explain why each is a good alternative. Encouraging tone.</div></div>
+      <div class="screen-card3d"><div class="sc-num">21</div><div class="sc-title">Scholarships</div><div class="sc-desc">قاعدة بيانات المنح الدراسية مع eligibility checker ذكي</div><div class="sc-prompt"><b>Prompt:</b> Scholarships database with AI eligibility checker. Filter by: score range, financial need, specialization, location. Each scholarship card: amount, deadline, requirements. Eligibility match percentage.</div></div>
+    </div>
+
+    <h3 style="font-size:17px;font-weight:700;margin-bottom:16px;color:var(--red);">Parent & Admin (Screens 23–25)</h3>
+    <div class="grid-2">
+      <div class="screen-card3d"><div class="sc-num">23</div><div class="sc-title">Parent Dashboard</div><div class="sc-desc">متابعة نشاط الأبناء، الكليات المحفوظة، نتائج Quiz، والتوصيات</div><div class="sc-prompt"><b>Prompt:</b> Parent dashboard showing linked students' activity. Child's quiz results, saved colleges, time spent. Insights: most viewed colleges, personality type. Notification settings.</div></div>
+      <div class="screen-card3d"><div class="sc-num">24</div><div class="sc-title">Admin Analytics</div><div class="sc-desc">لوحة تحكم كاملة: مستخدمين، أداء AI، بيانات جغرافية، revenue</div><div class="sc-prompt"><b>Prompt:</b> Admin dashboard with KPI cards (total users, DAU, quiz completions, revenue). Charts: user growth line chart, college interest pie, Egypt map heatmap, AI chatbot satisfaction score.</div></div>
+      <div class="screen-card3d"><div class="sc-num">25</div><div class="sc-title">Admission Steps</div><div class="sc-desc">دليل خطوة بخطوة لإجراءات التقديم لكل كلية مع checklist تفاعلي</div><div class="sc-prompt"><b>Prompt:</b> Step-by-step admission guide for specific college. Interactive checklist with document requirements. Important dates calendar. Official links. Progress tracker showing how many steps completed.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 3: UX FLOW ══════════════ -->
+<div id="page-ux" class="page">
+  <div class="section">
+    <h2 class="section-title">🔄 UX Flow & Navigation</h2>
+    <p class="section-desc">رحلة المستخدم من أول لحظة لحد الاختيار النهائي</p>
+    <div class="grid-2" style="margin-bottom:40px;">
+      <div class="card3d">
+        <h3 class="card-h3" style="margin-bottom:20px;">Student Journey</h3>
+        <div class="flow-step"><div class="flow-num">1</div><div class="flow-content"><h4>Onboarding & Registration</h4><p>تسجيل حساب جديد → OTP verification → إدخال البيانات الأساسية</p></div></div>
+        <div class="flow-step"><div class="flow-num">2</div><div class="flow-content"><h4>AI Quiz</h4><p>15 سؤال لتحديد الشخصية والميول → نتائج فورية مع Top 10 توصيات مخصصة</p></div></div>
+        <div class="flow-step"><div class="flow-num">3</div><div class="flow-content"><h4>Explore & Discover</h4><p>بحث وفلترة الكليات → مقارنة → حفظ المفضلة → تفاصيل كل كلية</p></div></div>
+        <div class="flow-step"><div class="flow-num">4</div><div class="flow-content"><h4>Deep Dive with AI</h4><p>AI Chatbot → Salary Predictor → Career Path visualization</p></div></div>
+        <div class="flow-step"><div class="flow-num">5</div><div class="flow-content"><h4>Decision & Action</h4><p>Admission Steps guide → Scholarships → مشاركة مع ولي الأمر</p></div></div>
+      </div>
+      <div class="card3d">
+        <h3 class="card-h3" style="margin-bottom:20px;">Navigation Architecture</h3>
+        <div class="callout"><strong>Primary Navigation:</strong> Home · Explore · Quiz · AI Chat · Profile</div>
+        <div class="callout"><strong>Secondary (Context-based):</strong> College Details → Compare → Save → Admission Steps</div>
+        <div class="callout"><strong>Parent Portal:</strong> منفصل بـ role-based routing مع shared auth system</div>
+        <div class="callout"><strong>Admin Panel:</strong> /admin route محمي بـ admin role فقط</div>
+      </div>
+    </div>
+    <h2 class="section-title">📐 Information Architecture</h2>
+    <div class="card3d">
+      <div class="code-block">/ (Root)
+├── /auth
+│   ├── /login
+│   ├── /register
+│   └── /otp-verify
+├── /app (Protected)
+│   ├── /dashboard
+│   ├── /quiz
+│   ├── /quiz/results
+│   ├── /colleges
+│   ├── /colleges/:id
+│   ├── /colleges/compare
+│   ├── /saved
+│   ├── /chat
+│   ├── /salary
+│   ├── /career/:id
+│   ├── /scholarships
+│   └── /profile
+├── /parent
+│   └── /parent/dashboard
+└── /admin
+    └── /admin/analytics</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 4: FRONTEND ══════════════ -->
+<div id="page-frontend" class="page">
+  <div class="section">
+    <h2 class="section-title">⚛️ Frontend Architecture</h2>
+    <p class="section-desc">Next.js 14 + TypeScript + Tailwind CSS</p>
+    <div class="grid-2" style="margin-bottom:32px;">
+      <div class="card3d card-glow-blue">
+        <h3 class="card-h3">Tech Stack</h3>
+        <div class="tag-row" style="margin-top:12px;">
+          <span class="tech-pill">Next.js 14 (App Router)</span><span class="tech-pill">TypeScript</span><span class="tech-pill">Tailwind CSS</span><span class="tech-pill">Shadcn/UI</span><span class="tech-pill">Zustand</span><span class="tech-pill">React Query</span><span class="tech-pill">Framer Motion</span><span class="tech-pill">Recharts</span><span class="tech-pill">Three.js</span><span class="tech-pill">i18next (Arabic)</span>
+        </div>
+      </div>
+      <div class="card3d card-glow-teal">
+        <h3 class="card-h3">Folder Structure</h3>
+        <div class="code-block">src/
+├── app/
+├── components/
+│   ├── ui/
+│   ├── college/
+│   ├── quiz/
+│   └── ai/
+├── lib/
+├── hooks/
+├── store/
+└── types/</div>
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="card3d"><div class="badge3d b-blue" style="margin-bottom:12px;">State Management</div><h3 class="card-h3">Zustand</h3><p class="card-p">useAuthStore + useQuizStore + useCollegeStore + useChatStore</p></div>
+      <div class="card3d"><div class="badge3d b-teal" style="margin-bottom:12px;">Data Fetching</div><h3 class="card-h3">React Query</h3><p class="card-p">Server state، caching، background refetch، optimistic updates. Streaming للـ AI chat.</p></div>
+      <div class="card3d"><div class="badge3d b-purple" style="margin-bottom:12px;">Internationalization</div><h3 class="card-h3">RTL-First</h3><p class="card-p">Arabic primary. dir="rtl" على root. i18next لـ dynamic strings. Cairo font.</p></div>
+      <div class="card3d"><div class="badge3d b-amber" style="margin-bottom:12px;">Performance</div><h3 class="card-h3">Optimizations</h3><p class="card-p">Next.js Image optimization. Dynamic imports. Virtualized lists. Service Worker للـ offline.</p></div>
+      <div class="card3d"><div class="badge3d b-cyan" style="margin-bottom:12px;">UI Components</div><h3 class="card-h3">Design System</h3><p class="card-p">Shadcn/UI base + customized Tailwind. Dark mode only. Consistent variants.</p></div>
+      <div class="card3d"><div class="badge3d b-red" style="margin-bottom:12px;">Testing</div><h3 class="card-h3">Quality</h3><p class="card-p">Vitest + React Testing Library. Playwright للـ E2E. Storybook لـ component docs.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 5: BACKEND ══════════════ -->
+<div id="page-backend" class="page">
+  <div class="section">
+    <h2 class="section-title">⚙️ Backend Architecture</h2>
+    <p class="section-desc">Node.js + Express + PostgreSQL + Redis</p>
+    <div class="grid-2" style="margin-bottom:32px;">
+      <div class="card3d card-glow-teal">
+        <h3 class="card-h3">Tech Stack</h3>
+        <div class="tag-row" style="margin-top:12px;"><span class="tech-pill">Node.js 20 LTS</span><span class="tech-pill">Express.js</span><span class="tech-pill">TypeScript</span><span class="tech-pill">PostgreSQL 16</span><span class="tech-pill">Redis 7</span><span class="tech-pill">Prisma ORM</span><span class="tech-pill">JWT + Refresh Tokens</span><span class="tech-pill">Bull.js</span><span class="tech-pill">Socket.io</span><span class="tech-pill">AWS S3</span></div>
+      </div>
+      <div class="card3d card-glow-amber">
+        <h3 class="card-h3">Microservices Architecture</h3>
+        <p class="card-p" style="margin-bottom:12px;">Monolith to start, microservices-ready:</p>
+        <div class="tag-row"><span class="badge3d b-blue">API Gateway</span><span class="badge3d b-teal">Auth Service</span><span class="badge3d b-amber">College Service</span><span class="badge3d b-purple">AI Service (Python)</span><span class="badge3d b-cyan">Notification Service</span><span class="badge3d b-red">Analytics Service</span></div>
+      </div>
+    </div>
+    <div class="card3d" style="margin-bottom:16px;">
+      <h3 class="card-h3" style="margin-bottom:16px;">Auth APIs</h3>
+      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/auth/register</div><div class="ep-desc">تسجيل مستخدم جديد</div></div></div>
+      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/auth/login</div><div class="ep-desc">تسجيل دخول + JWT + refresh token</div></div></div>
+      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/auth/otp/send</div><div class="ep-desc">إرسال OTP على الموبايل</div></div></div>
+      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/auth/otp/verify</div><div class="ep-desc">تحقق من OTP</div></div></div>
+    </div>
+    <div class="card3d" style="margin-bottom:16px;">
+      <h3 class="card-h3" style="margin-bottom:16px;">AI Endpoints</h3>
+      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/ai/quiz/submit</div><div class="ep-desc">Quiz → AI recommendations (Top 10)</div></div></div>
+      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/ai/chat</div><div class="ep-desc">AI Chatbot + Server-Sent Events streaming</div></div></div>
+      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/ai/salary-predict</div><div class="ep-desc">توقع الراتب بـ XGBoost ML model</div></div></div>
+      <div class="api-row3d"><span class="method-chip m-get">GET</span><div><div class="ep-code">/api/ai/roadmap/:studentId</div><div class="ep-desc">خريطة طريق مهنية شخصية</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 6: DATABASE ══════════════ -->
+<div id="page-database" class="page">
+  <div class="section">
+    <h2 class="section-title">🗄️ Database Architecture</h2>
+    <p class="section-desc">PostgreSQL 16 + pgvector + Redis</p>
+    <div class="db-block"><div class="db-head">👤 users</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td>Primary key</td></tr><tr><td>name</td><td>VARCHAR(100)</td><td>اسم المستخدم</td></tr><tr><td>phone</td><td>VARCHAR(15)</td><td>رقم الموبايل المصري</td></tr><tr><td>role</td><td>ENUM(student,parent,admin)</td><td>نوع المستخدم</td></tr><tr><td>governorate</td><td>VARCHAR(50)</td><td>المحافظة</td></tr></table></div>
+    <div class="db-block"><div class="db-head">🎓 colleges</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td></td></tr><tr><td>name_ar</td><td>VARCHAR(200)</td><td>اسم الكلية بالعربي</td></tr><tr><td class="fk">university_id (FK)</td><td>UUID→universities</td><td></td></tr><tr><td>type</td><td>ENUM(gov,private,national)</td><td>حكومي/خاص/أهلي</td></tr><tr><td>min_score</td><td>DECIMAL(5,2)</td><td>درجة القبول الدنيا</td></tr><tr><td>annual_fees</td><td>INTEGER</td><td>المصاريف السنوية</td></tr><tr><td>employment_rate</td><td>DECIMAL(5,2)</td><td>نسبة التوظيف %</td></tr></table></div>
+    <div class="db-block"><div class="db-head">📝 quiz_sessions</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td></td></tr><tr><td class="fk">student_id (FK)</td><td>UUID→users</td><td></td></tr><tr><td>answers</td><td>JSONB</td><td>إجابات الـ 15 سؤال</td></tr><tr><td>personality_type</td><td>VARCHAR(50)</td><td>نوع الشخصية</td></tr></table></div>
+    <div class="db-block"><div class="db-head">🤖 ai_recommendations</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td></td></tr><tr><td class="fk">student_id (FK)</td><td>UUID→users</td><td></td></tr><tr><td class="fk">college_id (FK)</td><td>UUID→colleges</td><td></td></tr><tr><td>match_score</td><td>DECIMAL(5,2)</td><td>نسبة التطابق 0-100</td></tr><tr><td>reasons</td><td>JSONB</td><td>أسباب التوصية بالعربي</td></tr></table></div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 7: AI SYSTEM ══════════════ -->
+<div id="page-ai" class="page">
+  <div class="section">
+    <h2 class="section-title">🤖 AI System Design</h2>
+    <p class="section-desc">5 نماذج AI متكاملة</p>
+    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-purple">Model 1</span>AI Recommendation Engine</div><p class="card-p">Hybrid (Content-based + Collaborative Filtering + LLM reranking). Stack: Python FastAPI → Scikit-learn → GPT-4o reranking.</p><div class="progress3d"><div class="progress-fill3d" style="width:82%;"></div></div><p style="font-size:12px;margin-top:6px;color:var(--text3);">Target accuracy: 82%+ user satisfaction rate</p></div>
+    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-blue">Model 2</span>AI Chatbot — Arabic NLP</div><p class="card-p">RAG (Retrieval Augmented Generation) فوق قاعدة بيانات الكليات المصرية. LLM: GPT-4o. Vector DB: pgvector. Streaming via Server-Sent Events.</p></div>
+    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-amber">Model 3</span>Salary Predictor</div><p class="card-p">Gradient Boosting Regressor (XGBoost) trained on Egyptian job market data. Features: college_type, specialization, governorate, years_exp.</p><div class="progress3d"><div class="progress-fill3d" style="width:76%;background:linear-gradient(to left,var(--amber),#ffca28);"></div></div></div>
+    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-teal">Model 4</span>Alternative Recommendations</div><p class="card-p">Rule-based + ML: similarity score بين الكليات بناءً على subject areas، career outcomes، fee ranges.</p></div>
+    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-cyan">Model 5</span>Behavior Tracking</div><p class="card-p">Real-time event tracking → Redis queue → async processing → تحديث user preference vector → إعادة ترتيب التوصيات.</p></div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 8: DASHBOARD ══════════════ -->
+<div id="page-dashboard" class="page">
+  <div class="section">
+    <h2 class="section-title">📊 Smart Analytics Dashboard</h2>
+    <p class="section-desc">لوحة تحكم متكاملة لمتابعة أداء المنصة</p>
+    <div class="grid-4" style="margin-bottom:40px;">
+      <div class="stat-card s-blue"><div class="stat-icon ci-blue">👥</div><div class="stat-value">12,450</div><div class="stat-label">إجمالي الطلاب المسجلين</div></div>
+      <div class="stat-card s-teal"><div class="stat-icon ci-teal">📝</div><div class="stat-value">87%</div><div class="stat-label">معدل إتمام الـ Quiz</div></div>
+      <div class="stat-card s-amber"><div class="stat-icon ci-amber">🎓</div><div class="stat-value">3.2</div><div class="stat-label">متوسط الكليات المحفوظة/طالب</div></div>
+      <div class="stat-card s-red"><div class="stat-icon ci-red">💬</div><div class="stat-value">4.1m</div><div class="stat-label">رسايل AI Chatbot</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card3d"><div class="badge3d b-blue" style="margin-bottom:12px;">Student Interests</div><h3 class="card-h3">توزيع الاهتمامات</h3><p class="card-p">Pie chart: توزيع الطلاب على الكليات مع drill-down بالمحافظة والجنس والسنة.</p></div>
+      <div class="card3d"><div class="badge3d b-teal" style="margin-bottom:12px;">Regional Trends</div><h3 class="card-h3">Heatmap مصر</h3><p class="card-p">Heatmap على خريطة مصر يوضح أكتر الكليات بحثاً في كل محافظة.</p></div>
+      <div class="card3d"><div class="badge3d b-amber" style="margin-bottom:12px;">Salary Trends</div><h3 class="card-h3">تحليل الرواتب</h3><p class="card-p">Line chart لمتوسط الرواتب بالتخصص على مدار السنين + prediction للـ 3 سنين الجاية.</p></div>
+      <div class="card3d"><div class="badge3d b-red" style="margin-bottom:12px;">AI Performance</div><h3 class="card-h3">أداء الـ AI</h3><p class="card-p">AI recommendation accuracy، chatbot satisfaction scores، avg tokens per session، cost tracking.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 9: ROADMAP ══════════════ -->
+<div id="page-roadmap" class="page">
+  <div class="section">
+    <h2 class="section-title">🚀 MVP Roadmap</h2>
+    <p class="section-desc">خطة تنفيذ 20 أسبوع للوصول للـ MVP</p>
+    <div class="phase3d ph1"><div class="phase-header"><div class="phase-dot" style="background:var(--blue);"></div>Phase 1 — Foundation<span class="badge3d b-blue">Weeks 1–4</span></div><div class="tl-row"><div class="week-chip">Week 1-2</div><div class="tl-text">Project setup: Next.js + Backend boilerplate، DB schema، CI/CD pipeline</div></div><div class="tl-row"><div class="week-chip">Week 3-4</div><div class="tl-text">Auth flow (Screens 1-5)، JWT + Refresh tokens، OTP integration</div></div></div>
+    <div class="phase3d ph2"><div class="phase-header"><div class="phase-dot" style="background:var(--teal);"></div>Phase 2 — Core Features<span class="badge3d b-teal">Weeks 5–10</span></div><div class="tl-row"><div class="week-chip">Week 5-6</div><div class="tl-text">Home Dashboard، University Finder، College Details، Database seeding (500+ كلية)</div></div><div class="tl-row"><div class="week-chip">Week 7-10</div><div class="tl-text">AI Quiz، Compare، Saved، Career Path، Admission Steps</div></div></div>
+    <div class="phase3d ph3"><div class="phase-header"><div class="phase-dot" style="background:var(--red);"></div>Phase 3 — AI Features<span class="badge3d b-red">Weeks 11–16</span></div><div class="tl-row"><div class="week-chip">Week 11-12</div><div class="tl-text">AI Chatbot (RAG)، Arabic NLP، streaming interface</div></div><div class="tl-row"><div class="week-chip">Week 13-16</div><div class="tl-text">Salary Predictor، Alternative Recommendations، Parent Dashboard</div></div></div>
+    <div class="phase3d ph4"><div class="phase-header"><div class="phase-dot" style="background:var(--amber);"></div>Phase 4 — Polish & Launch<span class="badge3d b-amber">Weeks 17–20</span></div><div class="tl-row"><div class="week-chip">Week 17-18</div><div class="tl-text">Analytics Dashboard، Performance optimization، RTL QA، User testing (50 طالب)</div></div><div class="tl-row"><div class="week-chip">Week 19-20</div><div class="tl-text">Beta launch (1,000 طالب)، App Store submission، Marketing campaign</div></div></div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card3d"><h3 class="card-h3" style="margin-bottom:16px;">Monthly OpEx</h3><div class="cost-row3d"><span>Infrastructure (AWS/GCP)</span><span class="badge3d b-blue">~4,500 EGP</span></div><div class="cost-row3d"><span>AI API (OpenAI/Gemini)</span><span class="badge3d b-amber">~8,000 EGP</span></div><div class="cost-row3d"><span>SMS OTP</span><span class="badge3d b-teal">~2,000 EGP</span></div><div class="cost-row3d"><span>Total Monthly OpEx</span><span class="badge3d b-red">~17,000 EGP</span></div></div>
+      <div class="card3d"><h3 class="card-h3" style="margin-bottom:16px;">Monetization</h3><div class="cost-row3d"><span>🎯 Freemium (B2C)</span><span class="badge3d b-blue">99 EGP/شهر</span></div><div class="cost-row3d"><span>🏫 B2B Schools</span><span class="badge3d b-teal">2,000 EGP/مدرسة</span></div><div class="cost-row3d"><span>🎓 University Ads</span><span class="badge3d b-amber">Sponsored slots</span></div><div class="cost-row3d"><span>📊 Data Insights B2B</span><span class="badge3d b-purple">Annual reports</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 10: SCALING ══════════════ -->
+<div id="page-scaling" class="page">
+  <div class="section">
+    <h2 class="section-title">📈 Scaling Strategy</h2>
+    <p class="section-desc">من 0 لـ 1 مليون مستخدم عبر 3 سنوات</p>
+    <div class="scale-phase"><div class="year-label">Y1</div><div class="phase-header" style="margin-bottom:12px;"><span class="badge3d b-blue" style="font-size:13px;">Year 1</span>Egypt MVP — 0 to 50K Users</div><div class="tag-row"><span class="badge3d b-blue">Single region AWS Cairo</span><span class="badge3d b-teal">Monolith → microservices ready</span><span class="badge3d b-amber">Focus: Product-market fit</span><span class="badge3d b-purple">Target: 50K students</span></div></div>
+    <div class="scale-phase"><div class="year-label">Y2</div><div class="phase-header" style="margin-bottom:12px;"><span class="badge3d b-teal" style="font-size:13px;">Year 2</span>Egypt Scale — 50K to 500K Users</div><div class="tag-row"><span class="badge3d b-blue">Microservices split</span><span class="badge3d b-teal">Redis cluster + DB read replicas</span><span class="badge3d b-amber">Mobile app (React Native)</span><span class="badge3d b-purple">B2B: 2,000+ schools</span></div></div>
+    <div class="scale-phase"><div class="year-label">Y3</div><div class="phase-header" style="margin-bottom:12px;"><span class="badge3d b-red" style="font-size:13px;">Year 3</span>MENA Expansion — 500K to 1M+ Users</div><div class="tag-row"><span class="badge3d b-blue">Saudi Arabia</span><span class="badge3d b-teal">UAE + Jordan</span><span class="badge3d b-amber">Morocco</span><span class="badge3d b-red">Series A target: $3M</span></div></div>
+    <div class="divider"></div>
+    <h2 class="section-title" style="font-size:20px;">📅 Key Milestones</h2>
+    <div class="card3d">
+      <div class="milestone-row"><div class="m-month" style="background:rgba(26,107,224,0.15);color:#60a8ff;border:1px solid rgba(26,107,224,0.3);">Month 5</div><div class="m-text">MVP Launch — 1,000 beta users — first real feedback</div></div>
+      <div class="milestone-row"><div class="m-month" style="background:rgba(14,165,122,0.15);color:#3ed8a8;border:1px solid rgba(14,165,122,0.3);">Month 8</div><div class="m-text">10,000 users — B2B school partnerships — first revenue</div></div>
+      <div class="milestone-row"><div class="m-month" style="background:rgba(224,165,26,0.15);color:#f5c842;border:1px solid rgba(224,165,26,0.3);">Month 12</div><div class="m-text">50,000 users — Profitability — Seed funding preparation</div></div>
+      <div class="milestone-row"><div class="m-month" style="background:rgba(130,80,220,0.15);color:#b89eff;border:1px solid rgba(130,80,220,0.3);">Month 18</div><div class="m-text">Mobile app launch، 200K users، Seed funding closes</div></div>
+      <div class="milestone-row"><div class="m-month" style="background:rgba(224,92,26,0.15);color:#ff8a50;border:1px solid rgba(224,92,26,0.3);">Month 30</div><div class="m-text">MENA expansion، 1M+ users across 4 countries، Series A: $3M</div></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer style="position:relative;z-index:1;">
+  <div class="footer">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="logo-icon" style="width:28px;height:28px;font-size:14px;">🎓</div>
+      <span>مصر للجامعات © 2025 — AI Platform</span>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <span class="tech-pill">Next.js 14</span>
+      <span class="tech-pill">PostgreSQL</span>
+      <span class="tech-pill">GPT-4o</span>
+      <span class="tech-pill">AWS Cairo</span>
+    </div>
+    <span>Startup-Ready v1.0</span>
+  </div>
+</footer>
+
+<script>
+// ══════════════ THREE.JS BACKGROUND ══════════════
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 30;
+
+  const particleCount = 200;
+  const geo = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  const sizes = new Float32Array(particleCount);
+
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3]     = (Math.random() - 0.5) * 100;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 60;
+    sizes[i] = Math.random() * 2 + 0.5;
+  }
+
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+  const mat = new THREE.PointsMaterial({ color: 0x1a6be0, size: 0.3, transparent: true, opacity: 0.6, sizeAttenuation: true });
+  const particles = new THREE.Points(geo, mat);
+  scene.add(particles);
+
+  const shapes = [];
+  const shapeGeos = [new THREE.OctahedronGeometry(1.5,0), new THREE.TetrahedronGeometry(1.2,0), new THREE.IcosahedronGeometry(1.0,0)];
+  const wireMat = new THREE.MeshBasicMaterial({ color: 0x00c8e8, wireframe: true, transparent: true, opacity: 0.15 });
+
+  for (let i = 0; i < 6; i++) {
+    const mesh = new THREE.Mesh(shapeGeos[i % 3], wireMat.clone());
+    mesh.position.set((Math.random()-.5)*60, (Math.random()-.5)*40, (Math.random()-.5)*20-10);
+    mesh.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
+    shapes.push(mesh);
+    scene.add(mesh);
+  }
+
+  const gridHelper = new THREE.GridHelper(120, 30, 0x1a3a7a, 0x0f1e36);
+  gridHelper.position.y = -20;
+  gridHelper.material.transparent = true;
+  gridHelper.material.opacity = 0.3;
+  scene.add(gridHelper);
+
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  let t = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    t += 0.005;
+    particles.rotation.y = t * 0.05;
+    particles.rotation.x = t * 0.02;
+    shapes.forEach((s, i) => { s.rotation.x += 0.004+i*.001; s.rotation.y += 0.006+i*.001; s.position.y += Math.sin(t+i)*.008; });
+    camera.position.x += (mouseX * 3 - camera.position.x) * 0.02;
+    camera.position.y += (-mouseY * 2 - camera.position.y) * 0.02;
+    camera.lookAt(scene.position);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+})();
+
+// ══════════════ NAVIGATION ══════════════
+const pageMap = { vision:0, screens:1, ux:2, frontend:3, backend:4, database:5, ai:6, dashboard:7, roadmap:8, scaling:9 };
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tnav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mobile-tnav-btn').forEach(b => b.classList.remove('active'));
+
+  document.getElementById('page-' + id).classList.add('active');
+
+  const idx = pageMap[id];
+  const desktopBtns = document.querySelectorAll('.tnav-btn');
+  const mobileBtns  = document.querySelectorAll('.mobile-tnav-btn');
+  if (desktopBtns[idx]) desktopBtns[idx].classList.add('active');
+  if (mobileBtns[idx])  mobileBtns[idx].classList.add('active');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ══════════════ MOBILE NAV ══════════════
+function openMobileNav() {
+  document.getElementById('mobile-nav').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileNav() {
+  document.getElementById('mobile-nav').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on backdrop click
+document.getElementById('mobile-nav').addEventListener('click', function(e) {
+  if (e.target === this) closeMobileNav();
+});
+
+// Close on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMobileNav();
+});
+
+// ══════════════ 3D CARD MOUSE TRACKING ══════════════
+document.querySelectorAll('.card3d').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+    card.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+  });
+});
+</script>
+</body>
+</html>

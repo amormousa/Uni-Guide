@@ -1,416 +1,482 @@
-<![CDATA[<div align="center">
+<div align="center">
 
-# 🎓 مصر للجامعات — Egypt College AI Platform
+<img src="https://img.shields.io/badge/🎓-مصر_للجامعات-1a6be0?style=for-the-badge&labelColor=050d1f" alt="Logo" height="40"/>
 
-### اختار مستقبلك بذكاء
+# مصر للجامعات — Egypt College AI Platform
 
-**منصة ذكاء اصطناعي متكاملة تحلل ميول الطالب وتقترح الكلية والتخصص والجامعة المناسبة مع Roadmap واضح للمسار المهني**
+**اختار مستقبلك بذكاء**
 
-![Version](https://img.shields.io/badge/version-1.0-blue?style=for-the-badge)
-![Status](https://img.shields.io/badge/status-Startup--Ready-00c8e8?style=for-the-badge)
-![Screens](https://img.shields.io/badge/screens-25-0ea57a?style=for-the-badge)
-![AI Models](https://img.shields.io/badge/AI%20Models-5-8250dc?style=for-the-badge)
-![Target](https://img.shields.io/badge/target-700K+%20students-e0a51a?style=for-the-badge)
+> منصة ذكاء اصطناعي متكاملة تحلل ميول الطالب وتقترح الكلية والتخصص والجامعة المناسبة مع Roadmap واضح للمسار المهني
+
+<br/>
+
+![Version](https://img.shields.io/badge/version-1.0-1a6be0?style=for-the-badge&logo=semver&logoColor=white)
+![Status](https://img.shields.io/badge/status-Startup--Ready-00c8e8?style=for-the-badge&logo=statuspage&logoColor=white)
+![Screens](https://img.shields.io/badge/screens-25-0ea57a?style=for-the-badge&logo=figma&logoColor=white)
+![AI Models](https://img.shields.io/badge/AI_Models-5-8250dc?style=for-the-badge&logo=openai&logoColor=white)
+![Target](https://img.shields.io/badge/target-700K+_students-e0a51a?style=for-the-badge&logo=target&logoColor=white)
+
+<br/>
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![Three.js](https://img.shields.io/badge/Three.js-000000?style=flat-square&logo=three.js&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js_14-000000?style=flat-square&logo=next.js&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
 
 </div>
 
 ---
 
-## 📑 جدول المحتويات
+## 📑 Table of Contents
 
-- [📋 نظرة عامة على المشروع](#-نظرة-عامة-على-المشروع)
-- [⚡ المشكلة والحل](#-المشكلة-والحل)
-- [💡 القيم الأساسية للمنصة](#-القيم-الأساسية-للمنصة)
-- [🎨 نظام التصميم (Design System)](#-نظام-التصميم-design-system)
-- [📱 الشاشات الـ 25 بالتفصيل](#-الشاشات-الـ-25-بالتفصيل)
-- [🔄 رحلة المستخدم (UX Flow)](#-رحلة-المستخدم-ux-flow)
-- [🏗️ هيكل المعلومات (Information Architecture)](#️-هيكل-المعلومات-information-architecture)
-- [⚛️ الـ Frontend Architecture](#️-الـ-frontend-architecture)
-- [⚙️ الـ Backend Architecture](#️-الـ-backend-architecture)
-- [🗄️ قاعدة البيانات (Database)](#️-قاعدة-البيانات-database)
-- [🤖 نظام الذكاء الاصطناعي (AI System)](#-نظام-الذكاء-الاصطناعي-ai-system)
-- [📊 لوحة التحكم (Analytics Dashboard)](#-لوحة-التحكم-analytics-dashboard)
-- [🚀 خطة التنفيذ (MVP Roadmap)](#-خطة-التنفيذ-mvp-roadmap)
-- [💰 التكاليف والربحية](#-التكاليف-والربحية)
-- [📈 استراتيجية التوسع (Scaling)](#-استراتيجية-التوسع-scaling)
-- [📅 المعالم الرئيسية (Milestones)](#-المعالم-الرئيسية-milestones)
-- [🗂️ هيكل الملفات الحالي](#️-هيكل-الملفات-الحالي)
-- [🛠️ كيفية التشغيل](#️-كيفية-التشغيل)
-- [🔧 تفاصيل الكود (سطر بسطر)](#-تفاصيل-الكود-سطر-بسطر)
+<details>
+<summary><strong>Click to expand</strong></summary>
 
----
+- [📋 Project Overview](#-project-overview)
+- [⚡ Problem & Solution](#-problem--solution)
+- [💡 Core Value Propositions](#-core-value-propositions)
+- [🎨 Design System](#-design-system)
+- [📱 Screen Inventory (25 Screens)](#-screen-inventory-25-screens)
+- [🔄 User Journey (UX Flow)](#-user-journey-ux-flow)
+- [🏗️ Information Architecture](#️-information-architecture)
+- [⚛️ Frontend Architecture](#️-frontend-architecture)
+- [⚙️ Backend Architecture](#️-backend-architecture)
+- [🗄️ Database Design](#️-database-design)
+- [🤖 AI System Architecture](#-ai-system-architecture)
+- [📊 Analytics Dashboard](#-analytics-dashboard)
+- [🚀 MVP Roadmap](#-mvp-roadmap)
+- [💰 Cost & Revenue Model](#-cost--revenue-model)
+- [📈 Scaling Strategy](#-scaling-strategy)
+- [📅 Key Milestones](#-key-milestones)
+- [🗂️ Current File Structure](#️-current-file-structure)
+- [🛠️ Getting Started](#️-getting-started)
+- [🔧 Code Deep Dive](#-code-deep-dive)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
-## 📋 نظرة عامة على المشروع
-
-**مصر للجامعات** هي منصة ذكاء اصطناعي شاملة هدفها مساعدة طلاب الثانوية العامة في مصر على اختيار الكلية والتخصص والجامعة المناسبة. المنصة بتستخدم 5 نماذج AI متكاملة لتحليل ميول الطالب وتقديم توصيات مخصصة.
-
-| المعلومة | التفاصيل |
-|---|---|
-| **اسم المشروع** | مصر للجامعات — AI Platform |
-| **النسخة** | v1.0 Startup-Ready |
-| **السوق المستهدف** | 700,000+ طالب ثانوية عامة سنوياً في مصر |
-| **عدد الشاشات** | 25 شاشة مصممة بالكامل |
-| **نماذج AI** | 5 نماذج ذكاء اصطناعي |
-| **خطة التنفيذ** | 20 أسبوع للـ MVP |
-| **التوسع** | MENA Expansion Ready |
-| **اللغة** | عربي (RTL) — Arabic First |
+</details>
 
 ---
 
-## ⚡ المشكلة والحل
+## 📋 Project Overview
 
-### 🔴 المشكلة
-أكتر من **700,000 طالب** ثانوية عامة كل سنة في مصر بيتخبطوا في اختيار الكلية بدون توجيه حقيقي يعتمد على بياناتهم الشخصية. الطالب بيختار بناءً على رأي الأهل أو الأصحاب بدون تحليل علمي لميوله وقدراته.
+**مصر للجامعات** is a comprehensive AI-powered platform designed to help Egyptian high school students choose the right college, major, and university. The platform leverages **5 integrated AI models** to analyze student interests and deliver personalized recommendations.
 
-### 🟢 الحل
-منصة ذكاء اصطناعي تحلل ميول الطالب، درجاته، واهتماماته وتقترح الكلية والتخصص والجامعة المناسبة مع Roadmap واضح للمسار المهني. المنصة بتوفر:
-- **AI Quiz** — 15 سؤال لتحديد الشخصية والميول
-- **AI Chatbot** — مساعد ذكي 24/7 بالعربي
-- **Salary Predictor** — توقع الراتب المستقبلي بالـ ML
-- **Career Path** — خريطة مسار مهني واضحة
-
-### 🎯 السوق المستهدف
-طلاب الثانوية العامة وأولياء الأمور في مصر — السوق الفوري **700K+ طالب سنوياً**، قابل للتوسع لمنطقة **MENA** (السعودية، الإمارات، الأردن، المغرب).
-
----
-
-## 💡 القيم الأساسية للمنصة
-
-| الميزة | الوصف |
-|---|---|
-| 🤖 **AI Matching** | توصيات مخصصة لكل طالب بناءً على Quiz + بيانات سلوكية في الوقت الفعلي |
-| 📊 **Real Data** | مصاريف حقيقية + فرص عمل + متوسط رواتب في السوق المصري محدثة ربع سنوياً |
-| 👨‍👩‍👧 **Parent Layer** | Dashboard لولي الأمر يتابع فيه تقدم ابنه واهتماماته ويشارك في القرار |
-| 🗺️ **Career Path** | خريطة مسار مهني واضحة من أول يوم في الكلية لحد سوق العمل الفعلي |
-| 💬 **AI Chatbot** | مساعد ذكي 24/7 يجاوب على كل أسئلة الطالب بالعربي بدقة واحترافية |
-| 💰 **Salary Predictor** | توقعات راتب بناءً على التخصص والجامعة وسنوات الخبرة باستخدام ML |
+| Detail | Info |
+|:---|:---|
+| **Project Name** | مصر للجامعات — AI Platform |
+| **Version** | `v1.0` Startup-Ready |
+| **Target Market** | 700,000+ high school students annually in Egypt |
+| **Total Screens** | 25 fully designed screens |
+| **AI Models** | 5 integrated AI models |
+| **MVP Timeline** | 20 weeks |
+| **Expansion** | MENA-ready |
+| **Language** | Arabic-first (RTL) |
 
 ---
 
-## 🎨 نظام التصميم (Design System)
+## ⚡ Problem & Solution
 
-### لوحة الألوان (Color Palette)
+### 🔴 The Problem
 
-| اللون | الكود | الاستخدام |
-|---|---|---|
-| 🔵 **Primary Blue** | `#1a6be0` | الأزرار الرئيسية، الروابط، العناصر الفعالة |
-| 💎 **Cyan** | `#00c8e8` | التمييز، الأيقونات، النصوص المهمة |
-| 🌿 **Teal** | `#0ea57a` | حالات النجاح، الإحصائيات الإيجابية |
-| 🟡 **Amber** | `#e0a51a` | التحذيرات، العناصر الثانوية |
-| 🟠 **Orange/Red** | `#e05c1a` | الأخطاء، التنبيهات المهمة |
-| 🟣 **Purple** | `#8250dc` | عناصر AI، التميز |
-| 🌑 **Navy (خلفية)** | `#050d1f` | الخلفية الرئيسية |
-| 🌒 **Navy2** | `#0a1628` | الخلفية الثانوية |
-| 🌓 **Navy3** | `#0f1e36` | خلفية الكروت |
+Over **700,000 students** graduate from high school every year in Egypt without access to data-driven guidance for choosing their college. Decisions are made based on family opinions or peer pressure — not on the student's actual abilities and interests.
 
-### CSS Variables الكاملة
+### 🟢 The Solution
+
+An AI platform that analyzes a student's interests, grades, and behavior to recommend the best-fit college, major, and university — complete with a clear career roadmap.
+
+| Feature | Description |
+|:---|:---|
+| **AI Quiz** | 15-question personality & aptitude assessment |
+| **AI Chatbot** | 24/7 smart assistant in Arabic |
+| **Salary Predictor** | ML-powered future salary forecasting |
+| **Career Path** | Visual career roadmap from college to employment |
+
+### 🎯 Target Market
+
+Primary: Egyptian high school students and parents — **700K+ students/year**.  
+Expansion: **MENA region** (Saudi Arabia, UAE, Jordan, Morocco).
+
+---
+
+## 💡 Core Value Propositions
+
+| Feature | Description |
+|:---|:---|
+| 🤖 **AI Matching** | Personalized recommendations based on Quiz + real-time behavioral data |
+| 📊 **Real Data** | Actual tuition fees, job opportunities, and market salaries — updated quarterly |
+| 👨‍👩‍👧 **Parent Layer** | Dedicated dashboard for parents to track progress and co-own the decision |
+| 🗺️ **Career Path** | End-to-end career roadmap from enrollment to job market |
+| 💬 **AI Chatbot** | Arabic-first smart assistant with 24/7 availability |
+| 💰 **Salary Predictor** | ML-based salary projections by major, university, and experience level |
+
+---
+
+## 🎨 Design System
+
+### Color Palette
+
+| Swatch | Token | Hex | Usage |
+|:---:|:---|:---|:---|
+| 🔵 | `--blue` | `#1a6be0` | Primary buttons, links, active states |
+| 💎 | `--cyan` | `#00c8e8` | Accent highlights, icons, emphasis text |
+| 🌿 | `--teal` | `#0ea57a` | Success states, positive metrics |
+| 🟡 | `--amber` | `#e0a51a` | Warnings, secondary elements |
+| 🟠 | `--red` | `#e05c1a` | Errors, critical alerts |
+| 🟣 | `--purple` | `#8250dc` | AI features, premium indicators |
+| 🌑 | `--navy` | `#050d1f` | Primary background |
+| 🌒 | `--navy2` | `#0a1628` | Secondary background |
+| 🌓 | `--navy3` | `#0f1e36` | Card backgrounds |
+
+### CSS Custom Properties
 
 ```css
 :root {
-  --navy:       #050d1f;       /* الخلفية الرئيسية */
-  --navy2:      #0a1628;       /* خلفية ثانوية */
-  --navy3:      #0f1e36;       /* خلفية الكروت */
-  --blue:       #1a6be0;       /* اللون الأساسي */
-  --blue2:      #2a7ff0;       /* اللون الأساسي الفاتح */
-  --cyan:       #00c8e8;       /* لون التمييز */
-  --cyan2:      #00e5ff;       /* لون التمييز الفاتح */
-  --teal:       #0ea57a;       /* لون النجاح */
-  --amber:      #e0a51a;       /* لون التحذير */
-  --red:        #e05c1a;       /* لون الخطأ */
-  --text:       #e8f0ff;       /* النص الرئيسي */
-  --text2:      #8ba4cc;       /* النص الثانوي */
-  --text3:      #4d6a99;       /* النص الخافت */
-  --glass:      rgba(255,255,255,0.04);   /* زجاج شفاف */
-  --glass2:     rgba(255,255,255,0.08);   /* زجاج متوسط */
-  --glass3:     rgba(255,255,255,0.12);   /* زجاج مرئي */
-  --border:     rgba(0,180,255,0.12);     /* حدود خفيفة */
-  --border2:    rgba(0,180,255,0.22);     /* حدود مرئية */
-  --glow:       0 0 40px rgba(26,107,224,0.25);  /* توهج أزرق */
-  --glow2:      0 0 60px rgba(0,200,232,0.2);    /* توهج سيان */
-  --radius:     16px;          /* زوايا الكروت */
-  --radius2:    24px;          /* زوايا الألواح الكبيرة */
-  --font:       'Cairo', system-ui, sans-serif;   /* خط رئيسي */
-  --mono:       'IBM Plex Mono', monospace;       /* خط الكود */
-  --nav-h:      68px;          /* ارتفاع شريط التنقل */
+  /* ── Backgrounds ── */
+  --navy:       #050d1f;
+  --navy2:      #0a1628;
+  --navy3:      #0f1e36;
+
+  /* ── Brand Colors ── */
+  --blue:       #1a6be0;
+  --blue2:      #2a7ff0;
+  --cyan:       #00c8e8;
+  --cyan2:      #00e5ff;
+  --teal:       #0ea57a;
+  --amber:      #e0a51a;
+  --red:        #e05c1a;
+
+  /* ── Typography ── */
+  --text:       #e8f0ff;
+  --text2:      #8ba4cc;
+  --text3:      #4d6a99;
+
+  /* ── Glass Effects ── */
+  --glass:      rgba(255, 255, 255, 0.04);
+  --glass2:     rgba(255, 255, 255, 0.08);
+  --glass3:     rgba(255, 255, 255, 0.12);
+
+  /* ── Borders ── */
+  --border:     rgba(0, 180, 255, 0.12);
+  --border2:    rgba(0, 180, 255, 0.22);
+
+  /* ── Shadows ── */
+  --glow:       0 0 40px rgba(26, 107, 224, 0.25);
+  --glow2:      0 0 60px rgba(0, 200, 232, 0.2);
+
+  /* ── Geometry ── */
+  --radius:     16px;
+  --radius2:    24px;
+
+  /* ── Fonts ── */
+  --font:       'Cairo', system-ui, sans-serif;
+  --mono:       'IBM Plex Mono', monospace;
+
+  /* ── Layout ── */
+  --nav-h:      68px;
 }
 ```
 
-### الخطوط (Typography)
+### Typography
 
-| الخط | الأوزان | الاستخدام |
-|---|---|---|
-| **Cairo** | 300, 400, 500, 600, 700, 900 | خط عربي احترافي — العناوين والنصوص |
-| **IBM Plex Mono** | 400, 500 | الكود والأرقام التقنية |
+| Font | Weights | Usage |
+|:---|:---|:---|
+| **Cairo** | 300, 400, 500, 600, 700, 900 | Arabic headings & body text |
+| **IBM Plex Mono** | 400, 500 | Code snippets & technical numbers |
 
-### مقاسات المسافات (Spacing Scale)
-- **Base**: 4px grid
-- **Steps**: 4, 8, 12, 16, 24, 32, 48, 64, 80px
-- النظام ده بيضمن تناسق كامل في التصميم
+### Spacing Scale
 
-### الزوايا (Border Radius)
-| الحجم | القيمة | الاستخدام |
-|---|---|---|
-| صغير | `8px` | Components صغيرة (أزرار، inputs) |
-| متوسط | `16px` | Cards عادية |
-| كبير | `24px` | Panels كبيرة |
-| دائري | `9999px` | Pills و Badges |
+- **Base unit:** `4px`
+- **Scale:** `4 → 8 → 12 → 16 → 24 → 32 → 48 → 64 → 80px`
 
----
+### Border Radius Tokens
 
-## 📱 الشاشات الـ 25 بالتفصيل
-
-### 🔐 Auth Flow (الشاشات 1–5)
-
-#### شاشة 01: Splash / Onboarding
-- **الوصف**: شاشة البداية مع 3 slides توضيحية عن المنصة
-- **العناصر**: زرار "ابدأ الآن" و "سجل دخول"
-- **التصميم**: Animated illustrations، Dark navy background، Blue gradient accents
-- **التفاعل**: 3 Swipeable slides
-
-#### شاشة 02: Registration (تسجيل حساب جديد)
-- **الحقول**:
-  - الاسم
-  - رقم الموبايل المصري (+20)
-  - المحافظة (dropdown — 27 محافظة)
-  - نوع الحساب (طالب / ولي أمر)
-  - كلمة السر
-- **التصميم**: Glassmorphism style
-
-#### شاشة 03: OTP Verification
-- **الوصف**: تحقق من رقم الموبايل
-- **العناصر**:
-  - 6 خانات OTP
-  - Countdown timer 60 ثانية
-  - زرار Resend
-- **التفاعل**: Auto-focus للخانة التالية + Success animation عند الكود الصحيح
-
-#### شاشة 04: Student Profile Setup
-- **الوصف**: استكمال بيانات الطالب
-- **الحقول**:
-  - Section selector (علمي / أدبي / تجاري)
-  - درجة الثانوية (0-410)
-  - Multi-select interests chips
-- **العناصر**: Progress bar لنسبة الاستكمال
-
-#### شاشة 05: Login
-- **الحقول**: Phone + Password
-- **الإضافات**:
-  - نسيت كلمة السر؟
-  - Google OAuth login
-  - Biometric login toggle
-  - Remember me checkbox
+| Size | Value | Usage |
+|:---|:---|:---|
+| Small | `8px` | Buttons, inputs |
+| Medium | `16px` | Standard cards |
+| Large | `24px` | Feature panels |
+| Pill | `9999px` | Pills, badges |
 
 ---
 
-### 🏠 Core Platform (الشاشات 6–15)
+## 📱 Screen Inventory (25 Screens)
 
-#### شاشة 06: Home Dashboard
-- **المحتوى**:
-  - Personalized greeting بالاسم
-  - Top 3 AI-recommended colleges (horizontal scrollable cards مع match %)
-  - Quick action buttons: Take Quiz, Find Colleges, Saved, Chat AI
+### 🔐 Auth Flow — Screens 1–5
 
-#### شاشة 07: University Finder
-- **الفلاتر**:
-  - المحافظة
-  - النوع (حكومي / خاص / أهلي)
-  - نطاق الدرجات
-  - نطاق المصاريف
-- **العناصر**: Search bar + Sort + Results cards (match %, مصاريف, نسبة التوظيف)
+<details>
+<summary><strong>01 · Splash / Onboarding</strong></summary>
 
-#### شاشة 08: College Details
-- **المعلومات الشاملة**:
-  - Hero image
-  - إحصائيات (مصاريف, درجة القبول, نسبة التوظيف, متوسط الراتب)
-  - قائمة التخصصات
-  - خطوات القبول
-  - آراء الطلاب
-  - كليات مشابهة
-- **التفاعل**: Save button مع heart animation
+- 3 animated illustrative slides introducing the platform
+- CTA buttons: "ابدأ الآن" (Start Now) and "سجل دخول" (Login)
+- Design: animated illustrations, dark navy background, blue gradient accents
+- Interaction: 3 swipeable slides
 
-#### شاشة 09: AI Quiz
-- **المحتوى**: 15 سؤال لتحديد الشخصية والميول
-- **التصميم**: سؤال واحد لكل شاشة، 4 اختيارات كـ cards مع أيقونات
-- **العناصر**: Animated progress bar + Previous/Next navigation + Estimated time remaining
+</details>
 
-#### شاشة 10: Quiz Results
-- **المحتوى**:
-  - كشف نوع الشخصية مع animation
-  - Top 10 توصيات كليات مرتبة بـ match percentage bars
-  - لكل توصية تفسير ليه عملت match
+<details>
+<summary><strong>02 · Registration</strong></summary>
 
-#### شاشة 11: Compare Colleges
-- **المحتوى**: مقارنة 2-3 كليات جنب بعض في table تفاعلية
-- **الصفوف**: المصاريف, الدرجة, نسبة التوظيف, متوسط الراتب, الموقع, عدد التخصصات
-- **التمييز**: Highlight للأفضل في كل صف بلون أخضر
+- **Fields:** Name, Egyptian phone (+20), Governorate (27 options), Account type (Student/Parent), Password
+- **Design:** Glassmorphism style
 
----
+</details>
 
-### 🤖 AI Features (الشاشات 16–22)
+<details>
+<summary><strong>03 · OTP Verification</strong></summary>
 
-#### شاشة 16: AI Chatbot
-- **المحتوى**: Chat interface كامل بالعربي
-- **المميزات**:
-  - Streaming text animation
-  - Suggested questions chips
-  - College recommendation cards inline في الـ chat
-- **التصميم**: Chat bubbles RTL Arabic
+- 6-digit OTP input with auto-focus progression
+- 60-second countdown timer + resend button
+- Success animation on correct code
 
-#### شاشة 17: Salary Predictor
-- **المدخلات**:
-  - اختيار التخصص (specialization picker)
-  - نوع الجامعة (university type)
-  - سنوات الخبرة (slider 0-20)
-- **المخرجات**: Animated bar chart للراتب المتوقع (Min / Median / Max) بالجنيه المصري
+</details>
 
-#### شاشة 18: Career Path
-- **المحتوى**: Timeline مرئي للمسار المهني
-- **المراحل**:
-  1. سنوات الكلية
-  2. التدريب
-  3. أول وظيفة
-  4. النمو المهني
-  5. المناصب العليا
-- **لكل مرحلة**: المهارات المطلوبة, نطاق الراتب, الجدول الزمني
+<details>
+<summary><strong>04 · Student Profile Setup</strong></summary>
 
-#### شاشة 19: Learning Roadmap
-- **المحتوى**: خريطة طريق بالكورسات والمهارات المطلوبة
-- **العناصر**:
-  - Skills tree visualization
-  - Recommended online courses مع logos المنصات
-  - Progress tracking
-  - Bookmark courses
+- Section selector (Science / Arts / Commerce)
+- High school score input (0–410)
+- Multi-select interests chips
+- Progress bar for profile completeness
 
-#### شاشة 20: Alternative Recommendations
-- **التفعيل**: لو درجة الطالب تحت الحد الأدنى
-- **المحتوى**: 5 بدائل مقترحة مع similarity score + تفسير ليه كل بديل مناسب
-- **النبرة**: مشجعة وإيجابية
+</details>
 
-#### شاشة 21: Scholarships
-- **المحتوى**: قاعدة بيانات المنح الدراسية
-- **الفلاتر**: نطاق الدرجات, الحاجة المادية, التخصص, الموقع
-- **لكل منحة**: المبلغ, الموعد النهائي, المتطلبات, نسبة الأهلية
+<details>
+<summary><strong>05 · Login</strong></summary>
+
+- Phone + Password fields
+- Forgot password, Google OAuth, Biometric toggle, Remember me
+
+</details>
 
 ---
 
-### 👨‍👩‍👧 Parent & Admin (الشاشات 23–25)
+### 🏠 Core Platform — Screens 6–15
 
-#### شاشة 23: Parent Dashboard
-- **المحتوى**: متابعة نشاط الأبناء
-- **العناصر**:
-  - نتائج الـ Quiz
-  - الكليات المحفوظة
-  - وقت الاستخدام
-  - Insights: أكتر الكليات اللي اتشافت, نوع الشخصية
-  - إعدادات الإشعارات
+<details>
+<summary><strong>06 · Home Dashboard</strong></summary>
 
-#### شاشة 24: Admin Analytics
-- **الـ KPIs**:
-  - إجمالي المستخدمين
-  - DAU (المستخدمين اليوميين)
-  - Quiz completions
-  - Revenue
-- **الـ Charts**:
-  - User growth line chart
-  - College interest pie chart
-  - Egypt map heatmap
-  - AI chatbot satisfaction score
+- Personalized greeting with student name
+- Top 3 AI-recommended colleges (horizontal scrollable cards with match %)
+- Quick actions: Take Quiz, Find Colleges, Saved, Chat AI
 
-#### شاشة 25: Admission Steps
-- **المحتوى**: دليل خطوة بخطوة لإجراءات التقديم لكل كلية
-- **العناصر**:
-  - Interactive checklist مع document requirements
-  - Important dates calendar
-  - Official links
-  - Progress tracker
+</details>
+
+<details>
+<summary><strong>07 · University Finder</strong></summary>
+
+- **Filters:** Governorate, Type (Public/Private/National), Score range, Fee range
+- Search bar + sort + result cards (match %, fees, employment rate)
+
+</details>
+
+<details>
+<summary><strong>08 · College Details</strong></summary>
+
+- Hero image, stats (fees, min score, employment rate, avg salary)
+- Specializations list, admission steps, student reviews, similar colleges
+- Save button with heart animation
+
+</details>
+
+<details>
+<summary><strong>09 · AI Quiz</strong></summary>
+
+- 15 questions — one per screen, 4 card-based choices with icons
+- Animated progress bar + Previous/Next navigation + time estimate
+
+</details>
+
+<details>
+<summary><strong>10 · Quiz Results</strong></summary>
+
+- Personality type reveal with animation
+- Top 10 college recommendations with match % bars and explanations
+
+</details>
+
+<details>
+<summary><strong>11 · Compare Colleges</strong></summary>
+
+- Side-by-side comparison table for 2–3 colleges
+- Rows: Fees, Score, Employment %, Avg Salary, Location, Specializations
+- Best-in-class highlighting (green)
+
+</details>
 
 ---
 
-## 🔄 رحلة المستخدم (UX Flow)
+### 🤖 AI Features — Screens 16–22
+
+<details>
+<summary><strong>16 · AI Chatbot</strong></summary>
+
+- Full Arabic chat interface with streaming text animation
+- Suggested question chips, inline college recommendation cards
+- RTL chat bubble design
+
+</details>
+
+<details>
+<summary><strong>17 · Salary Predictor</strong></summary>
+
+- **Inputs:** Specialization, University type, Years of experience (slider 0–20)
+- **Output:** Animated bar chart — Min / Median / Max salary in EGP
+
+</details>
+
+<details>
+<summary><strong>18 · Career Path</strong></summary>
+
+- Visual timeline: College → Internship → First Job → Growth → Senior Roles
+- Each stage: required skills, salary range, timeline
+
+</details>
+
+<details>
+<summary><strong>19 · Learning Roadmap</strong></summary>
+
+- Skills tree visualization, recommended courses with platform logos
+- Progress tracking + bookmarking
+
+</details>
+
+<details>
+<summary><strong>20 · Alternative Recommendations</strong></summary>
+
+- Triggered when student score is below minimum
+- 5 alternatives with similarity score and explanation — encouraging tone
+
+</details>
+
+<details>
+<summary><strong>21 · Scholarships</strong></summary>
+
+- Scholarship database with filters (score range, financial need, major, location)
+- Each entry: amount, deadline, requirements, eligibility %
+
+</details>
+
+---
+
+### 👨‍👩‍👧 Parent & Admin — Screens 23–25
+
+<details>
+<summary><strong>23 · Parent Dashboard</strong></summary>
+
+- Child activity tracking: Quiz results, saved colleges, usage time
+- Insights: most viewed colleges, personality type, notification settings
+
+</details>
+
+<details>
+<summary><strong>24 · Admin Analytics</strong></summary>
+
+- **KPIs:** Total users, DAU, Quiz completions, Revenue
+- **Charts:** User growth (line), College interest (pie), Egypt heatmap, AI satisfaction
+
+</details>
+
+<details>
+<summary><strong>25 · Admission Steps</strong></summary>
+
+- Step-by-step admission guide per college
+- Interactive checklist, important dates calendar, official links, progress tracker
+
+</details>
+
+---
+
+## 🔄 User Journey (UX Flow)
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    رحلة الطالب (Student Journey)                 │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  ① Onboarding & Registration                                   │
-│     تسجيل حساب جديد → OTP verification → إدخال البيانات        │
-│           │                                                     │
-│           ▼                                                     │
-│  ② AI Quiz                                                      │
-│     15 سؤال لتحديد الشخصية → نتائج فورية مع Top 10 توصيات     │
-│           │                                                     │
-│           ▼                                                     │
-│  ③ Explore & Discover                                           │
-│     بحث وفلترة الكليات → مقارنة → حفظ المفضلة → تفاصيل        │
-│           │                                                     │
-│           ▼                                                     │
-│  ④ Deep Dive with AI                                            │
-│     AI Chatbot → Salary Predictor → Career Path                 │
-│           │                                                     │
-│           ▼                                                     │
-│  ⑤ Decision & Action                                            │
-│     Admission Steps → Scholarships → مشاركة مع ولي الأمر       │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                      Student Journey                             │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ① Onboarding & Registration                                    │
+│     Sign up → OTP verification → Complete profile                │
+│           │                                                      │
+│           ▼                                                      │
+│  ② AI Quiz                                                       │
+│     15 personality questions → Instant results + Top 10 matches  │
+│           │                                                      │
+│           ▼                                                      │
+│  ③ Explore & Discover                                            │
+│     Search → Filter → Compare → Save favorites → Details         │
+│           │                                                      │
+│           ▼                                                      │
+│  ④ Deep Dive with AI                                             │
+│     AI Chatbot → Salary Predictor → Career Path                  │
+│           │                                                      │
+│           ▼                                                      │
+│  ⑤ Decision & Action                                             │
+│     Admission Steps → Scholarships → Share with parent           │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
-### نظام التنقل (Navigation Architecture)
+### Navigation Architecture
 
-| النوع | العناصر |
-|---|---|
-| **Primary Navigation** | Home · Explore · Quiz · AI Chat · Profile |
-| **Secondary (Context-based)** | College Details → Compare → Save → Admission Steps |
-| **Parent Portal** | منفصل بـ role-based routing مع shared auth system |
-| **Admin Panel** | `/admin` route محمي بـ admin role فقط |
+| Layer | Elements |
+|:---|:---|
+| **Primary** | Home · Explore · Quiz · AI Chat · Profile |
+| **Secondary (Contextual)** | College Details → Compare → Save → Admission Steps |
+| **Parent Portal** | Separate role-based routing with shared auth system |
+| **Admin Panel** | Protected `/admin` route — admin role only |
 
 ---
 
-## 🏗️ هيكل المعلومات (Information Architecture)
+## 🏗️ Information Architecture
 
 ```
 / (Root)
 ├── /auth
-│   ├── /login                 ← شاشة تسجيل الدخول
-│   ├── /register              ← شاشة التسجيل
-│   └── /otp-verify            ← شاشة تحقق OTP
-├── /app (Protected)           ← محمي — يحتاج تسجيل دخول
-│   ├── /dashboard             ← الصفحة الرئيسية
-│   ├── /quiz                  ← AI Quiz (15 سؤال)
-│   ├── /quiz/results          ← نتائج الـ Quiz
-│   ├── /colleges              ← University Finder
-│   ├── /colleges/:id          ← تفاصيل كلية معينة
-│   ├── /colleges/compare      ← مقارنة الكليات
-│   ├── /saved                 ← الكليات المحفوظة
+│   ├── /login                 ← Login
+│   ├── /register              ← Registration
+│   └── /otp-verify            ← OTP verification
+│
+├── /app (Protected)           ← Requires authentication
+│   ├── /dashboard             ← Home
+│   ├── /quiz                  ← AI Quiz (15 questions)
+│   ├── /quiz/results          ← Quiz results
+│   ├── /colleges              ← University finder
+│   ├── /colleges/:id          ← College details
+│   ├── /colleges/compare      ← Side-by-side comparison
+│   ├── /saved                 ← Saved colleges
 │   ├── /chat                  ← AI Chatbot
 │   ├── /salary                ← Salary Predictor
-│   ├── /career/:id            ← Career Path لتخصص معين
-│   ├── /scholarships          ← المنح الدراسية
-│   └── /profile               ← الملف الشخصي
+│   ├── /career/:id            ← Career path by major
+│   ├── /scholarships          ← Scholarship database
+│   └── /profile               ← User profile
+│
 ├── /parent
-│   └── /parent/dashboard      ← لوحة تحكم ولي الأمر
+│   └── /parent/dashboard      ← Parent control panel
+│
 └── /admin
-    └── /admin/analytics       ← لوحة تحكم الأدمن
+    └── /admin/analytics       ← Admin analytics dashboard
 ```
 
 ---
 
-## ⚛️ الـ Frontend Architecture
+## ⚛️ Frontend Architecture
 
 ### Tech Stack
 
-| التقنية | الاستخدام |
-|---|---|
-| **Next.js 14** (App Router) | Framework رئيسي — SSR + SSG + API Routes |
-| **TypeScript** | Type safety لكل الكود |
+| Technology | Purpose |
+|:---|:---|
+| **Next.js 14** (App Router) | Framework — SSR + SSG + API Routes |
+| **TypeScript** | Type safety across the codebase |
 | **Tailwind CSS** | Utility-first CSS framework |
-| **Shadcn/UI** | Component library مخصصة |
-| **Zustand** | State management خفيف وسريع |
-| **React Query** | Server state + caching + background refetch |
-| **Framer Motion** | Animations احترافية |
-| **Recharts** | Charts و data visualization |
+| **Shadcn/UI** | Customizable component library |
+| **Zustand** | Lightweight state management |
+| **React Query** | Server state, caching, background refetching |
+| **Framer Motion** | Professional animations |
+| **Recharts** | Data visualization charts |
 | **Three.js** | 3D background effects |
-| **i18next** | Internationalization (Arabic) |
+| **i18next** | Internationalization (Arabic-first) |
 
 ### Folder Structure
 
@@ -418,7 +484,7 @@
 src/
 ├── app/                  ← Next.js App Router pages
 ├── components/
-│   ├── ui/               ← Shadcn UI components (Button, Card, Input...)
+│   ├── ui/               ← Shadcn UI (Button, Card, Input…)
 │   ├── college/           ← College-specific components
 │   ├── quiz/              ← Quiz flow components
 │   └── ai/                ← AI features (Chat, Salary, Career)
@@ -428,53 +494,58 @@ src/
 └── types/                 ← TypeScript type definitions
 ```
 
-### State Management (Zustand Stores)
+### State Management — Zustand Stores
 
-| Store | المسؤولية |
-|---|---|
-| `useAuthStore` | حالة المصادقة — login/logout/user data |
-| `useQuizStore` | إجابات الـ Quiz + النتائج + personality type |
-| `useCollegeStore` | الكليات المحفوظة + المقارنة + الفلاتر |
-| `useChatStore` | محادثات AI Chatbot + history |
+| Store | Responsibility |
+|:---|:---|
+| `useAuthStore` | Authentication state — login / logout / user data |
+| `useQuizStore` | Quiz answers + results + personality type |
+| `useCollegeStore` | Saved colleges + comparison + filters |
+| `useChatStore` | AI Chatbot conversations + history |
 
-### Data Fetching (React Query)
-- **Server state management** مع automatic caching
-- **Background refetch** لتحديث البيانات تلقائياً
-- **Optimistic updates** لتجربة مستخدم أسرع
-- **Streaming** لـ AI chat responses
+### Data Fetching — React Query
+
+- **Automatic caching** with server state management
+- **Background refetch** for live data updates
+- **Optimistic updates** for snappy UX
+- **Streaming support** for AI chat responses
 
 ### Performance Optimizations
-- ⚡ **Next.js Image** optimization لكل الصور
-- ⚡ **Dynamic imports** للكومبوننتات الثقيلة
-- ⚡ **Virtualized lists** للقوائم الطويلة
-- ⚡ **Service Worker** لدعم Offline
+
+| Strategy | Benefit |
+|:---|:---|
+| ⚡ Next.js Image | Automatic image optimization |
+| ⚡ Dynamic Imports | Lazy-load heavy components |
+| ⚡ Virtualized Lists | Efficient rendering for long lists |
+| ⚡ Service Worker | Offline-first support |
 
 ### Internationalization
-- **Arabic-first** — `dir="rtl"` على الـ root element
-- **i18next** لـ dynamic strings
-- **Cairo font** كخط رئيسي عربي
+
+- **Arabic-first** — `dir="rtl"` on root element
+- **i18next** for dynamic string localization
+- **Cairo font** as the primary Arabic typeface
 
 ### Testing Strategy
 
-| النوع | الأداة |
-|---|---|
+| Type | Tool |
+|:---|:---|
 | Unit Tests | Vitest + React Testing Library |
 | E2E Tests | Playwright |
 | Component Docs | Storybook |
 
 ---
 
-## ⚙️ الـ Backend Architecture
+## ⚙️ Backend Architecture
 
 ### Tech Stack
 
-| التقنية | الاستخدام |
-|---|---|
+| Technology | Purpose |
+|:---|:---|
 | **Node.js 20 LTS** | Runtime environment |
 | **Express.js** | Web framework |
 | **TypeScript** | Type safety |
 | **PostgreSQL 16** | Primary database |
-| **Redis 7** | Caching + queues + sessions |
+| **Redis 7** | Caching, queues, sessions |
 | **Prisma ORM** | Database client + migrations |
 | **JWT + Refresh Tokens** | Authentication |
 | **Bull.js** | Background job queues |
@@ -482,7 +553,8 @@ src/
 | **AWS S3** | File storage |
 
 ### Architecture Pattern
-**Monolith to start → Microservices-ready**
+
+**Monolith-first → Microservices-ready**
 
 ```
 ┌──────────────────────────────────────────────────────┐
@@ -498,231 +570,246 @@ src/
 
 #### 🔐 Auth APIs
 
-| Method | Endpoint | الوصف |
-|---|---|---|
-| `POST` | `/api/auth/register` | تسجيل مستخدم جديد |
-| `POST` | `/api/auth/login` | تسجيل دخول + JWT + refresh token |
-| `POST` | `/api/auth/otp/send` | إرسال OTP على الموبايل |
-| `POST` | `/api/auth/otp/verify` | تحقق من OTP |
+| Method | Endpoint | Description |
+|:---|:---|:---|
+| `POST` | `/api/auth/register` | Register new user |
+| `POST` | `/api/auth/login` | Login — returns JWT + refresh token |
+| `POST` | `/api/auth/otp/send` | Send OTP to mobile |
+| `POST` | `/api/auth/otp/verify` | Verify OTP code |
 
 #### 🤖 AI APIs
 
-| Method | Endpoint | الوصف |
-|---|---|---|
-| `POST` | `/api/ai/quiz/submit` | إرسال إجابات Quiz → AI recommendations (Top 10) |
-| `POST` | `/api/ai/chat` | AI Chatbot + Server-Sent Events streaming |
-| `POST` | `/api/ai/salary-predict` | توقع الراتب بـ XGBoost ML model |
-| `GET` | `/api/ai/roadmap/:studentId` | خريطة طريق مهنية شخصية |
+| Method | Endpoint | Description |
+|:---|:---|:---|
+| `POST` | `/api/ai/quiz/submit` | Submit quiz answers → AI recommendations (Top 10) |
+| `POST` | `/api/ai/chat` | AI Chatbot — Server-Sent Events streaming |
+| `POST` | `/api/ai/salary-predict` | Salary prediction (XGBoost ML model) |
+| `GET` | `/api/ai/roadmap/:studentId` | Personalized career roadmap |
 
 ---
 
-## 🗄️ قاعدة البيانات (Database)
+## 🗄️ Database Design
 
-**Engine**: PostgreSQL 16 + pgvector (لـ AI embeddings) + Redis (للـ caching)
+**Engine:** PostgreSQL 16 + pgvector (AI embeddings) + Redis (caching layer)
 
-### جدول `users` — المستخدمين 👤
+### `users` — User Accounts 👤
 
-| العمود | النوع | الوصف |
-|---|---|---|
-| `id` **(PK)** | UUID | المعرف الفريد |
-| `name` | VARCHAR(100) | اسم المستخدم |
-| `phone` | VARCHAR(15) | رقم الموبايل المصري |
-| `role` | ENUM(student, parent, admin) | نوع المستخدم |
-| `governorate` | VARCHAR(50) | المحافظة |
+| Column | Type | Description |
+|:---|:---|:---|
+| `id` **(PK)** | `UUID` | Unique identifier |
+| `name` | `VARCHAR(100)` | Display name |
+| `phone` | `VARCHAR(15)` | Egyptian mobile number |
+| `role` | `ENUM(student, parent, admin)` | User role |
+| `governorate` | `VARCHAR(50)` | Egyptian governorate |
 
-### جدول `colleges` — الكليات 🎓
+### `colleges` — College Registry 🎓
 
-| العمود | النوع | الوصف |
-|---|---|---|
-| `id` **(PK)** | UUID | المعرف الفريد |
-| `name_ar` | VARCHAR(200) | اسم الكلية بالعربي |
-| `university_id` **(FK)** | UUID → universities | ربط بالجامعة |
-| `type` | ENUM(gov, private, national) | حكومي / خاص / أهلي |
-| `min_score` | DECIMAL(5,2) | درجة القبول الدنيا |
-| `annual_fees` | INTEGER | المصاريف السنوية بالجنيه |
-| `employment_rate` | DECIMAL(5,2) | نسبة التوظيف % |
+| Column | Type | Description |
+|:---|:---|:---|
+| `id` **(PK)** | `UUID` | Unique identifier |
+| `name_ar` | `VARCHAR(200)` | College name (Arabic) |
+| `university_id` **(FK)** | `UUID → universities` | University relation |
+| `type` | `ENUM(gov, private, national)` | Institution type |
+| `min_score` | `DECIMAL(5,2)` | Minimum admission score |
+| `annual_fees` | `INTEGER` | Annual tuition in EGP |
+| `employment_rate` | `DECIMAL(5,2)` | Graduate employment % |
 
-### جدول `quiz_sessions` — جلسات الـ Quiz 📝
+### `quiz_sessions` — Quiz Sessions 📝
 
-| العمود | النوع | الوصف |
-|---|---|---|
-| `id` **(PK)** | UUID | المعرف الفريد |
-| `student_id` **(FK)** | UUID → users | ربط بالطالب |
-| `answers` | JSONB | إجابات الـ 15 سؤال |
-| `personality_type` | VARCHAR(50) | نوع الشخصية المحدد |
+| Column | Type | Description |
+|:---|:---|:---|
+| `id` **(PK)** | `UUID` | Unique identifier |
+| `student_id` **(FK)** | `UUID → users` | Student relation |
+| `answers` | `JSONB` | All 15 question answers |
+| `personality_type` | `VARCHAR(50)` | Determined personality type |
 
-### جدول `ai_recommendations` — توصيات AI 🤖
+### `ai_recommendations` — AI Recommendations 🤖
 
-| العمود | النوع | الوصف |
-|---|---|---|
-| `id` **(PK)** | UUID | المعرف الفريد |
-| `student_id` **(FK)** | UUID → users | ربط بالطالب |
-| `college_id` **(FK)** | UUID → colleges | ربط بالكلية |
-| `match_score` | DECIMAL(5,2) | نسبة التطابق (0-100) |
-| `reasons` | JSONB | أسباب التوصية بالعربي |
+| Column | Type | Description |
+|:---|:---|:---|
+| `id` **(PK)** | `UUID` | Unique identifier |
+| `student_id` **(FK)** | `UUID → users` | Student relation |
+| `college_id` **(FK)** | `UUID → colleges` | College relation |
+| `match_score` | `DECIMAL(5,2)` | Match percentage (0–100) |
+| `reasons` | `JSONB` | Recommendation rationale (Arabic) |
 
-### ER Diagram (العلاقات)
+### Entity Relationship Diagram
 
 ```
-users ──────┐
-  │         │
-  │ 1:N     │ 1:N
-  ▼         ▼
-quiz_sessions  ai_recommendations
-                    │
-                    │ N:1
-                    ▼
-                colleges
-                    │
-                    │ N:1
-                    ▼
-               universities
+users ──────────┐
+  │              │
+  │ 1:N          │ 1:N
+  ▼              ▼
+quiz_sessions   ai_recommendations
+                     │
+                     │ N:1
+                     ▼
+                 colleges
+                     │
+                     │ N:1
+                     ▼
+                universities
 ```
 
 ---
 
-## 🤖 نظام الذكاء الاصطناعي (AI System)
+## 🤖 AI System Architecture
 
-### Model 1: AI Recommendation Engine
-- **النوع**: Hybrid (Content-based + Collaborative Filtering + LLM reranking)
-- **الـ Stack**: Python FastAPI → Scikit-learn → GPT-4o reranking
-- **الدقة المستهدفة**: 82%+ user satisfaction rate
-- **الوظيفة**: تحليل بيانات الطالب (Quiz + behavior) → ترتيب Top 10 كليات
+### Model 1 — Recommendation Engine
 
-### Model 2: AI Chatbot — Arabic NLP
-- **النوع**: RAG (Retrieval Augmented Generation)
-- **الـ LLM**: GPT-4o
-- **الـ Vector DB**: pgvector (PostgreSQL extension)
-- **الـ Streaming**: Server-Sent Events
-- **الوظيفة**: مساعد ذكي بالعربي بيجاوب على أسئلة الطلاب فوق قاعدة بيانات الكليات المصرية
+| Attribute | Detail |
+|:---|:---|
+| **Type** | Hybrid (Content-based + Collaborative Filtering + LLM reranking) |
+| **Stack** | Python FastAPI → Scikit-learn → GPT-4o reranking |
+| **Target Accuracy** | 82%+ user satisfaction rate |
+| **Function** | Analyze student data (Quiz + behavior) → rank Top 10 colleges |
 
-### Model 3: Salary Predictor
-- **النوع**: Gradient Boosting Regressor (XGBoost)
-- **الـ Training Data**: Egyptian job market data
-- **الـ Features**: `college_type`, `specialization`, `governorate`, `years_exp`
-- **الوظيفة**: توقع الراتب المتوقع بالجنيه (Min / Median / Max)
+### Model 2 — Arabic AI Chatbot (RAG)
 
-### Model 4: Alternative Recommendations
-- **النوع**: Rule-based + ML
-- **الوظيفة**: similarity score بين الكليات بناءً على:
-  - Subject areas
-  - Career outcomes
-  - Fee ranges
-- **التفعيل**: لو درجة الطالب أقل من الحد الأدنى للكلية المطلوبة
+| Attribute | Detail |
+|:---|:---|
+| **Type** | Retrieval Augmented Generation |
+| **LLM** | GPT-4o |
+| **Vector DB** | pgvector (PostgreSQL extension) |
+| **Streaming** | Server-Sent Events |
+| **Function** | Smart Arabic assistant answering student questions over Egyptian college data |
 
-### Model 5: Behavior Tracking
-- **النوع**: Real-time event tracking
-- **الـ Pipeline**: Events → Redis queue → Async processing → Update user preference vector → إعادة ترتيب التوصيات
-- **الوظيفة**: تتبع سلوك الطالب (الكليات اللي شافها, الوقت, الحفظ) لتحسين التوصيات
+### Model 3 — Salary Predictor
 
----
+| Attribute | Detail |
+|:---|:---|
+| **Type** | Gradient Boosting Regressor (XGBoost) |
+| **Training Data** | Egyptian job market dataset |
+| **Features** | `college_type`, `specialization`, `governorate`, `years_exp` |
+| **Output** | Predicted salary in EGP (Min / Median / Max) |
 
-## 📊 لوحة التحكم (Analytics Dashboard)
+### Model 4 — Alternative Recommendations
 
-### الإحصائيات الرئيسية
+| Attribute | Detail |
+|:---|:---|
+| **Type** | Rule-based + ML |
+| **Function** | Similarity scoring between colleges (subjects, careers, fees) |
+| **Trigger** | Activated when student score is below a college's minimum |
 
-| المؤشر | القيمة (Demo) | الوصف |
-|---|---|---|
-| 👥 إجمالي الطلاب | **12,450** | عدد الطلاب المسجلين |
-| 📝 معدل إتمام Quiz | **87%** | نسبة الطلاب اللي كملوا الـ Quiz |
-| 🎓 متوسط المحفوظات | **3.2** | متوسط الكليات المحفوظة لكل طالب |
-| 💬 رسائل AI | **4.1M** | إجمالي رسائل AI Chatbot |
+### Model 5 — Behavior Tracking
 
-### الـ Charts والتحليلات
-
-| التقرير | التفاصيل |
-|---|---|
-| **Student Interests** | Pie chart — توزيع الطلاب على الكليات مع drill-down بالمحافظة والجنس |
-| **Regional Trends** | Heatmap على خريطة مصر — أكتر الكليات بحثاً في كل محافظة |
-| **Salary Trends** | Line chart — متوسط الرواتب بالتخصص + prediction لـ 3 سنين قدام |
-| **AI Performance** | دقة التوصيات, chatbot satisfaction, avg tokens/session, cost tracking |
+| Attribute | Detail |
+|:---|:---|
+| **Type** | Real-time event tracking |
+| **Pipeline** | Events → Redis queue → Async processing → Update preference vector → Rerank recommendations |
+| **Function** | Track student behavior (views, time-on-page, saves) to refine suggestions |
 
 ---
 
-## 🚀 خطة التنفيذ (MVP Roadmap)
+## 📊 Analytics Dashboard
 
-### 20 أسبوع من الفكرة للإطلاق
+### Key KPIs
 
-#### Phase 1 — Foundation 🔵 (الأسابيع 1–4)
+| Metric | Value (Demo) | Description |
+|:---|:---:|:---|
+| 👥 Total Students | **12,450** | Registered students |
+| 📝 Quiz Completion | **87%** | Students who completed the full quiz |
+| 🎓 Avg Saved | **3.2** | Average saved colleges per student |
+| 💬 AI Messages | **4.1M** | Total AI Chatbot messages |
 
-| الأسبوع | المهام |
-|---|---|
-| **Week 1-2** | Project setup: Next.js + Backend boilerplate، DB schema، CI/CD pipeline |
-| **Week 3-4** | Auth flow (الشاشات 1-5)، JWT + Refresh tokens، OTP integration |
+### Charts & Visualizations
 
-#### Phase 2 — Core Features 🟢 (الأسابيع 5–10)
-
-| الأسبوع | المهام |
-|---|---|
-| **Week 5-6** | Home Dashboard, University Finder, College Details, Database seeding (500+ كلية) |
-| **Week 7-10** | AI Quiz, Compare, Saved, Career Path, Admission Steps |
-
-#### Phase 3 — AI Features 🔴 (الأسابيع 11–16)
-
-| الأسبوع | المهام |
-|---|---|
-| **Week 11-12** | AI Chatbot (RAG), Arabic NLP, streaming interface |
-| **Week 13-16** | Salary Predictor, Alternative Recommendations, Parent Dashboard |
-
-#### Phase 4 — Polish & Launch 🟡 (الأسابيع 17–20)
-
-| الأسبوع | المهام |
-|---|---|
-| **Week 17-18** | Analytics Dashboard, Performance optimization, RTL QA, User testing (50 طالب) |
-| **Week 19-20** | Beta launch (1,000 طالب), App Store submission, Marketing campaign |
+| Report | Details |
+|:---|:---|
+| **Student Interests** | Pie chart — Distribution across colleges with drill-down by governorate & gender |
+| **Regional Trends** | Egypt heatmap — Most searched colleges per governorate |
+| **Salary Trends** | Line chart — Avg salary by major + 3-year prediction |
+| **AI Performance** | Recommendation accuracy, chatbot satisfaction, avg tokens/session, cost tracking |
 
 ---
 
-## 💰 التكاليف والربحية
+## 🚀 MVP Roadmap
 
-### التكاليف الشهرية (Monthly OpEx)
+### 20 Weeks — From Idea to Launch
 
-| البند | التكلفة |
-|---|---|
+#### Phase 1 — Foundation 🔵 (Weeks 1–4)
+
+| Week | Tasks |
+|:---|:---|
+| **1–2** | Project setup: Next.js + Backend boilerplate, DB schema, CI/CD pipeline |
+| **3–4** | Auth flow (Screens 1–5), JWT + Refresh tokens, OTP integration |
+
+#### Phase 2 — Core Features 🟢 (Weeks 5–10)
+
+| Week | Tasks |
+|:---|:---|
+| **5–6** | Home Dashboard, University Finder, College Details, DB seeding (500+ colleges) |
+| **7–10** | AI Quiz, Compare, Saved, Career Path, Admission Steps |
+
+#### Phase 3 — AI Features 🔴 (Weeks 11–16)
+
+| Week | Tasks |
+|:---|:---|
+| **11–12** | AI Chatbot (RAG), Arabic NLP, streaming interface |
+| **13–16** | Salary Predictor, Alternative Recommendations, Parent Dashboard |
+
+#### Phase 4 — Polish & Launch 🟡 (Weeks 17–20)
+
+| Week | Tasks |
+|:---|:---|
+| **17–18** | Analytics Dashboard, Performance optimization, RTL QA, User testing (50 students) |
+| **19–20** | Beta launch (1,000 students), App Store submission, Marketing campaign |
+
+---
+
+## 💰 Cost & Revenue Model
+
+### Monthly Operating Costs
+
+| Item | Cost |
+|:---|---:|
 | Infrastructure (AWS/GCP) | ~4,500 EGP |
 | AI API (OpenAI/Gemini) | ~8,000 EGP |
 | SMS OTP | ~2,000 EGP |
-| **الإجمالي الشهري** | **~17,000 EGP** |
+| **Monthly Total** | **~17,000 EGP** |
 
-### مصادر الدخل (Monetization)
+### Revenue Streams
 
-| المصدر | النموذج | السعر |
-|---|---|---|
-| 🎯 **Freemium (B2C)** | اشتراك شهري للطلاب | 99 EGP/شهر |
-| 🏫 **B2B Schools** | اشتراكات المدارس | 2,000 EGP/مدرسة |
-| 🎓 **University Ads** | مساحات إعلانية للجامعات | Sponsored slots |
-| 📊 **Data Insights** | تقارير بيانات سنوية | Annual reports |
+| Stream | Model | Pricing |
+|:---|:---|:---|
+| 🎯 **Freemium (B2C)** | Monthly student subscription | 99 EGP/month |
+| 🏫 **B2B Schools** | School subscriptions | 2,000 EGP/school |
+| 🎓 **University Ads** | Sponsored placement slots | Per campaign |
+| 📊 **Data Insights** | Annual market reports | Per report |
 
 ---
 
-## 📈 استراتيجية التوسع (Scaling)
+## 📈 Scaling Strategy
 
-### من 0 لـ 1 مليون مستخدم في 3 سنوات
+### 0 → 1M Users in 3 Years
 
-#### Year 1 — Egypt MVP (0 → 50K مستخدم)
-- ✅ Single region AWS Cairo
-- ✅ Monolith → microservices ready
-- ✅ Focus: Product-market fit
+#### Year 1 — Egypt MVP (0 → 50K)
+
+- ✅ Single-region AWS (Cairo)
+- ✅ Monolith → microservices-ready
+- ✅ Focus: product-market fit
 - 🎯 Target: 50K students
 
-#### Year 2 — Egypt Scale (50K → 500K مستخدم)
+#### Year 2 — Egypt Scale (50K → 500K)
+
 - ✅ Microservices split
 - ✅ Redis cluster + DB read replicas
 - ✅ Mobile app (React Native)
 - 🎯 B2B: 2,000+ schools
 
-#### Year 3 — MENA Expansion (500K → 1M+ مستخدم)
+#### Year 3 — MENA Expansion (500K → 1M+)
+
 - 🌍 Saudi Arabia
 - 🌍 UAE + Jordan
 - 🌍 Morocco
-- 💰 Series A target: $3M
+- 💰 Series A target: **$3M**
 
 ---
 
-## 📅 المعالم الرئيسية (Milestones)
+## 📅 Key Milestones
 
-| الشهر | الحدث |
-|---|---|
+| Month | Event |
+|:---|:---|
 | **Month 5** | MVP Launch — 1,000 beta users — first real feedback |
 | **Month 8** | 10,000 users — B2B school partnerships — first revenue |
 | **Month 12** | 50,000 users — Profitability — Seed funding preparation |
@@ -731,46 +818,58 @@ quiz_sessions  ai_recommendations
 
 ---
 
-## 🗂️ هيكل الملفات الحالي
+## 🗂️ Current File Structure
 
 ```
 uniapp/
-├── fixed_app.html          ← الملف الرئيسي — التطبيق كامل (HTML + CSS + JS)
-├── README.md               ← هذا الملف — التوثيق الشامل
+├── index.html              ← Main application file (HTML + CSS + JS)
+├── README.md               ← This document — comprehensive project documentation
 └── .git/                   ← Git version control
 ```
 
-### `fixed_app.html` — الملف الرئيسي (1,742 سطر)
+### `index.html` — Main Application (1,742 lines)
 
-الملف ده هو **single-page application** يحتوي على كل شيء:
-- **CSS** (سطر 10 → 1147): كل الـ styles والتصميم
-- **HTML** (سطر 1149 → 1613): كل الشاشات والمحتوى
-- **JavaScript** (سطر 1615 → 1739): التنقل + Three.js + التفاعلات
+This is a **single-page application** prototype containing everything in one file:
+
+| Section | Lines | Content |
+|:---|:---|:---|
+| **CSS** | 10 → 1147 | Complete design system & styles |
+| **HTML** | 1149 → 1613 | All screens & page content |
+| **JavaScript** | 1615 → 1739 | Navigation + Three.js + interactions |
+
+> **Note:** This is a prototype / documentation app. The production application will be built with **Next.js 14** as detailed in the tech stack above.
 
 ---
 
-## 🛠️ كيفية التشغيل
+## 🛠️ Getting Started
 
-### الطريقة الأسهل (الملف الحالي)
+### Quick Start (Current Prototype)
+
 ```bash
-# فقط افتح الملف في المتصفح
-# Windows
-start fixed_app.html
+# Clone the repository
+git clone https://github.com/your-username/uniapp.git
+cd uniapp
 
-# أو بأي متصفح
-# Chrome / Firefox / Edge
+# Open in browser — that's it!
+# Windows
+start index.html
+
+# macOS
+open index.html
+
+# Linux
+xdg-open index.html
 ```
 
-> ⚠️ **ملاحظة**: الملف الحالي هو prototype / documentation app. التطبيق الفعلي هيتبني بـ Next.js 14 حسب الـ tech stack المحدد.
+### Production Setup (Future Build)
 
-### لبناء التطبيق الفعلي (مستقبلاً)
 ```bash
-# Frontend
+# ── Frontend ──
 npx create-next-app@latest uniapp-frontend --typescript --tailwind --app
 cd uniapp-frontend
 npm install zustand @tanstack/react-query framer-motion recharts three i18next
 
-# Backend
+# ── Backend ──
 mkdir uniapp-backend && cd uniapp-backend
 npm init -y
 npm install express typescript prisma @prisma/client jsonwebtoken bcryptjs bull redis socket.io
@@ -779,251 +878,316 @@ npx prisma init
 
 ---
 
-## 🔧 تفاصيل الكود (سطر بسطر)
+## 🔧 Code Deep Dive
 
-### 📄 هيكل الملف الكامل
+### File Layout Overview
 
 ```
-السطر 1      → <!DOCTYPE html> + بداية الصفحة
-السطر 2      → <html lang="ar" dir="rtl"> — عربي من اليمين لليسار
-السطر 3-9    → <head> — meta tags + Google Fonts + Three.js CDN
-السطر 10-1147 → <style> — كل CSS styles
-السطر 1149    → <body>
-السطر 1151    → Three.js Canvas للخلفية المتحركة
-السطر 1159-1194 → Topbar / Navigation الثابت
-السطر 1197-1225 → Mobile Navigation Overlay
-السطر 1227    → <main> بداية المحتوى الرئيسي
-السطر 1230-1348 → Page 1: Vision (الرؤية)
-السطر 1351-1392 → Page 2: Screens (الشاشات)
-السطر 1395-1442 → Page 3: UX Flow (رحلة المستخدم)
-السطر 1445-1480 → Page 4: Frontend Architecture
-السطر 1483-1513 → Page 5: Backend Architecture
-السطر 1516-1525 → Page 6: Database Architecture
-السطر 1528-1538 → Page 7: AI System Design
-السطر 1541-1558 → Page 8: Analytics Dashboard
-السطر 1561-1575 → Page 9: MVP Roadmap
-السطر 1578-1595 → Page 10: Scaling Strategy
-السطر 1599-1613 → Footer
-السطر 1615-1689 → Three.js 3D Background (JavaScript)
-السطر 1692-1708 → Navigation System (JavaScript)
-السطر 1711-1729 → Mobile Nav Controls (JavaScript)
-السطر 1732-1738 → 3D Card Mouse Tracking (JavaScript)
+Line 1          → <!DOCTYPE html> + page opening
+Line 2          → <html lang="ar" dir="rtl"> — Arabic RTL
+Lines 3–9       → <head> — meta tags + Google Fonts + Three.js CDN
+Lines 10–1147   → <style> — complete CSS design system
+Line 1149       → <body>
+Line 1151       → Three.js Canvas (animated 3D background)
+Lines 1159–1194 → Topbar / Fixed navigation
+Lines 1197–1225 → Mobile navigation overlay
+Line 1227       → <main> — main content begins
+Lines 1230–1348 → Page 1: Vision
+Lines 1351–1392 → Page 2: Screens
+Lines 1395–1442 → Page 3: UX Flow
+Lines 1445–1480 → Page 4: Frontend Architecture
+Lines 1483–1513 → Page 5: Backend Architecture
+Lines 1516–1525 → Page 6: Database Architecture
+Lines 1528–1538 → Page 7: AI System Design
+Lines 1541–1558 → Page 8: Analytics Dashboard
+Lines 1561–1575 → Page 9: MVP Roadmap
+Lines 1578–1595 → Page 10: Scaling Strategy
+Lines 1599–1613 → Footer
+Lines 1615–1689 → Three.js 3D Background (JavaScript)
+Lines 1692–1708 → Navigation System (JavaScript)
+Lines 1711–1729 → Mobile Nav Controls (JavaScript)
+Lines 1732–1738 → 3D Card Mouse Tracking (JavaScript)
 ```
 
 ---
 
-### 🎨 CSS بالتفصيل
+### 🎨 CSS Highlights
 
-#### 1. Reset & Variables (سطر 11-39)
+<details>
+<summary><strong>1. Reset & CSS Variables (Lines 11–39)</strong></summary>
+
 ```css
-/* Reset عام لكل العناصر */
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+/* Universal reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-/* متغيرات CSS الرئيسية */
+/* Design tokens */
 :root {
-  --navy: #050d1f;    /* الخلفية */
-  --blue: #1a6be0;    /* اللون الرئيسي */
-  --cyan: #00c8e8;    /* لون التمييز */
-  /* ... باقي المتغيرات */
+  --navy: #050d1f;    /* Background */
+  --blue: #1a6be0;    /* Primary */
+  --cyan: #00c8e8;    /* Accent */
+  /* … full variable list above … */
 }
 ```
 
-#### 2. Topbar — Fixed Navigation (سطر 60-168)
+</details>
+
+<details>
+<summary><strong>2. Fixed Navigation (Lines 60–168)</strong></summary>
+
 ```css
-/* شريط التنقل الثابت في الأعلى */
+/* Fixed topbar with glassmorphism */
 .topbar {
-  position: fixed;           /* ثابت في مكانه */
-  height: var(--nav-h);      /* 68px */
-  background: rgba(5,13,31,0.92);  /* شبه شفاف */
-  backdrop-filter: blur(20px);     /* تأثير الضباب */
+  position: fixed;
+  height: var(--nav-h);           /* 68px */
+  background: rgba(5, 13, 31, 0.92);
+  backdrop-filter: blur(20px);
 }
 
-/* الـ Nav — KEY FIX:
-   المشكلة الأصلية: margin-right:auto في RTL
-   كان بيدفع الـ nav لليسار ويفصل الـ badges
-   الحل: flex:1 + min-width:0 بدون أي margin:auto
+/*
+  KEY FIX: RTL nav layout
+  ────────────────────────────────────────────
+  Original bug: margin-right:auto in RTL mode
+  pushed nav left, stranding badges.
+
+  Solution: flex:1 + min-width:0 — no auto margins.
 */
 .topbar-nav {
-  flex: 1;           /* يملأ المساحة المتبقية */
-  min-width: 0;      /* يسمح بالتقلص */
-  overflow-x: auto;  /* scroll أفقي لو مفيش مساحة */
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
 }
 ```
 
-#### 3. Hero Section (سطر 309-368)
+</details>
+
+<details>
+<summary><strong>3. Hero Section (Lines 309–368)</strong></summary>
+
 ```css
-/* قسم البداية الكبير */
 .hero {
   min-height: 560px;
-  background: radial-gradient(...)  /* تأثير ضوء في الخلفية */
+  background: radial-gradient(…); /* Radial glow effect */
 }
 
 .hero-title {
-  font-size: clamp(36px, 5vw, 72px);  /* حجم متجاوب */
+  font-size: clamp(36px, 5vw, 72px);       /* Fluid responsive */
   background: linear-gradient(135deg, #fff 30%, var(--cyan) 70%);
-  -webkit-background-clip: text;       /* النص بألوان متدرجة */
+  -webkit-background-clip: text;             /* Gradient text */
 }
 ```
 
-#### 4. Glassmorphism Cards (سطر 465-509)
+</details>
+
+<details>
+<summary><strong>4. Glassmorphism Cards (Lines 465–509)</strong></summary>
+
 ```css
-/* كروت بتأثير الزجاج */
 .card3d {
-  background: rgba(255,255,255,0.04);  /* شبه شفاف */
-  border: 1px solid rgba(0,180,255,0.12);
+  background: rgba(255, 255, 255, 0.04);    /* Semi-transparent */
+  border: 1px solid rgba(0, 180, 255, 0.12);
   border-radius: 24px;
 }
 
 .card3d:hover {
-  /* تأثير 3D عند الـ hover */
   transform: translateY(-4px) perspective(800px) rotateX(2deg);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
-/* تأثير الضوء اللي بيتبع الماوس */
+/* Mouse-tracking light effect */
 .card3d::after {
-  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), ...);
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 200, 232, 0.06) 0%,
+    transparent 60%
+  );
 }
 ```
 
-#### 5. Responsive Design (سطر 1119-1146)
+</details>
+
+<details>
+<summary><strong>5. Responsive Breakpoints (Lines 1119–1146)</strong></summary>
+
 ```css
-/* Tablet (≤ 1024px): إخفاء الـ badges */
+/* Tablet (≤ 1024px) — hide badges */
 @media (max-width: 1024px) {
   .topbar-badges { display: none; }
 }
 
-/* Mobile (≤ 768px): hamburger menu */
+/* Mobile (≤ 768px) — hamburger menu */
 @media (max-width: 768px) {
-  .topbar-nav { display: none; }      /* إخفاء nav الديسكتوب */
-  .hamburger { display: flex; }       /* إظهار زرار القائمة */
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }  /* عمود واحد */
+  .topbar-nav { display: none; }
+  .hamburger { display: flex; }
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr;
+  }
 }
 ```
 
+</details>
+
 ---
 
-### 🟨 JavaScript بالتفصيل
+### 🟨 JavaScript Highlights
 
-#### 1. Three.js 3D Background (سطر 1617-1689)
+<details>
+<summary><strong>1. Three.js 3D Background (Lines 1617–1689)</strong></summary>
+
 ```javascript
-// إنشاء خلفية 3D متحركة بـ Three.js
 const canvas = document.getElementById('bg-canvas');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 
-// 200 نقطة مضيئة عشوائية
+// 200 glowing particles
 const particleCount = 200;
 
-// 6 أشكال هندسية (Octahedron, Tetrahedron, Icosahedron)
-// بتدور ببطء وبتتحرك مع حركة الماوس
+// 6 geometric shapes (Octahedron, Tetrahedron, Icosahedron)
+// Slow rotation + mouse-driven movement
 
-// الكاميرا بتتحرك مع الماوس لتأثير parallax
+// Parallax camera tracking
 camera.position.x += (mouseX * 3 - camera.position.x) * 0.02;
 
-// Grid في الأرضية لتأثير العمق
+// Floor grid for depth perception
 const gridHelper = new THREE.GridHelper(120, 30);
 ```
 
-#### 2. Navigation System (سطر 1692-1708)
+</details>
+
+<details>
+<summary><strong>2. Page Navigation System (Lines 1692–1708)</strong></summary>
+
 ```javascript
-// خريطة الصفحات
 const pageMap = {
-  vision:0, screens:1, ux:2, frontend:3, backend:4,
-  database:5, ai:6, dashboard:7, roadmap:8, scaling:9
+  vision: 0, screens: 1, ux: 2, frontend: 3, backend: 4,
+  database: 5, ai: 6, dashboard: 7, roadmap: 8, scaling: 9
 };
 
-// التنقل بين الصفحات
 function showPage(id) {
-  // 1. إخفاء كل الصفحات
+  // 1. Hide all pages
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  // 2. إزالة active من كل الأزرار
+  // 2. Deactivate all nav buttons
   document.querySelectorAll('.tnav-btn').forEach(b => b.classList.remove('active'));
-  // 3. إظهار الصفحة المطلوبة
+  // 3. Show target page
   document.getElementById('page-' + id).classList.add('active');
-  // 4. تفعيل الزرار المناسب
-  // 5. Scroll لأعلى بسلاسة
+  // 4. Activate corresponding nav button
+  // 5. Smooth scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 ```
 
-#### 3. Mobile Navigation (سطر 1711-1729)
+</details>
+
+<details>
+<summary><strong>3. Mobile Navigation (Lines 1711–1729)</strong></summary>
+
 ```javascript
-// فتح القائمة الجانبية
 function openMobileNav() {
   document.getElementById('mobile-nav').classList.add('open');
-  document.body.style.overflow = 'hidden';  // منع الـ scroll
+  document.body.style.overflow = 'hidden';  // Lock body scroll
 }
 
-// إغلاق القائمة
 function closeMobileNav() {
   document.getElementById('mobile-nav').classList.remove('open');
-  document.body.style.overflow = '';  // إعادة الـ scroll
+  document.body.style.overflow = '';         // Restore scroll
 }
 
-// إغلاق بالضغط على الخلفية
-// إغلاق بزرار Escape
+// Also closes on backdrop tap or Escape key
 ```
 
-#### 4. 3D Card Mouse Tracking (سطر 1732-1738)
+</details>
+
+<details>
+<summary><strong>4. 3D Card Mouse Tracking (Lines 1732–1738)</strong></summary>
+
 ```javascript
-// تتبع حركة الماوس على كل card3d
 document.querySelectorAll('.card3d').forEach(card => {
   card.addEventListener('mousemove', (e) => {
     const rect = card.getBoundingClientRect();
-    // حفظ موقع الماوس كـ CSS custom property
+    // Store mouse position as CSS custom properties
     card.style.setProperty('--mx', (x / width * 100) + '%');
     card.style.setProperty('--my', (y / height * 100) + '%');
-    // الـ CSS بيستخدم --mx و --my لعمل تأثير الضوء
+    // CSS uses --mx and --my for the light-follow effect
   });
 });
 ```
 
+</details>
+
 ---
 
-### 📄 HTML Structure بالتفصيل
+### 📄 HTML Structure
 
-#### Topbar (سطر 1159-1194)
+<details>
+<summary><strong>Topbar Layout (Lines 1159–1194)</strong></summary>
+
 ```html
-<!-- Layout في RTL (يمين → يسار):
+<!-- RTL layout (right → left):
      [Logo]  [←── Nav (flex:1, scrollable) ──→]  [Badges]  [Hamburger] -->
 
 <header class="topbar">
-  <!-- 1. Logo — دايماً يمين في RTL -->
+  <!-- 1. Logo — always right in RTL -->
   <a class="topbar-logo">🎓 مصر للجامعات</a>
 
-  <!-- 2. Desktop Nav — 10 أزرار تنقل -->
+  <!-- 2. Desktop Nav — 10 navigation buttons -->
   <nav class="topbar-nav">
     <button>① Vision</button>
     <button>② Screens</button>
-    <!-- ... 8 أزرار تانيين -->
+    <!-- … 8 more buttons … -->
   </nav>
 
-  <!-- 3. Badges — مخفية تحت 1024px -->
+  <!-- 3. Badges — hidden below 1024px -->
   <div class="topbar-badges">
     <span>v1.0 Startup-Ready</span>
     <span>25 Screens</span>
     <span>AI-Powered</span>
   </div>
 
-  <!-- 4. Hamburger — مرئي فقط على الموبايل -->
+  <!-- 4. Hamburger — mobile only -->
   <button class="hamburger">☰</button>
 </header>
 ```
 
-#### Page System (سطر 1230-1595)
-```html
-<!-- كل صفحة هي div مخفي بـ display:none -->
-<!-- الصفحة الفعالة عليها class="active" اللي بتخليها display:block -->
+</details>
 
-<div id="page-vision" class="page active">...</div>     <!-- مرئية -->
-<div id="page-screens" class="page">...</div>            <!-- مخفية -->
-<div id="page-ux" class="page">...</div>                 <!-- مخفية -->
-<!-- ... وهكذا لـ 10 صفحات -->
+<details>
+<summary><strong>Page System (Lines 1230–1595)</strong></summary>
+
+```html
+<!-- Pages are hidden divs; the .active class shows them -->
+<div id="page-vision"   class="page active">…</div>  <!-- Visible -->
+<div id="page-screens"  class="page">…</div>           <!-- Hidden -->
+<div id="page-ux"       class="page">…</div>           <!-- Hidden -->
+<!-- … 10 pages total … -->
 ```
+
+</details>
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! If you'd like to contribute:
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
+3. **Commit** your changes: `git commit -m 'Add amazing feature'`
+4. **Push** to the branch: `git push origin feature/amazing-feature`
+5. **Open** a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <div align="center">
+
+<br/>
 
 ## 🎓 مصر للجامعات
 
@@ -1031,11 +1195,12 @@ document.querySelectorAll('.card3d').forEach(card => {
 
 Built with ❤️ for Egyptian Students
 
-Next.js 14 · PostgreSQL · GPT-4o · AWS Cairo
+`Next.js 14` · `PostgreSQL` · `GPT-4o` · `AWS Cairo`
 
 ---
 
-*© 2025 مصر للجامعات — AI Platform. All rights reserved.*
+*© 2026 مصر للجامعات — AI Platform. All rights reserved.*
+
+<br/>
 
 </div>
-]]>

@@ -1,29 +1,28 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/🎓-مصر_للجامعات-1a6be0?style=for-the-badge&labelColor=050d1f" alt="Logo" height="40"/>
+<img src="https://img.shields.io/badge/🎓-UniGuide-1a6be0?style=for-the-badge&labelColor=050d1f" alt="UniGuide Logo" height="40"/>
 
-# مصر للجامعات — Egypt College AI Platform
+# UniGuide — AI-Powered University Guidance Platform
 
-**اختار مستقبلك بذكاء**
+**Your Intelligent Path from High School to Career**
 
-> منصة ذكاء اصطناعي متكاملة تحلل ميول الطالب وتقترح الكلية والتخصص والجامعة المناسبة مع Roadmap واضح للمسار المهني
-
-<br/>
-
-![Version](https://img.shields.io/badge/version-1.0-1a6be0?style=for-the-badge&logo=semver&logoColor=white)
-![Status](https://img.shields.io/badge/status-Startup--Ready-00c8e8?style=for-the-badge&logo=statuspage&logoColor=white)
-![Screens](https://img.shields.io/badge/screens-25-0ea57a?style=for-the-badge&logo=figma&logoColor=white)
-![AI Models](https://img.shields.io/badge/AI_Models-5-8250dc?style=for-the-badge&logo=openai&logoColor=white)
-![Target](https://img.shields.io/badge/target-700K+_students-e0a51a?style=for-the-badge&logo=target&logoColor=white)
+> A full-stack AI platform that analyzes student interests, academic strengths, and behavioral data to recommend the best-fit university, major, and career roadmap — built for scale and precision.
 
 <br/>
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![Three.js](https://img.shields.io/badge/Three.js-000000?style=flat-square&logo=three.js&logoColor=white)
-![Next.js](https://img.shields.io/badge/Next.js_14-000000?style=flat-square&logo=next.js&logoColor=white)
+![Version](https://img.shields.io/badge/version-1.0.0-1a6be0?style=for-the-badge&logo=semver&logoColor=white)
+![Status](https://img.shields.io/badge/status-Active_Development-00c8e8?style=for-the-badge&logo=statuspage&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-0ea57a?style=for-the-badge&logo=opensourceinitiative&logoColor=white)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-8250dc?style=for-the-badge&logo=github&logoColor=white)
+
+<br/>
+
+![Angular](https://img.shields.io/badge/Angular-DD0031?style=flat-square&logo=angular&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=flat-square&logo=nestjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Jest](https://img.shields.io/badge/Jest-C21325?style=flat-square&logo=jest&logoColor=white)
+![Jasmine](https://img.shields.io/badge/Jasmine-8A4182?style=flat-square&logo=jasmine&logoColor=white)
 
 </div>
 
@@ -34,1154 +33,964 @@
 <details>
 <summary><strong>Click to expand</strong></summary>
 
-- [📋 Project Overview](#-project-overview)
-- [⚡ Problem & Solution](#-problem--solution)
-- [💡 Core Value Propositions](#-core-value-propositions)
-- [🎨 Design System](#-design-system)
-- [📱 Screen Inventory (25 Screens)](#-screen-inventory-25-screens)
-- [🔄 User Journey (UX Flow)](#-user-journey-ux-flow)
-- [🏗️ Information Architecture](#️-information-architecture)
-- [⚛️ Frontend Architecture](#️-frontend-architecture)
-- [⚙️ Backend Architecture](#️-backend-architecture)
-- [🗄️ Database Design](#️-database-design)
-- [🤖 AI System Architecture](#-ai-system-architecture)
-- [📊 Analytics Dashboard](#-analytics-dashboard)
-- [🚀 MVP Roadmap](#-mvp-roadmap)
-- [💰 Cost & Revenue Model](#-cost--revenue-model)
-- [📈 Scaling Strategy](#-scaling-strategy)
-- [📅 Key Milestones](#-key-milestones)
-- [🗂️ Current File Structure](#️-current-file-structure)
-- [🛠️ Getting Started](#️-getting-started)
-- [🔧 Code Deep Dive](#-code-deep-dive)
-- [🤝 Contributing](#-contributing)
+- [📋 Description](#-description)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [✨ Features](#-features)
+- [🏗️ Project Architecture](#️-project-architecture)
+- [📁 Folder Structure](#-folder-structure)
+- [🚀 Installation & Setup](#-installation--setup)
+- [📜 Scripts](#-scripts)
+- [🧪 Testing](#-testing)
+- [📡 API Documentation](#-api-documentation)
+- [☁️ Deployment](#️-deployment)
+- [🤝 Contribution Guidelines](#-contribution-guidelines)
 - [📄 License](#-license)
 
 </details>
 
 ---
 
-## 📋 Project Overview
+## 📋 Description
 
-**مصر للجامعات** is a comprehensive AI-powered platform designed to help Egyptian high school students choose the right college, major, and university. The platform leverages **5 integrated AI models** to analyze student interests and deliver personalized recommendations.
+**UniGuide** is a comprehensive, AI-powered university guidance platform designed to help high school graduates make informed, data-driven decisions about their higher education and career paths.
+
+### The Problem
+
+Every year, hundreds of thousands of high school students face one of the most critical decisions of their lives — choosing a university and major — without access to structured, personalized, or data-backed guidance. Decisions are often driven by family pressure or peer influence rather than a student's actual aptitude and interest.
+
+### The Solution
+
+UniGuide bridges this gap by combining a **15-question AI personality quiz**, a **real-time chatbot**, a **salary predictor**, and a **visual career roadmap** into a seamless, intelligent platform. The system analyzes each student's profile and delivers highly personalized college and major recommendations — complete with actionable next steps.
 
 | Detail | Info |
 |:---|:---|
-| **Project Name** | مصر للجامعات — AI Platform |
-| **Version** | `v1.0` Startup-Ready |
-| **Target Market** | 700,000+ high school students annually in Egypt |
-| **Total Screens** | 25 fully designed screens |
-| **AI Models** | 5 integrated AI models |
-| **MVP Timeline** | 20 weeks |
-| **Expansion** | MENA-ready |
-| **Language** | Arabic-first (RTL) |
+| **Platform** | Web Application (Mobile-responsive) |
+| **Primary Users** | High school students, parents, and academic advisors |
+| **AI Capabilities** | Recommendation engine, chatbot (RAG), salary prediction |
+| **Language Support** | Arabic-first (RTL) with English fallback |
+| **Deployment Target** | AWS / GCP — Cairo region |
 
 ---
 
-## ⚡ Problem & Solution
+## 🛠️ Tech Stack
 
-### 🔴 The Problem
+### Frontend
 
-Over **700,000 students** graduate from high school every year in Egypt without access to data-driven guidance for choosing their college. Decisions are made based on family opinions or peer pressure — not on the student's actual abilities and interests.
-
-### 🟢 The Solution
-
-An AI platform that analyzes a student's interests, grades, and behavior to recommend the best-fit college, major, and university — complete with a clear career roadmap.
-
-| Feature | Description |
-|:---|:---|
-| **AI Quiz** | 15-question personality & aptitude assessment |
-| **AI Chatbot** | 24/7 smart assistant in Arabic |
-| **Salary Predictor** | ML-powered future salary forecasting |
-| **Career Path** | Visual career roadmap from college to employment |
-
-### 🎯 Target Market
-
-Primary: Egyptian high school students and parents — **700K+ students/year**.  
-Expansion: **MENA region** (Saudi Arabia, UAE, Jordan, Morocco).
-
----
-
-## 💡 Core Value Propositions
-
-| Feature | Description |
-|:---|:---|
-| 🤖 **AI Matching** | Personalized recommendations based on Quiz + real-time behavioral data |
-| 📊 **Real Data** | Actual tuition fees, job opportunities, and market salaries — updated quarterly |
-| 👨‍👩‍👧 **Parent Layer** | Dedicated dashboard for parents to track progress and co-own the decision |
-| 🗺️ **Career Path** | End-to-end career roadmap from enrollment to job market |
-| 💬 **AI Chatbot** | Arabic-first smart assistant with 24/7 availability |
-| 💰 **Salary Predictor** | ML-based salary projections by major, university, and experience level |
-
----
-
-## 🎨 Design System
-
-### Color Palette
-
-| Swatch | Token | Hex | Usage |
-|:---:|:---|:---|:---|
-| 🔵 | `--blue` | `#1a6be0` | Primary buttons, links, active states |
-| 💎 | `--cyan` | `#00c8e8` | Accent highlights, icons, emphasis text |
-| 🌿 | `--teal` | `#0ea57a` | Success states, positive metrics |
-| 🟡 | `--amber` | `#e0a51a` | Warnings, secondary elements |
-| 🟠 | `--red` | `#e05c1a` | Errors, critical alerts |
-| 🟣 | `--purple` | `#8250dc` | AI features, premium indicators |
-| 🌑 | `--navy` | `#050d1f` | Primary background |
-| 🌒 | `--navy2` | `#0a1628` | Secondary background |
-| 🌓 | `--navy3` | `#0f1e36` | Card backgrounds |
-
-### CSS Custom Properties
-
-```css
-:root {
-  /* ── Backgrounds ── */
-  --navy:       #050d1f;
-  --navy2:      #0a1628;
-  --navy3:      #0f1e36;
-
-  /* ── Brand Colors ── */
-  --blue:       #1a6be0;
-  --blue2:      #2a7ff0;
-  --cyan:       #00c8e8;
-  --cyan2:      #00e5ff;
-  --teal:       #0ea57a;
-  --amber:      #e0a51a;
-  --red:        #e05c1a;
-
-  /* ── Typography ── */
-  --text:       #e8f0ff;
-  --text2:      #8ba4cc;
-  --text3:      #4d6a99;
-
-  /* ── Glass Effects ── */
-  --glass:      rgba(255, 255, 255, 0.04);
-  --glass2:     rgba(255, 255, 255, 0.08);
-  --glass3:     rgba(255, 255, 255, 0.12);
-
-  /* ── Borders ── */
-  --border:     rgba(0, 180, 255, 0.12);
-  --border2:    rgba(0, 180, 255, 0.22);
-
-  /* ── Shadows ── */
-  --glow:       0 0 40px rgba(26, 107, 224, 0.25);
-  --glow2:      0 0 60px rgba(0, 200, 232, 0.2);
-
-  /* ── Geometry ── */
-  --radius:     16px;
-  --radius2:    24px;
-
-  /* ── Fonts ── */
-  --font:       'Cairo', system-ui, sans-serif;
-  --mono:       'IBM Plex Mono', monospace;
-
-  /* ── Layout ── */
-  --nav-h:      68px;
-}
-```
-
-### Typography
-
-| Font | Weights | Usage |
-|:---|:---|:---|
-| **Cairo** | 300, 400, 500, 600, 700, 900 | Arabic headings & body text |
-| **IBM Plex Mono** | 400, 500 | Code snippets & technical numbers |
-
-### Spacing Scale
-
-- **Base unit:** `4px`
-- **Scale:** `4 → 8 → 12 → 16 → 24 → 32 → 48 → 64 → 80px`
-
-### Border Radius Tokens
-
-| Size | Value | Usage |
-|:---|:---|:---|
-| Small | `8px` | Buttons, inputs |
-| Medium | `16px` | Standard cards |
-| Large | `24px` | Feature panels |
-| Pill | `9999px` | Pills, badges |
-
----
-
-## 📱 Screen Inventory (25 Screens)
-
-### 🔐 Auth Flow — Screens 1–5
-
-<details>
-<summary><strong>01 · Splash / Onboarding</strong></summary>
-
-- 3 animated illustrative slides introducing the platform
-- CTA buttons: "ابدأ الآن" (Start Now) and "سجل دخول" (Login)
-- Design: animated illustrations, dark navy background, blue gradient accents
-- Interaction: 3 swipeable slides
-
-</details>
-
-<details>
-<summary><strong>02 · Registration</strong></summary>
-
-- **Fields:** Name, Egyptian phone (+20), Governorate (27 options), Account type (Student/Parent), Password
-- **Design:** Glassmorphism style
-
-</details>
-
-<details>
-<summary><strong>03 · OTP Verification</strong></summary>
-
-- 6-digit OTP input with auto-focus progression
-- 60-second countdown timer + resend button
-- Success animation on correct code
-
-</details>
-
-<details>
-<summary><strong>04 · Student Profile Setup</strong></summary>
-
-- Section selector (Science / Arts / Commerce)
-- High school score input (0–410)
-- Multi-select interests chips
-- Progress bar for profile completeness
-
-</details>
-
-<details>
-<summary><strong>05 · Login</strong></summary>
-
-- Phone + Password fields
-- Forgot password, Google OAuth, Biometric toggle, Remember me
-
-</details>
-
----
-
-### 🏠 Core Platform — Screens 6–15
-
-<details>
-<summary><strong>06 · Home Dashboard</strong></summary>
-
-- Personalized greeting with student name
-- Top 3 AI-recommended colleges (horizontal scrollable cards with match %)
-- Quick actions: Take Quiz, Find Colleges, Saved, Chat AI
-
-</details>
-
-<details>
-<summary><strong>07 · University Finder</strong></summary>
-
-- **Filters:** Governorate, Type (Public/Private/National), Score range, Fee range
-- Search bar + sort + result cards (match %, fees, employment rate)
-
-</details>
-
-<details>
-<summary><strong>08 · College Details</strong></summary>
-
-- Hero image, stats (fees, min score, employment rate, avg salary)
-- Specializations list, admission steps, student reviews, similar colleges
-- Save button with heart animation
-
-</details>
-
-<details>
-<summary><strong>09 · AI Quiz</strong></summary>
-
-- 15 questions — one per screen, 4 card-based choices with icons
-- Animated progress bar + Previous/Next navigation + time estimate
-
-</details>
-
-<details>
-<summary><strong>10 · Quiz Results</strong></summary>
-
-- Personality type reveal with animation
-- Top 10 college recommendations with match % bars and explanations
-
-</details>
-
-<details>
-<summary><strong>11 · Compare Colleges</strong></summary>
-
-- Side-by-side comparison table for 2–3 colleges
-- Rows: Fees, Score, Employment %, Avg Salary, Location, Specializations
-- Best-in-class highlighting (green)
-
-</details>
-
----
-
-### 🤖 AI Features — Screens 16–22
-
-<details>
-<summary><strong>16 · AI Chatbot</strong></summary>
-
-- Full Arabic chat interface with streaming text animation
-- Suggested question chips, inline college recommendation cards
-- RTL chat bubble design
-
-</details>
-
-<details>
-<summary><strong>17 · Salary Predictor</strong></summary>
-
-- **Inputs:** Specialization, University type, Years of experience (slider 0–20)
-- **Output:** Animated bar chart — Min / Median / Max salary in EGP
-
-</details>
-
-<details>
-<summary><strong>18 · Career Path</strong></summary>
-
-- Visual timeline: College → Internship → First Job → Growth → Senior Roles
-- Each stage: required skills, salary range, timeline
-
-</details>
-
-<details>
-<summary><strong>19 · Learning Roadmap</strong></summary>
-
-- Skills tree visualization, recommended courses with platform logos
-- Progress tracking + bookmarking
-
-</details>
-
-<details>
-<summary><strong>20 · Alternative Recommendations</strong></summary>
-
-- Triggered when student score is below minimum
-- 5 alternatives with similarity score and explanation — encouraging tone
-
-</details>
-
-<details>
-<summary><strong>21 · Scholarships</strong></summary>
-
-- Scholarship database with filters (score range, financial need, major, location)
-- Each entry: amount, deadline, requirements, eligibility %
-
-</details>
-
----
-
-### 👨‍👩‍👧 Parent & Admin — Screens 23–25
-
-<details>
-<summary><strong>23 · Parent Dashboard</strong></summary>
-
-- Child activity tracking: Quiz results, saved colleges, usage time
-- Insights: most viewed colleges, personality type, notification settings
-
-</details>
-
-<details>
-<summary><strong>24 · Admin Analytics</strong></summary>
-
-- **KPIs:** Total users, DAU, Quiz completions, Revenue
-- **Charts:** User growth (line), College interest (pie), Egypt heatmap, AI satisfaction
-
-</details>
-
-<details>
-<summary><strong>25 · Admission Steps</strong></summary>
-
-- Step-by-step admission guide per college
-- Interactive checklist, important dates calendar, official links, progress tracker
-
-</details>
-
----
-
-## 🔄 User Journey (UX Flow)
-
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                      Student Journey                             │
-├──────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ① Onboarding & Registration                                    │
-│     Sign up → OTP verification → Complete profile                │
-│           │                                                      │
-│           ▼                                                      │
-│  ② AI Quiz                                                       │
-│     15 personality questions → Instant results + Top 10 matches  │
-│           │                                                      │
-│           ▼                                                      │
-│  ③ Explore & Discover                                            │
-│     Search → Filter → Compare → Save favorites → Details         │
-│           │                                                      │
-│           ▼                                                      │
-│  ④ Deep Dive with AI                                             │
-│     AI Chatbot → Salary Predictor → Career Path                  │
-│           │                                                      │
-│           ▼                                                      │
-│  ⑤ Decision & Action                                             │
-│     Admission Steps → Scholarships → Share with parent           │
-│                                                                  │
-└──────────────────────────────────────────────────────────────────┘
-```
-
-### Navigation Architecture
-
-| Layer | Elements |
-|:---|:---|
-| **Primary** | Home · Explore · Quiz · AI Chat · Profile |
-| **Secondary (Contextual)** | College Details → Compare → Save → Admission Steps |
-| **Parent Portal** | Separate role-based routing with shared auth system |
-| **Admin Panel** | Protected `/admin` route — admin role only |
-
----
-
-## 🏗️ Information Architecture
-
-```
-/ (Root)
-├── /auth
-│   ├── /login                 ← Login
-│   ├── /register              ← Registration
-│   └── /otp-verify            ← OTP verification
-│
-├── /app (Protected)           ← Requires authentication
-│   ├── /dashboard             ← Home
-│   ├── /quiz                  ← AI Quiz (15 questions)
-│   ├── /quiz/results          ← Quiz results
-│   ├── /colleges              ← University finder
-│   ├── /colleges/:id          ← College details
-│   ├── /colleges/compare      ← Side-by-side comparison
-│   ├── /saved                 ← Saved colleges
-│   ├── /chat                  ← AI Chatbot
-│   ├── /salary                ← Salary Predictor
-│   ├── /career/:id            ← Career path by major
-│   ├── /scholarships          ← Scholarship database
-│   └── /profile               ← User profile
-│
-├── /parent
-│   └── /parent/dashboard      ← Parent control panel
-│
-└── /admin
-    └── /admin/analytics       ← Admin analytics dashboard
-```
-
----
-
-## ⚛️ Frontend Architecture
-
-### Tech Stack
-
-| Technology | Purpose |
-|:---|:---|
-| **Next.js 14** (App Router) | Framework — SSR + SSG + API Routes |
-| **TypeScript** | Type safety across the codebase |
-| **Tailwind CSS** | Utility-first CSS framework |
-| **Shadcn/UI** | Customizable component library |
-| **Zustand** | Lightweight state management |
-| **React Query** | Server state, caching, background refetching |
-| **Framer Motion** | Professional animations |
-| **Recharts** | Data visualization charts |
-| **Three.js** | 3D background effects |
-| **i18next** | Internationalization (Arabic-first) |
-
-### Folder Structure
-
-```
-src/
-├── app/                  ← Next.js App Router pages
-├── components/
-│   ├── ui/               ← Shadcn UI (Button, Card, Input…)
-│   ├── college/           ← College-specific components
-│   ├── quiz/              ← Quiz flow components
-│   └── ai/                ← AI features (Chat, Salary, Career)
-├── lib/                   ← Utility functions + API client
-├── hooks/                 ← Custom React hooks
-├── store/                 ← Zustand stores
-└── types/                 ← TypeScript type definitions
-```
-
-### State Management — Zustand Stores
-
-| Store | Responsibility |
-|:---|:---|
-| `useAuthStore` | Authentication state — login / logout / user data |
-| `useQuizStore` | Quiz answers + results + personality type |
-| `useCollegeStore` | Saved colleges + comparison + filters |
-| `useChatStore` | AI Chatbot conversations + history |
-
-### Data Fetching — React Query
-
-- **Automatic caching** with server state management
-- **Background refetch** for live data updates
-- **Optimistic updates** for snappy UX
-- **Streaming support** for AI chat responses
-
-### Performance Optimizations
-
-| Strategy | Benefit |
-|:---|:---|
-| ⚡ Next.js Image | Automatic image optimization |
-| ⚡ Dynamic Imports | Lazy-load heavy components |
-| ⚡ Virtualized Lists | Efficient rendering for long lists |
-| ⚡ Service Worker | Offline-first support |
-
-### Internationalization
-
-- **Arabic-first** — `dir="rtl"` on root element
-- **i18next** for dynamic string localization
-- **Cairo font** as the primary Arabic typeface
-
-### Testing Strategy
-
-| Type | Tool |
-|:---|:---|
-| Unit Tests | Vitest + React Testing Library |
-| E2E Tests | Playwright |
-| Component Docs | Storybook |
-
----
-
-## ⚙️ Backend Architecture
-
-### Tech Stack
-
-| Technology | Purpose |
-|:---|:---|
-| **Node.js 20 LTS** | Runtime environment |
-| **Express.js** | Web framework |
-| **TypeScript** | Type safety |
-| **PostgreSQL 16** | Primary database |
-| **Redis 7** | Caching, queues, sessions |
-| **Prisma ORM** | Database client + migrations |
-| **JWT + Refresh Tokens** | Authentication |
-| **Bull.js** | Background job queues |
-| **Socket.io** | Real-time notifications |
-| **AWS S3** | File storage |
-
-### Architecture Pattern
-
-**Monolith-first → Microservices-ready**
-
-```
-┌──────────────────────────────────────────────────────┐
-│                    API Gateway                        │
-├──────────┬──────────┬──────────┬──────────┬──────────┤
-│  Auth    │ College  │    AI    │  Notif.  │Analytics │
-│ Service  │ Service  │ Service  │ Service  │ Service  │
-│(Node.js) │(Node.js) │(Python)  │(Node.js) │(Node.js) │
-└──────────┴──────────┴──────────┴──────────┴──────────┘
-```
-
-### API Endpoints
-
-#### 🔐 Auth APIs
-
-| Method | Endpoint | Description |
-|:---|:---|:---|
-| `POST` | `/api/auth/register` | Register new user |
-| `POST` | `/api/auth/login` | Login — returns JWT + refresh token |
-| `POST` | `/api/auth/otp/send` | Send OTP to mobile |
-| `POST` | `/api/auth/otp/verify` | Verify OTP code |
-
-#### 🤖 AI APIs
-
-| Method | Endpoint | Description |
-|:---|:---|:---|
-| `POST` | `/api/ai/quiz/submit` | Submit quiz answers → AI recommendations (Top 10) |
-| `POST` | `/api/ai/chat` | AI Chatbot — Server-Sent Events streaming |
-| `POST` | `/api/ai/salary-predict` | Salary prediction (XGBoost ML model) |
-| `GET` | `/api/ai/roadmap/:studentId` | Personalized career roadmap |
-
----
-
-## 🗄️ Database Design
-
-**Engine:** PostgreSQL 16 + pgvector (AI embeddings) + Redis (caching layer)
-
-### `users` — User Accounts 👤
-
-| Column | Type | Description |
-|:---|:---|:---|
-| `id` **(PK)** | `UUID` | Unique identifier |
-| `name` | `VARCHAR(100)` | Display name |
-| `phone` | `VARCHAR(15)` | Egyptian mobile number |
-| `role` | `ENUM(student, parent, admin)` | User role |
-| `governorate` | `VARCHAR(50)` | Egyptian governorate |
-
-### `colleges` — College Registry 🎓
-
-| Column | Type | Description |
-|:---|:---|:---|
-| `id` **(PK)** | `UUID` | Unique identifier |
-| `name_ar` | `VARCHAR(200)` | College name (Arabic) |
-| `university_id` **(FK)** | `UUID → universities` | University relation |
-| `type` | `ENUM(gov, private, national)` | Institution type |
-| `min_score` | `DECIMAL(5,2)` | Minimum admission score |
-| `annual_fees` | `INTEGER` | Annual tuition in EGP |
-| `employment_rate` | `DECIMAL(5,2)` | Graduate employment % |
-
-### `quiz_sessions` — Quiz Sessions 📝
-
-| Column | Type | Description |
-|:---|:---|:---|
-| `id` **(PK)** | `UUID` | Unique identifier |
-| `student_id` **(FK)** | `UUID → users` | Student relation |
-| `answers` | `JSONB` | All 15 question answers |
-| `personality_type` | `VARCHAR(50)` | Determined personality type |
-
-### `ai_recommendations` — AI Recommendations 🤖
-
-| Column | Type | Description |
-|:---|:---|:---|
-| `id` **(PK)** | `UUID` | Unique identifier |
-| `student_id` **(FK)** | `UUID → users` | Student relation |
-| `college_id` **(FK)** | `UUID → colleges` | College relation |
-| `match_score` | `DECIMAL(5,2)` | Match percentage (0–100) |
-| `reasons` | `JSONB` | Recommendation rationale (Arabic) |
-
-### Entity Relationship Diagram
-
-```
-users ──────────┐
-  │              │
-  │ 1:N          │ 1:N
-  ▼              ▼
-quiz_sessions   ai_recommendations
-                     │
-                     │ N:1
-                     ▼
-                 colleges
-                     │
-                     │ N:1
-                     ▼
-                universities
-```
-
----
-
-## 🤖 AI System Architecture
-
-### Model 1 — Recommendation Engine
-
-| Attribute | Detail |
-|:---|:---|
-| **Type** | Hybrid (Content-based + Collaborative Filtering + LLM reranking) |
-| **Stack** | Python FastAPI → Scikit-learn → GPT-4o reranking |
-| **Target Accuracy** | 82%+ user satisfaction rate |
-| **Function** | Analyze student data (Quiz + behavior) → rank Top 10 colleges |
-
-### Model 2 — Arabic AI Chatbot (RAG)
-
-| Attribute | Detail |
-|:---|:---|
-| **Type** | Retrieval Augmented Generation |
-| **LLM** | GPT-4o |
-| **Vector DB** | pgvector (PostgreSQL extension) |
-| **Streaming** | Server-Sent Events |
-| **Function** | Smart Arabic assistant answering student questions over Egyptian college data |
-
-### Model 3 — Salary Predictor
-
-| Attribute | Detail |
-|:---|:---|
-| **Type** | Gradient Boosting Regressor (XGBoost) |
-| **Training Data** | Egyptian job market dataset |
-| **Features** | `college_type`, `specialization`, `governorate`, `years_exp` |
-| **Output** | Predicted salary in EGP (Min / Median / Max) |
-
-### Model 4 — Alternative Recommendations
-
-| Attribute | Detail |
-|:---|:---|
-| **Type** | Rule-based + ML |
-| **Function** | Similarity scoring between colleges (subjects, careers, fees) |
-| **Trigger** | Activated when student score is below a college's minimum |
-
-### Model 5 — Behavior Tracking
-
-| Attribute | Detail |
-|:---|:---|
-| **Type** | Real-time event tracking |
-| **Pipeline** | Events → Redis queue → Async processing → Update preference vector → Rerank recommendations |
-| **Function** | Track student behavior (views, time-on-page, saves) to refine suggestions |
-
----
-
-## 📊 Analytics Dashboard
-
-### Key KPIs
-
-| Metric | Value (Demo) | Description |
+| Technology | Version | Purpose |
 |:---|:---:|:---|
-| 👥 Total Students | **12,450** | Registered students |
-| 📝 Quiz Completion | **87%** | Students who completed the full quiz |
-| 🎓 Avg Saved | **3.2** | Average saved colleges per student |
-| 💬 AI Messages | **4.1M** | Total AI Chatbot messages |
+| **Angular** | 17+ | SPA framework with standalone components & signals |
+| **TypeScript** | 5.x | Static typing across the entire codebase |
+| **Angular Material** | 17+ | UI component library |
+| **RxJS** | 7.x | Reactive state management & async data streams |
+| **NgRx** | 17+ | Global state management (Redux pattern) |
+| **SCSS** | — | Advanced component-level styling |
+| **Jasmine + Karma** | — | Unit & integration testing |
 
-### Charts & Visualizations
+### Backend
 
-| Report | Details |
+| Technology | Version | Purpose |
+|:---|:---:|:---|
+| **NestJS** | 10+ | Modular, scalable Node.js framework |
+| **TypeScript** | 5.x | Full type safety on the server |
+| **TypeORM** | 0.3.x | ORM — database migrations & entity management |
+| **PostgreSQL** | 16 | Primary relational database |
+| **Redis** | 7 | Session caching and background job queues |
+| **JWT + Passport** | — | Authentication & authorization |
+| **Swagger / OpenAPI** | 3.x | Auto-generated API documentation |
+| **Jest** | 29+ | Unit, integration, and e2e testing |
+
+### Infrastructure & DevOps
+
+| Technology | Purpose |
 |:---|:---|
-| **Student Interests** | Pie chart — Distribution across colleges with drill-down by governorate & gender |
-| **Regional Trends** | Egypt heatmap — Most searched colleges per governorate |
-| **Salary Trends** | Line chart — Avg salary by major + 3-year prediction |
-| **AI Performance** | Recommendation accuracy, chatbot satisfaction, avg tokens/session, cost tracking |
+| **Docker / Docker Compose** | Containerized local development |
+| **GitHub Actions** | CI/CD pipeline (lint → test → build → deploy) |
+| **AWS EC2 + RDS** | Production hosting & managed database |
+| **AWS S3 + CloudFront** | Static frontend hosting & CDN delivery |
 
 ---
 
-## 🚀 MVP Roadmap
+## ✨ Features
 
-### 20 Weeks — From Idea to Launch
+### 🔐 Authentication & User Management
+- Phone-based OTP registration with SMS verification
+- JWT access tokens + refresh token rotation
+- Role-based access control: `student`, `parent`, `admin`
+- Google OAuth 2.0 social login integration
+- Biometric authentication toggle (mobile browsers)
 
-#### Phase 1 — Foundation 🔵 (Weeks 1–4)
+### 🤖 AI-Powered Recommendation Engine
+- **15-question personality & aptitude quiz** with real-time result processing
+- Hybrid recommendation model (content-based + collaborative filtering + GPT-4o reranking)
+- Top 10 personalized college matches with match-percentage explanation
+- Live behavioral tracking — recommendations update as users interact with the platform
 
-| Week | Tasks |
-|:---|:---|
-| **1–2** | Project setup: Next.js + Backend boilerplate, DB schema, CI/CD pipeline |
-| **3–4** | Auth flow (Screens 1–5), JWT + Refresh tokens, OTP integration |
+### 🎓 University & College Explorer
+- Searchable, filterable database of 500+ Egyptian colleges and universities
+- Advanced filters: governorate, institution type, score range, annual fee range
+- Side-by-side comparison of up to 3 institutions across 8+ metrics
+- Save to favourites with real-time sync across devices
 
-#### Phase 2 — Core Features 🟢 (Weeks 5–10)
+### 💬 AI Chatbot (Arabic RAG)
+- GPT-4o powered chatbot with Retrieval-Augmented Generation over the college database
+- Fully Arabic, RTL-native chat interface with streaming text responses
+- Suggested question chips for guided exploration
+- Conversation history persistence per user session
 
-| Week | Tasks |
-|:---|:---|
-| **5–6** | Home Dashboard, University Finder, College Details, DB seeding (500+ colleges) |
-| **7–10** | AI Quiz, Compare, Saved, Career Path, Admission Steps |
+### 💰 Salary Predictor
+- XGBoost ML model trained on Egyptian labour market data
+- Inputs: specialization, institution type, governorate, years of experience
+- Output: animated Min / Median / Max salary projection in EGP
+- 3-year forward projections by major
 
-#### Phase 3 — AI Features 🔴 (Weeks 11–16)
+### 🗺️ Career Roadmap
+- Visual timeline from college enrollment to senior employment
+- Stage-by-stage breakdown: required skills, certifications, expected salary
+- Recommended online courses with platform logos and direct links
+- Skill-tree visualization with interactive progress tracking
 
-| Week | Tasks |
-|:---|:---|
-| **11–12** | AI Chatbot (RAG), Arabic NLP, streaming interface |
-| **13–16** | Salary Predictor, Alternative Recommendations, Parent Dashboard |
+### 👨‍👩‍👧 Parent Dashboard
+- Real-time visibility into child's quiz results, saved colleges, and AI interactions
+- Notification system for application deadlines and important dates
+- Co-decision tools: shared notes and approval workflows
 
-#### Phase 4 — Polish & Launch 🟡 (Weeks 17–20)
-
-| Week | Tasks |
-|:---|:---|
-| **17–18** | Analytics Dashboard, Performance optimization, RTL QA, User testing (50 students) |
-| **19–20** | Beta launch (1,000 students), App Store submission, Marketing campaign |
-
----
-
-## 💰 Cost & Revenue Model
-
-### Monthly Operating Costs
-
-| Item | Cost |
-|:---|---:|
-| Infrastructure (AWS/GCP) | ~4,500 EGP |
-| AI API (OpenAI/Gemini) | ~8,000 EGP |
-| SMS OTP | ~2,000 EGP |
-| **Monthly Total** | **~17,000 EGP** |
-
-### Revenue Streams
-
-| Stream | Model | Pricing |
-|:---|:---|:---|
-| 🎯 **Freemium (B2C)** | Monthly student subscription | 99 EGP/month |
-| 🏫 **B2B Schools** | School subscriptions | 2,000 EGP/school |
-| 🎓 **University Ads** | Sponsored placement slots | Per campaign |
-| 📊 **Data Insights** | Annual market reports | Per report |
+### 📊 Admin Analytics Panel
+- Live KPI dashboard: DAU, quiz completions, AI satisfaction scores
+- Egypt heatmap — top-searched colleges by governorate
+- Revenue tracking, subscription analytics, and AI cost monitoring
+- Data export (CSV / PDF) for institutional reporting
 
 ---
 
-## 📈 Scaling Strategy
+## 🏗️ Project Architecture
 
-### 0 → 1M Users in 3 Years
-
-#### Year 1 — Egypt MVP (0 → 50K)
-
-- ✅ Single-region AWS (Cairo)
-- ✅ Monolith → microservices-ready
-- ✅ Focus: product-market fit
-- 🎯 Target: 50K students
-
-#### Year 2 — Egypt Scale (50K → 500K)
-
-- ✅ Microservices split
-- ✅ Redis cluster + DB read replicas
-- ✅ Mobile app (React Native)
-- 🎯 B2B: 2,000+ schools
-
-#### Year 3 — MENA Expansion (500K → 1M+)
-
-- 🌍 Saudi Arabia
-- 🌍 UAE + Jordan
-- 🌍 Morocco
-- 💰 Series A target: **$3M**
-
----
-
-## 📅 Key Milestones
-
-| Month | Event |
-|:---|:---|
-| **Month 5** | MVP Launch — 1,000 beta users — first real feedback |
-| **Month 8** | 10,000 users — B2B school partnerships — first revenue |
-| **Month 12** | 50,000 users — Profitability — Seed funding preparation |
-| **Month 18** | Mobile app launch, 200K users, Seed funding closes |
-| **Month 30** | MENA expansion, 1M+ users across 4 countries, Series A: $3M |
-
----
-
-## 🗂️ Current File Structure
+UniGuide follows a **clean, decoupled, three-tier architecture**:
 
 ```
-uniapp/
-├── index.html              ← Main application file (HTML + CSS + JS)
-├── README.md               ← This document — comprehensive project documentation
-└── .git/                   ← Git version control
+┌─────────────────────────────────────────────────────────────┐
+│                      Client Layer                            │
+│            Angular SPA  ─  HTTPS (TLS 1.3)                  │
+└─────────────────────────┬───────────────────────────────────┘
+                          │  REST / SSE
+┌─────────────────────────▼───────────────────────────────────┐
+│                      API Layer                               │
+│             NestJS  ─  JWT Auth  ─  Swagger                  │
+│                                                              │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐       │
+│  │   Auth   │ │ College  │ │    AI    │ │Analytics │       │
+│  │  Module  │ │  Module  │ │  Module  │ │  Module  │       │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘       │
+└──────────────────┬──────────────────┬───────────────────────┘
+                   │                  │
+      ┌────────────▼──────┐  ┌────────▼────────┐
+      │   PostgreSQL 16   │  │   Redis 7        │
+      │  (Primary Store)  │  │  (Cache + Queue) │
+      └───────────────────┘  └─────────────────┘
 ```
 
-### `index.html` — Main Application (1,742 lines)
+### Data Flow
 
-This is a **single-page application** prototype containing everything in one file:
-
-| Section | Lines | Content |
-|:---|:---|:---|
-| **CSS** | 10 → 1147 | Complete design system & styles |
-| **HTML** | 1149 → 1613 | All screens & page content |
-| **JavaScript** | 1615 → 1739 | Navigation + Three.js + interactions |
-
-> **Note:** This is a prototype / documentation app. The production application will be built with **Next.js 14** as detailed in the tech stack above.
+1. **Angular** sends authenticated HTTP requests (via `HttpClient` with JWT interceptors) to the NestJS REST API.
+2. **NestJS guards** validate the JWT on every protected route before passing control to the appropriate module.
+3. **TypeORM repositories** handle all database interactions, with migrations managing schema changes in both local and production environments.
+4. **AI endpoints** proxy requests to a Python FastAPI micro-service (LLM + ML models) and stream results back to the client via **Server-Sent Events (SSE)**.
+5. **Redis** caches hot data (college listings, quiz results) and manages background job queues (email notifications, OTP expiry).
 
 ---
 
-## 🛠️ Getting Started
+## 📁 Folder Structure
 
-### Quick Start (Current Prototype)
+### Frontend — Angular
+
+```
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── core/                      # Singleton services, guards, interceptors
+│   │   │   ├── auth/
+│   │   │   │   ├── auth.service.ts
+│   │   │   │   ├── auth.guard.ts
+│   │   │   │   └── jwt.interceptor.ts
+│   │   │   └── services/
+│   │   │       ├── api.service.ts
+│   │   │       └── analytics.service.ts
+│   │   │
+│   │   ├── shared/                    # Shared components, pipes, directives
+│   │   │   ├── components/
+│   │   │   │   ├── college-card/
+│   │   │   │   ├── loading-spinner/
+│   │   │   │   └── confirm-dialog/
+│   │   │   ├── pipes/
+│   │   │   │   └── arabic-number.pipe.ts
+│   │   │   └── directives/
+│   │   │       └── lazy-image.directive.ts
+│   │   │
+│   │   ├── features/                  # Feature modules (lazy-loaded)
+│   │   │   ├── auth/
+│   │   │   │   ├── login/
+│   │   │   │   ├── register/
+│   │   │   │   └── otp-verify/
+│   │   │   ├── dashboard/
+│   │   │   ├── college-explorer/
+│   │   │   │   ├── college-list/
+│   │   │   │   ├── college-detail/
+│   │   │   │   └── college-compare/
+│   │   │   ├── quiz/
+│   │   │   │   ├── quiz-flow/
+│   │   │   │   └── quiz-results/
+│   │   │   ├── ai-chat/
+│   │   │   ├── salary-predictor/
+│   │   │   ├── career-roadmap/
+│   │   │   └── parent-dashboard/
+│   │   │
+│   │   ├── store/                     # NgRx state management
+│   │   │   ├── auth/
+│   │   │   │   ├── auth.actions.ts
+│   │   │   │   ├── auth.reducer.ts
+│   │   │   │   ├── auth.effects.ts
+│   │   │   │   └── auth.selectors.ts
+│   │   │   ├── college/
+│   │   │   └── quiz/
+│   │   │
+│   │   ├── models/                    # TypeScript interfaces & enums
+│   │   │   ├── user.model.ts
+│   │   │   ├── college.model.ts
+│   │   │   └── quiz.model.ts
+│   │   │
+│   │   ├── app.routes.ts              # Root lazy-loaded route definitions
+│   │   ├── app.config.ts              # Application providers
+│   │   └── app.component.ts
+│   │
+│   ├── assets/
+│   │   ├── i18n/                      # Translation files (ar.json, en.json)
+│   │   └── icons/
+│   │
+│   ├── environments/
+│   │   ├── environment.ts             # Development environment
+│   │   └── environment.prod.ts        # Production environment
+│   │
+│   └── styles/
+│       ├── _variables.scss            # Design tokens
+│       ├── _typography.scss
+│       ├── _mixins.scss
+│       └── styles.scss                # Global styles
+│
+├── angular.json
+├── tsconfig.json
+├── karma.conf.js
+└── package.json
+```
+
+### Backend — NestJS
+
+```
+backend/
+├── src/
+│   ├── modules/
+│   │   ├── auth/
+│   │   │   ├── auth.module.ts
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── strategies/
+│   │   │   │   ├── jwt.strategy.ts
+│   │   │   │   └── google.strategy.ts
+│   │   │   └── dto/
+│   │   │       ├── login.dto.ts
+│   │   │       └── register.dto.ts
+│   │   │
+│   │   ├── users/
+│   │   │   ├── users.module.ts
+│   │   │   ├── users.controller.ts
+│   │   │   ├── users.service.ts
+│   │   │   └── entities/
+│   │   │       └── user.entity.ts
+│   │   │
+│   │   ├── colleges/
+│   │   │   ├── colleges.module.ts
+│   │   │   ├── colleges.controller.ts
+│   │   │   ├── colleges.service.ts
+│   │   │   └── entities/
+│   │   │       ├── college.entity.ts
+│   │   │       └── university.entity.ts
+│   │   │
+│   │   ├── quiz/
+│   │   │   ├── quiz.module.ts
+│   │   │   ├── quiz.controller.ts
+│   │   │   ├── quiz.service.ts
+│   │   │   └── entities/
+│   │   │       └── quiz-session.entity.ts
+│   │   │
+│   │   ├── ai/
+│   │   │   ├── ai.module.ts
+│   │   │   ├── ai.controller.ts
+│   │   │   ├── recommendation.service.ts
+│   │   │   ├── chatbot.service.ts
+│   │   │   └── salary-predictor.service.ts
+│   │   │
+│   │   └── analytics/
+│   │       ├── analytics.module.ts
+│   │       ├── analytics.controller.ts
+│   │       └── analytics.service.ts
+│   │
+│   ├── common/
+│   │   ├── decorators/
+│   │   │   ├── roles.decorator.ts
+│   │   │   └── current-user.decorator.ts
+│   │   ├── guards/
+│   │   │   ├── jwt-auth.guard.ts
+│   │   │   └── roles.guard.ts
+│   │   ├── filters/
+│   │   │   └── http-exception.filter.ts
+│   │   ├── interceptors/
+│   │   │   ├── logging.interceptor.ts
+│   │   │   └── transform.interceptor.ts
+│   │   └── pipes/
+│   │       └── validation.pipe.ts
+│   │
+│   ├── database/
+│   │   └── migrations/                # TypeORM migration files
+│   │
+│   ├── config/
+│   │   ├── app.config.ts
+│   │   ├── database.config.ts
+│   │   └── jwt.config.ts
+│   │
+│   └── main.ts                        # Application entry point
+│
+├── test/
+│   ├── app.e2e-spec.ts
+│   └── jest-e2e.json
+│
+├── .env.example
+├── docker-compose.yml
+├── nest-cli.json
+├── tsconfig.json
+└── package.json
+```
+
+---
+
+## 🚀 Installation & Setup
+
+### Prerequisites
+
+Ensure the following tools are installed on your machine:
+
+| Tool | Minimum Version | Install |
+|:---|:---:|:---|
+| Node.js | 20 LTS | [nodejs.org](https://nodejs.org) |
+| npm | 10+ | Comes with Node.js |
+| Angular CLI | 17+ | `npm install -g @angular/cli` |
+| NestJS CLI | 10+ | `npm install -g @nestjs/cli` |
+| PostgreSQL | 16 | [postgresql.org](https://postgresql.org) |
+| Redis | 7 | [redis.io](https://redis.io) |
+| Docker (optional) | 24+ | [docker.com](https://docker.com) |
+
+---
+
+### 1. Clone the Repository
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/uniapp.git
-cd uniapp
-
-# Open in browser — that's it!
-# Windows
-start index.html
-
-# macOS
-open index.html
-
-# Linux
-xdg-open index.html
+git clone https://github.com/your-org/uniguide.git
+cd uniguide
 ```
 
-### Production Setup (Future Build)
+---
+
+### 2. Install Dependencies
+
+#### Frontend
 
 ```bash
-# ── Frontend ──
-npx create-next-app@latest uniapp-frontend --typescript --tailwind --app
-cd uniapp-frontend
-npm install zustand @tanstack/react-query framer-motion recharts three i18next
+cd frontend
+npm install
+```
 
-# ── Backend ──
-mkdir uniapp-backend && cd uniapp-backend
-npm init -y
-npm install express typescript prisma @prisma/client jsonwebtoken bcryptjs bull redis socket.io
-npx prisma init
+#### Backend
+
+```bash
+cd ../backend
+npm install
 ```
 
 ---
 
-## 🔧 Code Deep Dive
+### 3. Environment Variables Setup
 
-### File Layout Overview
+#### Backend — `.env`
 
-```
-Line 1          → <!DOCTYPE html> + page opening
-Line 2          → <html lang="ar" dir="rtl"> — Arabic RTL
-Lines 3–9       → <head> — meta tags + Google Fonts + Three.js CDN
-Lines 10–1147   → <style> — complete CSS design system
-Line 1149       → <body>
-Line 1151       → Three.js Canvas (animated 3D background)
-Lines 1159–1194 → Topbar / Fixed navigation
-Lines 1197–1225 → Mobile navigation overlay
-Line 1227       → <main> — main content begins
-Lines 1230–1348 → Page 1: Vision
-Lines 1351–1392 → Page 2: Screens
-Lines 1395–1442 → Page 3: UX Flow
-Lines 1445–1480 → Page 4: Frontend Architecture
-Lines 1483–1513 → Page 5: Backend Architecture
-Lines 1516–1525 → Page 6: Database Architecture
-Lines 1528–1538 → Page 7: AI System Design
-Lines 1541–1558 → Page 8: Analytics Dashboard
-Lines 1561–1575 → Page 9: MVP Roadmap
-Lines 1578–1595 → Page 10: Scaling Strategy
-Lines 1599–1613 → Footer
-Lines 1615–1689 → Three.js 3D Background (JavaScript)
-Lines 1692–1708 → Navigation System (JavaScript)
-Lines 1711–1729 → Mobile Nav Controls (JavaScript)
-Lines 1732–1738 → 3D Card Mouse Tracking (JavaScript)
+Copy the example and fill in your values:
+
+```bash
+cp .env.example .env
 ```
 
----
+```env
+# ── App ──────────────────────────────────────────
+NODE_ENV=development
+PORT=3000
 
-### 🎨 CSS Highlights
+# ── Database ─────────────────────────────────────
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=your_secure_password
+DB_NAME=uniguide_db
 
-<details>
-<summary><strong>1. Reset & CSS Variables (Lines 11–39)</strong></summary>
+# ── Redis ────────────────────────────────────────
+REDIS_HOST=localhost
+REDIS_PORT=6379
 
-```css
-/* Universal reset */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+# ── Authentication ───────────────────────────────
+JWT_SECRET=your_jwt_secret_min_32_chars
+JWT_EXPIRES_IN=15m
+JWT_REFRESH_SECRET=your_refresh_secret
+JWT_REFRESH_EXPIRES_IN=7d
 
-/* Design tokens */
-:root {
-  --navy: #050d1f;    /* Background */
-  --blue: #1a6be0;    /* Primary */
-  --cyan: #00c8e8;    /* Accent */
-  /* … full variable list above … */
-}
+# ── Google OAuth ─────────────────────────────────
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CALLBACK_URL=http://localhost:3000/api/auth/google/callback
+
+# ── SMS (OTP) ────────────────────────────────────
+SMS_API_KEY=your_sms_provider_api_key
+SMS_SENDER_ID=UniGuide
+
+# ── AI Services ──────────────────────────────────
+OPENAI_API_KEY=sk-...
+AI_SERVICE_URL=http://localhost:8000  # Python FastAPI micro-service
 ```
 
-</details>
+#### Frontend — `src/environments/environment.ts`
 
-<details>
-<summary><strong>2. Fixed Navigation (Lines 60–168)</strong></summary>
-
-```css
-/* Fixed topbar with glassmorphism */
-.topbar {
-  position: fixed;
-  height: var(--nav-h);           /* 68px */
-  background: rgba(5, 13, 31, 0.92);
-  backdrop-filter: blur(20px);
-}
-
-/*
-  KEY FIX: RTL nav layout
-  ────────────────────────────────────────────
-  Original bug: margin-right:auto in RTL mode
-  pushed nav left, stranding badges.
-
-  Solution: flex:1 + min-width:0 — no auto margins.
-*/
-.topbar-nav {
-  flex: 1;
-  min-width: 0;
-  overflow-x: auto;
-}
-```
-
-</details>
-
-<details>
-<summary><strong>3. Hero Section (Lines 309–368)</strong></summary>
-
-```css
-.hero {
-  min-height: 560px;
-  background: radial-gradient(…); /* Radial glow effect */
-}
-
-.hero-title {
-  font-size: clamp(36px, 5vw, 72px);       /* Fluid responsive */
-  background: linear-gradient(135deg, #fff 30%, var(--cyan) 70%);
-  -webkit-background-clip: text;             /* Gradient text */
-}
-```
-
-</details>
-
-<details>
-<summary><strong>4. Glassmorphism Cards (Lines 465–509)</strong></summary>
-
-```css
-.card3d {
-  background: rgba(255, 255, 255, 0.04);    /* Semi-transparent */
-  border: 1px solid rgba(0, 180, 255, 0.12);
-  border-radius: 24px;
-}
-
-.card3d:hover {
-  transform: translateY(-4px) perspective(800px) rotateX(2deg);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-}
-
-/* Mouse-tracking light effect */
-.card3d::after {
-  background: radial-gradient(
-    circle at var(--mx, 50%) var(--my, 50%),
-    rgba(0, 200, 232, 0.06) 0%,
-    transparent 60%
-  );
-}
-```
-
-</details>
-
-<details>
-<summary><strong>5. Responsive Breakpoints (Lines 1119–1146)</strong></summary>
-
-```css
-/* Tablet (≤ 1024px) — hide badges */
-@media (max-width: 1024px) {
-  .topbar-badges { display: none; }
-}
-
-/* Mobile (≤ 768px) — hamburger menu */
-@media (max-width: 768px) {
-  .topbar-nav { display: none; }
-  .hamburger { display: flex; }
-  .grid-2, .grid-3, .grid-4 {
-    grid-template-columns: 1fr;
-  }
-}
-```
-
-</details>
-
----
-
-### 🟨 JavaScript Highlights
-
-<details>
-<summary><strong>1. Three.js 3D Background (Lines 1617–1689)</strong></summary>
-
-```javascript
-const canvas = document.getElementById('bg-canvas');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-
-// 200 glowing particles
-const particleCount = 200;
-
-// 6 geometric shapes (Octahedron, Tetrahedron, Icosahedron)
-// Slow rotation + mouse-driven movement
-
-// Parallax camera tracking
-camera.position.x += (mouseX * 3 - camera.position.x) * 0.02;
-
-// Floor grid for depth perception
-const gridHelper = new THREE.GridHelper(120, 30);
-```
-
-</details>
-
-<details>
-<summary><strong>2. Page Navigation System (Lines 1692–1708)</strong></summary>
-
-```javascript
-const pageMap = {
-  vision: 0, screens: 1, ux: 2, frontend: 3, backend: 4,
-  database: 5, ai: 6, dashboard: 7, roadmap: 8, scaling: 9
+```typescript
+export const environment = {
+  production: false,
+  apiBaseUrl: 'http://localhost:3000/api',
+  wsUrl: 'ws://localhost:3000',
 };
-
-function showPage(id) {
-  // 1. Hide all pages
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  // 2. Deactivate all nav buttons
-  document.querySelectorAll('.tnav-btn').forEach(b => b.classList.remove('active'));
-  // 3. Show target page
-  document.getElementById('page-' + id).classList.add('active');
-  // 4. Activate corresponding nav button
-  // 5. Smooth scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
 ```
 
-</details>
+---
 
-<details>
-<summary><strong>3. Mobile Navigation (Lines 1711–1729)</strong></summary>
+### 4. Database Setup (PostgreSQL)
 
-```javascript
-function openMobileNav() {
-  document.getElementById('mobile-nav').classList.add('open');
-  document.body.style.overflow = 'hidden';  // Lock body scroll
-}
+#### Option A — Manual Setup
 
-function closeMobileNav() {
-  document.getElementById('mobile-nav').classList.remove('open');
-  document.body.style.overflow = '';         // Restore scroll
-}
+```bash
+# Connect to PostgreSQL
+psql -U postgres
 
-// Also closes on backdrop tap or Escape key
+# Create the database
+CREATE DATABASE uniguide_db;
+\q
 ```
 
-</details>
+```bash
+# Run TypeORM migrations
+cd backend
+npm run migration:run
+```
 
-<details>
-<summary><strong>4. 3D Card Mouse Tracking (Lines 1732–1738)</strong></summary>
+#### Option B — Docker Compose (Recommended)
 
-```javascript
-document.querySelectorAll('.card3d').forEach(card => {
-  card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    // Store mouse position as CSS custom properties
-    card.style.setProperty('--mx', (x / width * 100) + '%');
-    card.style.setProperty('--my', (y / height * 100) + '%');
-    // CSS uses --mx and --my for the light-follow effect
+```bash
+# From the project root
+docker-compose up -d postgres redis
+```
+
+The `docker-compose.yml` spins up PostgreSQL and Redis with the correct credentials pre-configured matching `.env.example`.
+
+---
+
+### 5. Run Development Servers
+
+Open two terminal windows:
+
+#### Terminal 1 — Backend
+
+```bash
+cd backend
+npm run start:dev
+```
+
+The API will be available at: `http://localhost:3000`  
+Swagger UI: `http://localhost:3000/api/docs`
+
+#### Terminal 2 — Frontend
+
+```bash
+cd frontend
+ng serve
+```
+
+The Angular app will be available at: `http://localhost:4200`
+
+---
+
+## 📜 Scripts
+
+### Frontend Scripts
+
+| Command | Description |
+|:---|:---|
+| `ng serve` | Start Angular dev server with hot-reload |
+| `ng build` | Build for production (`dist/` output) |
+| `ng build --configuration production` | Optimized production build with AOT |
+| `ng test` | Run unit tests with Karma + Jasmine |
+| `ng test --code-coverage` | Run tests and generate code coverage report |
+| `ng lint` | Run ESLint across the Angular project |
+| `ng generate component <name>` | Scaffold a new Angular component |
+
+### Backend Scripts
+
+| Command | Description |
+|:---|:---|
+| `npm run start:dev` | Start NestJS in watch mode (ts-node + nodemon) |
+| `npm run start:prod` | Start compiled production build |
+| `npm run build` | Compile TypeScript to `dist/` |
+| `npm run test` | Run all Jest unit tests |
+| `npm run test:watch` | Jest in interactive watch mode |
+| `npm run test:cov` | Jest with coverage report (LCOV + HTML) |
+| `npm run test:e2e` | Run end-to-end tests (Jest + Supertest) |
+| `npm run migration:generate -- -n <Name>` | Generate a new TypeORM migration |
+| `npm run migration:run` | Apply all pending migrations |
+| `npm run migration:revert` | Revert the last applied migration |
+| `npm run lint` | Run ESLint + Prettier checks |
+
+---
+
+## 🧪 Testing
+
+### Frontend — Jasmine + Karma
+
+The Angular frontend uses **Jasmine** as the test framework and **Karma** as the test runner with a Chrome headless environment.
+
+#### Running Tests
+
+```bash
+# Run all unit tests once
+ng test --watch=false
+
+# Run in watch mode (for TDD)
+ng test
+
+# Generate a code coverage report
+ng test --code-coverage
+# → Open coverage/index.html in your browser
+```
+
+#### Test Structure
+
+Tests are co-located with their source files using the `.spec.ts` suffix:
+
+```
+auth/
+├── auth.service.ts
+└── auth.service.spec.ts        # Jasmine unit test
+```
+
+#### Example Test — Service
+
+```typescript
+// auth.service.spec.ts
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { AuthService } from './auth.service';
+
+describe('AuthService', () => {
+  let service: AuthService;
+  let httpMock: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [AuthService],
+    });
+    service = TestBed.inject(AuthService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => httpMock.verify());
+
+  it('should call the login endpoint and return a token', () => {
+    const credentials = { phone: '+201234567890', password: 'pass' };
+    const mockResponse = { accessToken: 'jwt-token' };
+
+    service.login(credentials).subscribe((res) => {
+      expect(res.accessToken).toBe('jwt-token');
+    });
+
+    const req = httpMock.expectOne('/api/auth/login');
+    expect(req.request.method).toBe('POST');
+    req.flush(mockResponse);
   });
 });
 ```
 
-</details>
+---
+
+### Backend — Jest
+
+The NestJS backend uses **Jest** for unit tests, integration tests, and end-to-end (e2e) tests with **Supertest**.
+
+#### Running Tests
+
+```bash
+# Run all unit tests
+npm run test
+
+# Interactive watch mode
+npm run test:watch
+
+# With coverage (outputs to /coverage)
+npm run test:cov
+
+# End-to-end tests
+npm run test:e2e
+```
+
+#### Test Structure
+
+```
+src/
+└── modules/
+    └── auth/
+        ├── auth.service.ts
+        └── auth.service.spec.ts       # Jest unit test
+
+test/
+└── app.e2e-spec.ts                    # Supertest e2e test
+```
+
+#### Example Test — Controller
+
+```typescript
+// auth.controller.spec.ts
+import { Test, TestingModule } from '@nestjs/testing';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+
+describe('AuthController', () => {
+  let controller: AuthController;
+  let authService: jest.Mocked<AuthService>;
+
+  beforeEach(async () => {
+    const mockAuthService = {
+      login: jest.fn(),
+      register: jest.fn(),
+    };
+
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [AuthController],
+      providers: [{ provide: AuthService, useValue: mockAuthService }],
+    }).compile();
+
+    controller = module.get<AuthController>(AuthController);
+    authService = module.get(AuthService);
+  });
+
+  it('should return an access token on login', async () => {
+    const loginDto = { phone: '+201234567890', password: 'pass' };
+    authService.login.mockResolvedValue({ accessToken: 'jwt-token' });
+
+    const result = await controller.login(loginDto);
+
+    expect(result.accessToken).toBe('jwt-token');
+    expect(authService.login).toHaveBeenCalledWith(loginDto);
+  });
+});
+```
+
+#### Example — End-to-End Test
+
+```typescript
+// test/app.e2e-spec.ts
+import * as request from 'supertest';
+import { app } from './setup';
+
+describe('Auth (e2e)', () => {
+  it('POST /api/auth/login → 200 with JWT', () => {
+    return request(app.getHttpServer())
+      .post('/api/auth/login')
+      .send({ phone: '+201234567890', password: 'TestPass123!' })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.accessToken).toBeDefined();
+      });
+  });
+});
+```
+
+#### Coverage Targets
+
+| Module | Target |
+|:---|:---:|
+| Services | ≥ 85% |
+| Controllers | ≥ 80% |
+| Guards & Interceptors | ≥ 75% |
+| E2E critical paths | 100% |
 
 ---
 
-### 📄 HTML Structure
+## 📡 API Documentation
 
-<details>
-<summary><strong>Topbar Layout (Lines 1159–1194)</strong></summary>
+All endpoints are automatically documented via **Swagger UI** at:  
+`http://localhost:3000/api/docs`
 
-```html
-<!-- RTL layout (right → left):
-     [Logo]  [←── Nav (flex:1, scrollable) ──→]  [Badges]  [Hamburger] -->
+### Base URL
 
-<header class="topbar">
-  <!-- 1. Logo — always right in RTL -->
-  <a class="topbar-logo">🎓 مصر للجامعات</a>
-
-  <!-- 2. Desktop Nav — 10 navigation buttons -->
-  <nav class="topbar-nav">
-    <button>① Vision</button>
-    <button>② Screens</button>
-    <!-- … 8 more buttons … -->
-  </nav>
-
-  <!-- 3. Badges — hidden below 1024px -->
-  <div class="topbar-badges">
-    <span>v1.0 Startup-Ready</span>
-    <span>25 Screens</span>
-    <span>AI-Powered</span>
-  </div>
-
-  <!-- 4. Hamburger — mobile only -->
-  <button class="hamburger">☰</button>
-</header>
+```
+http://localhost:3000/api         ← Development
+https://api.uniguide.app/api      ← Production
 ```
 
-</details>
+### Authentication
 
-<details>
-<summary><strong>Page System (Lines 1230–1595)</strong></summary>
+All protected routes require a `Bearer` token in the `Authorization` header:
 
-```html
-<!-- Pages are hidden divs; the .active class shows them -->
-<div id="page-vision"   class="page active">…</div>  <!-- Visible -->
-<div id="page-screens"  class="page">…</div>           <!-- Hidden -->
-<div id="page-ux"       class="page">…</div>           <!-- Hidden -->
-<!-- … 10 pages total … -->
 ```
-
-</details>
+Authorization: Bearer <access_token>
+```
 
 ---
 
-## 🤝 Contributing
+### 🔐 Auth Endpoints
 
-Contributions are welcome! If you'd like to contribute:
+| Method | Endpoint | Auth | Description |
+|:---:|:---|:---:|:---|
+| `POST` | `/auth/register` | ❌ | Register a new student or parent account |
+| `POST` | `/auth/login` | ❌ | Login — returns `accessToken` + `refreshToken` |
+| `POST` | `/auth/otp/send` | ❌ | Send OTP code to a mobile number |
+| `POST` | `/auth/otp/verify` | ❌ | Verify the OTP and activate the account |
+| `POST` | `/auth/refresh` | ❌ | Exchange a refresh token for a new access token |
+| `POST` | `/auth/logout` | ✅ | Invalidate the current refresh token |
+| `GET`  | `/auth/google` | ❌ | Initiate Google OAuth flow |
 
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
-3. **Commit** your changes: `git commit -m 'Add amazing feature'`
-4. **Push** to the branch: `git push origin feature/amazing-feature`
-5. **Open** a Pull Request
+**Example — Register Request:**
+
+```json
+POST /api/auth/register
+{
+  "name": "Ahmed Hassan",
+  "phone": "+201234567890",
+  "password": "SecurePass@123",
+  "role": "student",
+  "governorate": "Cairo"
+}
+```
+
+**Example — Register Response:**
+
+```json
+{
+  "message": "OTP sent to +201234567890",
+  "userId": "a3d9f1c2-..."
+}
+```
+
+---
+
+### 🎓 College Endpoints
+
+| Method | Endpoint | Auth | Description |
+|:---:|:---|:---:|:---|
+| `GET` | `/colleges` | ✅ | List colleges with filters & pagination |
+| `GET` | `/colleges/:id` | ✅ | Get a single college with full details |
+| `GET` | `/colleges/compare` | ✅ | Compare 2–3 colleges by their IDs |
+| `POST` | `/colleges/:id/save` | ✅ | Save a college to user favourites |
+| `DELETE` | `/colleges/:id/save` | ✅ | Remove a college from favourites |
+
+**Example — College List Query:**
+
+```
+GET /api/colleges?governorate=Cairo&type=private&minScore=80&maxFee=60000&page=1&limit=20
+```
+
+---
+
+### 🤖 AI Endpoints
+
+| Method | Endpoint | Auth | Description |
+|:---:|:---|:---:|:---|
+| `POST` | `/ai/quiz/submit` | ✅ | Submit quiz answers → returns Top 10 recommendations |
+| `POST` | `/ai/chat` | ✅ | Send a chat message — returns SSE stream |
+| `POST` | `/ai/salary-predict` | ✅ | Predict salary based on major & experience |
+| `GET`  | `/ai/roadmap/:studentId` | ✅ | Get personalized career roadmap |
+
+**Example — Quiz Submission:**
+
+```json
+POST /api/ai/quiz/submit
+{
+  "answers": [
+    { "questionId": "q1", "selectedOption": "B" },
+    { "questionId": "q2", "selectedOption": "A" }
+  ]
+}
+```
+
+**Example — Quiz Response:**
+
+```json
+{
+  "personalityType": "Analytical Innovator",
+  "recommendations": [
+    {
+      "collegeId": "9a1b2c3d-...",
+      "name": "Faculty of Computer Science — Cairo University",
+      "matchScore": 94.5,
+      "reasons": ["Strong alignment with analytical profile", "High employment rate (91%)", "Top ranked in STEM"]
+    }
+  ]
+}
+```
+
+---
+
+### 📊 Analytics Endpoints (Admin Only)
+
+| Method | Endpoint | Auth | Description |
+|:---:|:---|:---:|:---|
+| `GET` | `/analytics/overview` | ✅ Admin | Platform KPIs — users, DAU, quiz completions |
+| `GET` | `/analytics/colleges/trending` | ✅ Admin | Most-viewed colleges by region |
+| `GET` | `/analytics/ai/performance` | ✅ Admin | Chatbot satisfaction, accuracy, token usage |
+
+---
+
+## ☁️ Deployment
+
+### Production Architecture
+
+```
+User → CloudFront CDN → S3 (Angular)
+                    ↓
+              AWS ALB (Load Balancer)
+                    ↓
+       EC2 Auto Scaling Group (NestJS)
+                    ↓
+           RDS PostgreSQL (Multi-AZ)
+                +
+           ElastiCache Redis
+```
+
+### Frontend — AWS S3 + CloudFront
+
+```bash
+# Build the Angular app for production
+cd frontend
+ng build --configuration production
+
+# Deploy to S3 (requires AWS CLI configured)
+aws s3 sync dist/frontend/ s3://your-bucket-name/ --delete
+
+# Invalidate CloudFront cache
+aws cloudfront create-invalidation --distribution-id YOUR_DIST_ID --paths "/*"
+```
+
+### Backend — Docker + EC2
+
+```bash
+# Build the Docker image
+cd backend
+docker build -t uniguide-api:latest .
+
+# Push to ECR (Elastic Container Registry)
+aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin <account>.dkr.ecr.eu-central-1.amazonaws.com
+docker tag uniguide-api:latest <account>.dkr.ecr.eu-central-1.amazonaws.com/uniguide-api:latest
+docker push <account>.dkr.ecr.eu-central-1.amazonaws.com/uniguide-api:latest
+```
+
+### CI/CD — GitHub Actions
+
+The repository includes a `.github/workflows/ci.yml` pipeline that automatically:
+
+1. ✅ **Lint** — ESLint on both frontend and backend
+2. 🧪 **Test** — Jasmine/Karma (frontend) + Jest (backend) with coverage gating
+3. 🏗️ **Build** — `ng build --prod` + `nest build`
+4. 🚀 **Deploy** — Push Docker image to ECR + S3 sync on merge to `main`
+
+### Environment Variables (Production)
+
+All production secrets are stored in **AWS Secrets Manager** and injected at container startup — never committed to source control.
+
+---
+
+## 🤝 Contribution Guidelines
+
+We welcome contributions from developers of all experience levels. Please read the following before opening a PR:
+
+### Getting Started
+
+1. **Fork** this repository
+2. **Clone** your fork locally
+3. **Create** a feature branch from `develop`:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+4. **Commit** using [Conventional Commits](https://www.conventionalcommits.org/):
+   ```bash
+   git commit -m "feat(quiz): add multi-language support for quiz questions"
+   git commit -m "fix(auth): resolve token refresh race condition"
+   git commit -m "docs(api): update Swagger examples for college endpoints"
+   ```
+5. **Push** and open a Pull Request against `develop`
+
+### Code Standards
+
+- All new code must be written in **TypeScript** (no `any` without justification)
+- Frontend components must follow the **Angular standalone component** pattern
+- Backend services must follow the **NestJS module + service + controller** pattern
+- All new features must include tests achieving **≥ 80% coverage**
+- Run `npm run lint` before committing — PRs with lint errors will not be merged
+
+### Branch Strategy
+
+| Branch | Purpose |
+|:---|:---|
+| `main` | Production — auto-deploys on merge |
+| `develop` | Integration branch — all PRs target here |
+| `feature/*` | New features |
+| `fix/*` | Bug fixes |
+| `chore/*` | Tooling, dependencies, config updates |
+
+### Pull Request Checklist
+
+Before submitting your PR, ensure:
+
+- [ ] Code follows project conventions and passes linting
+- [ ] New functionality is covered by unit or integration tests
+- [ ] All existing tests still pass (`npm test`)
+- [ ] The PR description clearly explains **what** and **why**
+- [ ] Any new environment variables are added to `.env.example`
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**.
+
+```
+MIT License
+
+Copyright (c) 2026 UniGuide
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is furnished
+to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+```
+
+See the [LICENSE](LICENSE) file for the full legal text.
 
 ---
 
@@ -1189,17 +998,15 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <br/>
 
-## 🎓 مصر للجامعات
+**UniGuide**
 
-**Startup-Ready v1.0**
+*Built with precision, tested with rigor, deployed for scale.*
 
-Built with ❤️ for Egyptian Students
-
-`Next.js 14` · `PostgreSQL` · `GPT-4o` · `AWS Cairo`
+`Angular 17` · `NestJS 10` · `PostgreSQL 16` · `TypeScript 5`
 
 ---
 
-*© 2026 مصر للجامعات — AI Platform. All rights reserved.*
+*© 2026 UniGuide Platform. All rights reserved.*
 
 <br/>
 

@@ -1,3 +1,4 @@
+
 <div align="center">
 
 <img src="https://img.shields.io/badge/🎓-UniGuide-1a6be0?style=for-the-badge&labelColor=050d1f" alt="UniGuide Logo" height="40"/>
@@ -22,7 +23,6 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
 ![Jest](https://img.shields.io/badge/Jest-C21325?style=flat-square&logo=jest&logoColor=white)
-![Jasmine](https://img.shields.io/badge/Jasmine-8A4182?style=flat-square&logo=jasmine&logoColor=white)
 
 </div>
 
@@ -78,34 +78,34 @@ UniGuide bridges this gap by combining a **15-question AI personality quiz**, a 
 
 | Technology | Version | Purpose |
 |:---|:---:|:---|
-| **Angular** | 17+ | SPA framework with standalone components & signals |
-| **TypeScript** | 5.x | Static typing across the entire codebase |
-| **Angular Material** | 17+ | UI component library |
-| **RxJS** | 7.x | Reactive state management & async data streams |
-| **NgRx** | 17+ | Global state management (Redux pattern) |
+| **Angular** | latest stable | SPA framework with standalone components & signals |
+| **TypeScript** | latest stable | Static typing across the entire codebase |
+| **Angular Material** | latest stable | UI component library |
+| **RxJS** | latest stable | Reactive state management & async data streams |
+| **NgRx** | latest stable | Global state management (Redux pattern with signals support) |
 | **SCSS** | — | Advanced component-level styling |
-| **Jasmine + Karma** | — | Unit & integration testing |
+| **Jest** | latest stable | Unit & integration testing |
 
 ### Backend
 
 | Technology | Version | Purpose |
 |:---|:---:|:---|
-| **NestJS** | 10+ | Modular, scalable Node.js framework |
-| **TypeScript** | 5.x | Full type safety on the server |
-| **TypeORM** | 0.3.x | ORM — database migrations & entity management |
-| **PostgreSQL** | 16 | Primary relational database |
-| **Redis** | 7 | Session caching and background job queues |
+| **NestJS** | latest stable | Modular, scalable Node.js framework |
+| **TypeScript** | latest stable | Full type safety on the server |
+| **TypeORM** | latest stable | ORM — database migrations & entity management |
+| **PostgreSQL** | latest stable | Primary relational database |
+| **Redis** | latest stable | Session caching and background job queues |
 | **JWT + Passport** | — | Authentication & authorization |
-| **Swagger / OpenAPI** | 3.x | Auto-generated API documentation |
-| **Jest** | 29+ | Unit, integration, and e2e testing |
+| **Swagger / OpenAPI** | latest stable | Auto-generated API documentation |
+| **Jest** | latest stable | Unit, integration, and e2e testing |
 
 ### Infrastructure & DevOps
 
 | Technology | Purpose |
 |:---|:---|
-| **Docker / Docker Compose** | Containerized local development |
+| **Docker / Docker Compose** | Containerized local development & production |
 | **GitHub Actions** | CI/CD pipeline (lint → test → build → deploy) |
-| **AWS EC2 + RDS** | Production hosting & managed database |
+| **AWS ECS (Fargate) + RDS** | Production hosting & managed database |
 | **AWS S3 + CloudFront** | Static frontend hosting & CDN delivery |
 
 ---
@@ -121,7 +121,7 @@ UniGuide bridges this gap by combining a **15-question AI personality quiz**, a 
 
 ### 🤖 AI-Powered Recommendation Engine
 - **15-question personality & aptitude quiz** with real-time result processing
-- Hybrid recommendation model (content-based + collaborative filtering + GPT-4o reranking)
+- Hybrid recommendation model (content-based + collaborative filtering + latest LLM reranking)
 - Top 10 personalized college matches with match-percentage explanation
 - Live behavioral tracking — recommendations update as users interact with the platform
 
@@ -132,7 +132,7 @@ UniGuide bridges this gap by combining a **15-question AI personality quiz**, a 
 - Save to favourites with real-time sync across devices
 
 ### 💬 AI Chatbot (Arabic RAG)
-- GPT-4o powered chatbot with Retrieval-Augmented Generation over the college database
+- Latest LLM powered chatbot with Retrieval-Augmented Generation over the college database
 - Fully Arabic, RTL-native chat interface with streaming text responses
 - Suggested question chips for guided exploration
 - Conversation history persistence per user session
@@ -164,7 +164,7 @@ UniGuide bridges this gap by combining a **15-question AI personality quiz**, a 
 
 ## 🏗️ Project Architecture
 
-UniGuide follows a **clean, decoupled, three-tier architecture**:
+UniGuide follows a **clean, decoupled, three-tier architecture** with modern best practices:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -183,7 +183,7 @@ UniGuide follows a **clean, decoupled, three-tier architecture**:
 └──────────────────┬──────────────────┬───────────────────────┘
                    │                  │
       ┌────────────▼──────┐  ┌────────▼────────┐
-      │   PostgreSQL 16   │  │   Redis 7        │
+      │ PostgreSQL (latest)│  │   Redis (latest) │
       │  (Primary Store)  │  │  (Cache + Queue) │
       └───────────────────┘  └─────────────────┘
 ```
@@ -206,166 +206,254 @@ UniGuide follows a **clean, decoupled, three-tier architecture**:
 frontend/
 ├── src/
 │   ├── app/
-│   │   ├── core/                      # Singleton services, guards, interceptors
+│   │   ├── core/                          # Singleton services, guards, interceptors
 │   │   │   ├── auth/
 │   │   │   │   ├── auth.service.ts
 │   │   │   │   ├── auth.guard.ts
+│   │   │   │   ├── role.guard.ts
 │   │   │   │   └── jwt.interceptor.ts
+│   │   │   ├── interceptors/              # Functional HTTP interceptors
+│   │   │   │   ├── api.interceptor.ts
+│   │   │   │   ├── error.interceptor.ts
+│   │   │   │   └── lang.interceptor.ts
+│   │   │   ├── layout/                    # Direction detection
+│   │   │   │   ├── dir.service.ts
+│   │   │   │   └── layout-direction.guard.ts
 │   │   │   └── services/
 │   │   │       ├── api.service.ts
-│   │   │       └── analytics.service.ts
+│   │   │       ├── analytics.service.ts
+│   │   │       └── seo.service.ts
 │   │   │
-│   │   ├── shared/                    # Shared components, pipes, directives
+│   │   ├── shared/                        # Reusable standalone components, pipes, directives
 │   │   │   ├── components/
 │   │   │   │   ├── college-card/
+│   │   │   │   ├── confirm-dialog/
+│   │   │   │   ├── language-switcher/
 │   │   │   │   ├── loading-spinner/
-│   │   │   │   └── confirm-dialog/
-│   │   │   ├── pipes/
-│   │   │   │   └── arabic-number.pipe.ts
-│   │   │   └── directives/
-│   │   │       └── lazy-image.directive.ts
+│   │   │   │   ├── rtl-card/
+│   │   │   │   ├── skeleton-loader/
+│   │   │   │   └── theme-toggle/
+│   │   │   ├── directives/
+│   │   │   │   ├── auto-dir.directive.ts
+│   │   │   │   ├── focus-trap.directive.ts
+│   │   │   │   └── lazy-image.directive.ts
+│   │   │   └── pipes/
+│   │   │       ├── arabic-number.pipe.ts
+│   │   │       ├── safe-html.pipe.ts
+│   │   │       └── truncate.pipe.ts
 │   │   │
-│   │   ├── features/                  # Feature modules (lazy-loaded)
+│   │   ├── layouts/                       # Page shell layouts
+│   │   │   ├── admin-layout/
+│   │   │   ├── auth-layout/
+│   │   │   └── main-layout/
+│   │   │
+│   │   ├── features/                      # Feature areas (lazy-loaded)
 │   │   │   ├── auth/
 │   │   │   │   ├── login/
 │   │   │   │   ├── register/
 │   │   │   │   └── otp-verify/
-│   │   │   ├── dashboard/
+│   │   │   ├── admin/
+│   │   │   ├── ai-chat/
+│   │   │   ├── career-roadmap/
 │   │   │   ├── college-explorer/
 │   │   │   │   ├── college-list/
 │   │   │   │   ├── college-detail/
 │   │   │   │   └── college-compare/
+│   │   │   ├── dashboard/
+│   │   │   ├── parent-dashboard/
 │   │   │   ├── quiz/
 │   │   │   │   ├── quiz-flow/
 │   │   │   │   └── quiz-results/
-│   │   │   ├── ai-chat/
-│   │   │   ├── salary-predictor/
-│   │   │   ├── career-roadmap/
-│   │   │   └── parent-dashboard/
 │   │   │
-│   │   ├── store/                     # NgRx state management
+│   │   ├── store/                         # NgRx state management
 │   │   │   ├── auth/
 │   │   │   │   ├── auth.actions.ts
-│   │   │   │   ├── auth.reducer.ts
 │   │   │   │   ├── auth.effects.ts
+│   │   │   │   ├── auth.reducer.ts
 │   │   │   │   └── auth.selectors.ts
 │   │   │   ├── college/
-│   │   │   └── quiz/
+│   │   │   ├── quiz/
+│   │   │   └── ui/
+│   │   │       ├── ui.actions.ts
+│   │   │       ├── ui.reducer.ts
+│   │   │       └── ui.selectors.ts
 │   │   │
-│   │   ├── models/                    # TypeScript interfaces & enums
-│   │   │   ├── user.model.ts
+│   │   ├── i18n/                          # Internationalization (Arabic-first)
+│   │   │   ├── loaders/
+│   │   │   │   ├── translation-loader.ts
+│   │   │   │   └── server-translation.loader.ts
+│   │   │   └── services/
+│   │   │       ├── i18n.service.ts
+│   │   │       └── rtl.service.ts
+│   │   │
+│   │   ├── themes/                        # Design system & theming
+│   │   │   ├── material/
+│   │   │   │   ├── light.theme.ts
+│   │   │   │   └── dark.theme.ts
+│   │   │   ├── services/
+│   │   │   │   └── theme.service.ts
+│   │   │   └── tokens/
+│   │   │       ├── colors.tokens.ts
+│   │   │       ├── spacing.tokens.ts
+│   │   │       └── typography.tokens.ts
+│   │   │
+│   │   ├── models/                        # TypeScript interfaces & enums
 │   │   │   ├── college.model.ts
-│   │   │   └── quiz.model.ts
+│   │   │   ├── i18n.model.ts
+│   │   │   ├── quiz.model.ts
+│   │   │   └── user.model.ts
 │   │   │
-│   │   ├── app.routes.ts              # Root lazy-loaded route definitions
-│   │   ├── app.config.ts              # Application providers
+│   │   ├── app.routes.ts                  # Root lazy-loaded route definitions
+│   │   ├── app.config.ts                  # Application providers
 │   │   └── app.component.ts
 │   │
 │   ├── assets/
-│   │   ├── i18n/                      # Translation files (ar.json, en.json)
+│   │   ├── fonts/
+│   │   ├── i18n/                          # Translation files (ar.json, en.json)
 │   │   └── icons/
 │   │
 │   ├── environments/
-│   │   ├── environment.ts             # Development environment
-│   │   └── environment.prod.ts        # Production environment
+│   │   ├── environment.ts                 # Development
+│   │   ├── environment.staging.ts         # Staging
+│   │   └── environment.prod.ts            # Production
 │   │
-│   └── styles/
-│       ├── _variables.scss            # Design tokens
-│       ├── _typography.scss
-│       ├── _mixins.scss
-│       └── styles.scss                # Global styles
+│   ├── styles/                            # Global SCSS design system
+│   │   ├── _a11y.scss                     # Accessibility utilities
+│   │   ├── _dark.scss                     # Dark mode overrides
+│   │   ├── _mixins.scss
+│   │   ├── _rtl.scss                      # RTL/Arabic layout rules
+│   │   ├── _tokens.scss                   # Design tokens
+│   │   ├── _typography.scss
+│   │   └── styles.scss                    # Global entry point
+│   │
+│   ├── index.html
+│   └── main.ts
 │
 ├── angular.json
 ├── tsconfig.json
-├── karma.conf.js
+├── tsconfig.app.json
 └── package.json
 ```
+
 
 ### Backend — NestJS
 
 ```
 backend/
 ├── src/
-│   ├── modules/
-│   │   ├── auth/
-│   │   │   ├── auth.module.ts
-│   │   │   ├── auth.controller.ts
-│   │   │   ├── auth.service.ts
-│   │   │   ├── strategies/
-│   │   │   │   ├── jwt.strategy.ts
-│   │   │   │   └── google.strategy.ts
-│   │   │   └── dto/
-│   │   │       ├── login.dto.ts
-│   │   │       └── register.dto.ts
-│   │   │
-│   │   ├── users/
-│   │   │   ├── users.module.ts
-│   │   │   ├── users.controller.ts
-│   │   │   ├── users.service.ts
-│   │   │   └── entities/
-│   │   │       └── user.entity.ts
-│   │   │
-│   │   ├── colleges/
-│   │   │   ├── colleges.module.ts
-│   │   │   ├── colleges.controller.ts
-│   │   │   ├── colleges.service.ts
-│   │   │   └── entities/
-│   │   │       ├── college.entity.ts
-│   │   │       └── university.entity.ts
-│   │   │
-│   │   ├── quiz/
-│   │   │   ├── quiz.module.ts
-│   │   │   ├── quiz.controller.ts
-│   │   │   ├── quiz.service.ts
-│   │   │   └── entities/
-│   │   │       └── quiz-session.entity.ts
-│   │   │
-│   │   ├── ai/
-│   │   │   ├── ai.module.ts
-│   │   │   ├── ai.controller.ts
-│   │   │   ├── recommendation.service.ts
-│   │   │   ├── chatbot.service.ts
-│   │   │   └── salary-predictor.service.ts
-│   │   │
-│   │   └── analytics/
-│   │       ├── analytics.module.ts
-│   │       ├── analytics.controller.ts
-│   │       └── analytics.service.ts
-│   │
-│   ├── common/
+│   ├── common/                        # Reusable exceptions, pipes, guards
 │   │   ├── decorators/
-│   │   │   ├── roles.decorator.ts
-│   │   │   └── current-user.decorator.ts
-│   │   ├── guards/
-│   │   │   ├── jwt-auth.guard.ts
-│   │   │   └── roles.guard.ts
 │   │   ├── filters/
-│   │   │   └── http-exception.filter.ts
+│   │   ├── guards/
 │   │   ├── interceptors/
-│   │   │   ├── logging.interceptor.ts
-│   │   │   └── transform.interceptor.ts
 │   │   └── pipes/
-│   │       └── validation.pipe.ts
-│   │
-│   ├── database/
-│   │   └── migrations/                # TypeORM migration files
-│   │
-│   ├── config/
+│   ├── config/                        # Global environment configs
+│   │   ├── ai.config.ts
 │   │   ├── app.config.ts
 │   │   ├── database.config.ts
-│   │   └── jwt.config.ts
-│   │
-│   └── main.ts                        # Application entry point
-│
+│   │   ├── jwt.config.ts
+│   │   └── redis.config.ts
+│   ├── database/                      # TypeORM configs and dumps
+│   │   ├── migrations/
+│   │   └── seeds/
+│   ├── modules/                       # Core domains
+│   │   ├── ai/
+│   │   ├── analytics/
+│   │   ├── auth/
+│   │   ├── colleges/
+│   │   ├── i18n/
+│   │   ├── notifications/
+│   │   ├── quiz/
+│   │   └── users/
+│   └── main.ts
 ├── test/
-│   ├── app.e2e-spec.ts
-│   └── jest-e2e.json
-│
 ├── .env.example
 ├── docker-compose.yml
 ├── nest-cli.json
-├── tsconfig.json
-└── package.json
+├── package.json
+└── tsconfig.json
+```
+
+### AI Layer — Python / FastAPI
+
+```
+AILayer/
+├── app/
+│   ├── api/                           # API Routes & dependencies
+│   │   ├── v1/
+│   │   │   ├── routes_chat.py
+│   │   │   ├── routes_quiz.py
+│   │   │   ├── routes_roadmap.py
+│   │   │   └── routes_salary.py
+│   │   └── deps.py
+│   ├── core/                          # Cross-cutting concerns
+│   │   ├── config.py
+│   │   ├── logging.py
+│   │   └── security.py
+│   ├── models/                        # ML models and schemas
+│   │   ├── ml/
+│   │   │   ├── personality_classifier.pkl
+│   │   │   └── salary_xgboost.pkl
+│   │   └── schemas.py
+│   ├── prompts/                       # LLM static prompts
+│   │   ├── chat.ar.txt
+│   │   ├── chat.en.txt
+│   │   ├── recommendation.ar.txt
+│   │   └── recommendation.en.txt
+│   ├── services/                      # AI logic & model inference
+│   │   ├── lang_router.py
+│   │   ├── rag_service.py
+│   │   ├── recommendation.py
+│   │   ├── salary_model.py
+│   │   └── stream_handler.py
+│   └── main.py
+├── tests/
+├── .env.example
+├── Dockerfile
+└── requirements.txt
+```
+
+### DevOps & Infrastructure
+
+```
+devOps/
+├── .github/
+│   └── workflows/
+│       ├── cd-ai.yml
+│       ├── cd-backend.yml
+│       ├── cd-frontend.yml
+│       └── ci.yml
+└── infra/
+    ├── docker/
+    │   ├── Dockerfile.ai
+    │   ├── Dockerfile.backend
+    │   ├── Dockerfile.frontend
+    │   └── docker-compose.yml
+    ├── nginx/
+    └── terraform/
+        ├── main.tf
+        ├── outputs.tf
+        └── variables.tf
+```
+
+### MonoRepo Context (Optional)
+
+```
+monoRepo/
+└── uniguide/
+    ├── docs/                          # Architecture & Guidelines Docs
+    │   ├── ai-prompting.md
+    │   ├── architecture.md
+    │   ├── i18n-guide.md
+    │   └── theme-guide.md
+    ├── shared/                        # Shared TS Types & Enums
+    │   ├── constants/
+    │   └── types/
+    ├── .editorconfig
+    ├── .gitignore
+    ├── commitlint.config.js
+    ├── nx.json
+    └── package.json
 ```
 
 ---
@@ -378,13 +466,13 @@ Ensure the following tools are installed on your machine:
 
 | Tool | Minimum Version | Install |
 |:---|:---:|:---|
-| Node.js | 20 LTS | [nodejs.org](https://nodejs.org) |
-| npm | 10+ | Comes with Node.js |
-| Angular CLI | 17+ | `npm install -g @angular/cli` |
-| NestJS CLI | 10+ | `npm install -g @nestjs/cli` |
-| PostgreSQL | 16 | [postgresql.org](https://postgresql.org) |
-| Redis | 7 | [redis.io](https://redis.io) |
-| Docker (optional) | 24+ | [docker.com](https://docker.com) |
+| **Node.js** | 24 LTS (recommended) | [nodejs.org](https://nodejs.org) |
+| **npm** | latest | Comes with Node.js |
+| **Angular CLI** | latest stable | `npm install -g @angular/cli` |
+| **NestJS CLI** | latest stable | `npm install -g @nestjs/cli` |
+| **PostgreSQL** | latest stable | [postgresql.org](https://postgresql.org) |
+| **Redis** | latest stable | [redis.io](https://redis.io) |
+| **Docker** (optional) | latest stable | [docker.com](https://docker.com) |
 
 ---
 
@@ -534,10 +622,10 @@ The Angular app will be available at: `http://localhost:4200`
 
 | Command | Description |
 |:---|:---|
-| `ng serve` | Start Angular dev server with hot-reload |
+| `ng serve` | Start Angular dev server with hot-reload (Vite + esbuild) |
 | `ng build` | Build for production (`dist/` output) |
 | `ng build --configuration production` | Optimized production build with AOT |
-| `ng test` | Run unit tests with Karma + Jasmine |
+| `ng test` | Run unit tests with Jest |
 | `ng test --code-coverage` | Run tests and generate code coverage report |
 | `ng lint` | Run ESLint across the Angular project |
 | `ng generate component <name>` | Scaffold a new Angular component |
@@ -562,9 +650,9 @@ The Angular app will be available at: `http://localhost:4200`
 
 ## 🧪 Testing
 
-### Frontend — Jasmine + Karma
+### Frontend — Jest
 
-The Angular frontend uses **Jasmine** as the test framework and **Karma** as the test runner with a Chrome headless environment.
+The Angular frontend uses **Jest** (configured via modern Angular builders) for fast, reliable unit and integration testing.
 
 #### Running Tests
 
@@ -587,7 +675,7 @@ Tests are co-located with their source files using the `.spec.ts` suffix:
 ```
 auth/
 ├── auth.service.ts
-└── auth.service.spec.ts        # Jasmine unit test
+└── auth.service.spec.ts        # Jest unit test
 ```
 
 #### Example Test — Service
@@ -867,7 +955,7 @@ User → CloudFront CDN → S3 (Angular)
                     ↓
               AWS ALB (Load Balancer)
                     ↓
-       EC2 Auto Scaling Group (NestJS)
+       ECS Fargate (NestJS containers)
                     ↓
            RDS PostgreSQL (Multi-AZ)
                 +
@@ -888,7 +976,7 @@ aws s3 sync dist/frontend/ s3://your-bucket-name/ --delete
 aws cloudfront create-invalidation --distribution-id YOUR_DIST_ID --paths "/*"
 ```
 
-### Backend — Docker + EC2
+### Backend — Docker + AWS ECS (Fargate)
 
 ```bash
 # Build the Docker image
@@ -906,7 +994,7 @@ docker push <account>.dkr.ecr.eu-central-1.amazonaws.com/uniguide-api:latest
 The repository includes a `.github/workflows/ci.yml` pipeline that automatically:
 
 1. ✅ **Lint** — ESLint on both frontend and backend
-2. 🧪 **Test** — Jasmine/Karma (frontend) + Jest (backend) with coverage gating
+2. 🧪 **Test** — Jest (frontend + backend) with coverage gating
 3. 🏗️ **Build** — `ng build --prod` + `nest build`
 4. 🚀 **Deploy** — Push Docker image to ECR + S3 sync on merge to `main`
 
@@ -939,7 +1027,7 @@ We welcome contributions from developers of all experience levels. Please read t
 ### Code Standards
 
 - All new code must be written in **TypeScript** (no `any` without justification)
-- Frontend components must follow the **Angular standalone component** pattern
+- Frontend components must follow the **Angular standalone component** pattern with signals
 - Backend services must follow the **NestJS module + service + controller** pattern
 - All new features must include tests achieving **≥ 80% coverage**
 - Run `npm run lint` before committing — PRs with lint errors will not be merged
@@ -1002,7 +1090,7 @@ See the [LICENSE](LICENSE) file for the full legal text.
 
 *Built with precision, tested with rigor, deployed for scale.*
 
-`Angular 17` · `NestJS 10` · `PostgreSQL 16` · `TypeScript 5`
+`Angular (latest)` · `NestJS (latest)` · `PostgreSQL (latest)` · `TypeScript (latest)`
 
 ---
 

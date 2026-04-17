@@ -3,1222 +3,413 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>مصر للجامعات — AI Platform</title>
+<title>UniGuide — AI Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-:root {
-  --navy:       #050d1f;
-  --navy2:      #0a1628;
-  --navy3:      #0f1e36;
-  --blue:       #1a6be0;
-  --blue2:      #2a7ff0;
-  --cyan:       #00c8e8;
-  --cyan2:      #00e5ff;
-  --teal:       #0ea57a;
-  --amber:      #e0a51a;
-  --red:        #e05c1a;
-  --text:       #e8f0ff;
-  --text2:      #8ba4cc;
-  --text3:      #4d6a99;
-  --glass:      rgba(255,255,255,0.04);
-  --glass2:     rgba(255,255,255,0.08);
-  --glass3:     rgba(255,255,255,0.12);
-  --border:     rgba(0,180,255,0.12);
-  --border2:    rgba(0,180,255,0.22);
-  --glow:       0 0 40px rgba(26,107,224,0.25);
-  --glow2:      0 0 60px rgba(0,200,232,0.2);
-  --radius:     16px;
-  --radius2:    24px;
-  --font:       'Cairo', system-ui, sans-serif;
-  --mono:       'IBM Plex Mono', monospace;
-  --nav-h:      68px;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--font);
-  background: var(--navy);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ═══════════════════════ CANVAS BG ═══════════════════════ */
-#bg-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-/* ═══════════════════════ TOPBAR — FIXED ═══════════════════════ */
-/*
-  ROOT CAUSE OF ORIGINAL BUG:
-  ─────────────────────────────────────────────────────────────────
-  The HTML has dir="rtl", so flex items flow RIGHT → LEFT.
-  The original `.topbar-nav { margin-right: auto }` means
-  "push the nav's right (= start in RTL) edge away from the logo",
-  which shoves the nav all the way left and strands the badges
-  at the far-left corner — exactly what the screenshot showed.
-
-  FIX:
-  1. Give the logo a fixed, shrunken slot (flex-shrink:0 + max-width).
-  2. Give the nav `flex: 1; min-width: 0` so it fills remaining space
-     and can shrink below its content width without forcing overflow.
-  3. Give the badges `flex-shrink: 0` so they never collapse.
-  4. Remove ALL `margin-*: auto` from the nav.
-  5. Add a hamburger toggle for mobile (≤ 768 px) so nothing is clipped.
-  ─────────────────────────────────────────────────────────────────
-*/
-.topbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: var(--nav-h);
-  z-index: 100;
-  background: rgba(5,13,31,0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  /* 
-    Use logical padding so it's direction-aware.
-    padding-inline = padding-right + padding-left in RTL.
-  */
-  padding: 0 20px;
-  gap: 8px;
-  overflow: hidden; /* never let topbar itself overflow */
-}
-
-/* ── Logo ── */
-.topbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  flex-shrink: 0;           /* never squish the logo */
-  min-width: 0;             /* allow text to truncate if truly needed */
-}
-
-.logo-icon {
-  width: 38px; height: 38px;
-  background: linear-gradient(135deg, var(--blue), var(--cyan));
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  box-shadow: 0 0 20px rgba(26,107,224,0.5);
-  flex-shrink: 0;
-}
-
-.logo-text {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.logo-sub {
-  font-size: 10px;
-  color: var(--cyan);
-  font-weight: 400;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-}
-
-/* ── Nav wrapper — KEY FIX ── */
-.topbar-nav {
-  flex: 1;              /* fill all remaining space between logo and badges */
-  min-width: 0;         /* allow flex child to shrink below content size    */
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  overflow-x: auto;     /* scroll horizontally on small screens            */
-  overflow-y: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 4px 6px;
-  /* NO margin-right / margin-left auto here — that was the bug */
-}
-
-.topbar-nav::-webkit-scrollbar { display: none; }
-
-/* Fade edges to hint at scrollability */
-.topbar-nav {
-  -webkit-mask-image: linear-gradient(
-    to left,
-    transparent 0%,
-    black 5%,
-    black 95%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to left,
-    transparent 0%,
-    black 5%,
-    black 95%,
-    transparent 100%
-  );
-}
-
-.tnav-btn {
-  background: transparent;
-  border: none;
-  color: var(--text2);
-  font-family: var(--font);
-  font-size: 12.5px;
-  font-weight: 500;
-  padding: 7px 13px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all .2s;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  flex-shrink: 0;       /* nav items must not shrink — allow scroll instead */
-}
-
-.tnav-btn .nav-num {
-  font-size: 10px;
-  color: var(--cyan);
-  font-weight: 700;
-  background: rgba(0,200,232,0.12);
-  padding: 1px 5px;
-  border-radius: 4px;
-}
-
-.tnav-btn:hover {
-  color: var(--text);
-  background: var(--glass2);
-}
-
-.tnav-btn.active {
-  color: var(--cyan2);
-  background: rgba(0,200,232,0.10);
-  border: 1px solid rgba(0,200,232,0.25);
-}
-
-/* ── Badges ── */
-.topbar-badges {
-  display: flex;
-  gap: 6px;
-  flex-shrink: 0;       /* never squish the badges */
-  align-items: center;
-}
-
-/* ── Mobile hamburger (hidden on desktop) ── */
-.hamburger {
-  display: none;
-  background: var(--glass2);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  padding: 7px 10px;
-  cursor: pointer;
-  color: var(--text);
-  font-size: 18px;
-  flex-shrink: 0;
-  line-height: 1;
-}
-
-/* ── Mobile drawer overlay ── */
-.mobile-nav-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(5,13,31,0.97);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  flex-direction: column;
-  padding: 24px 20px;
-  gap: 8px;
-  overflow-y: auto;
-}
-
-.mobile-nav-overlay.open {
-  display: flex;
-}
-
-.mobile-nav-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
-}
-
-.mobile-nav-close {
-  background: var(--glass2);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  padding: 8px 12px;
-  color: var(--text);
-  font-size: 20px;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.mobile-tnav-btn {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  color: var(--text2);
-  font-family: var(--font);
-  font-size: 15px;
-  font-weight: 500;
-  padding: 14px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all .2s;
-  text-align: right;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.mobile-tnav-btn:hover,
-.mobile-tnav-btn.active {
-  color: var(--cyan2);
-  background: rgba(0,200,232,0.10);
-  border-color: rgba(0,200,232,0.25);
-}
-
-/* ═══════════════════════ MAIN LAYOUT ═══════════════════════ */
-.app-shell {
-  padding-top: var(--nav-h);
-  min-height: 100vh;
-  position: relative;
-  z-index: 1;
-}
-
-.page { display: none; animation: fadeSlide .35s ease; }
-.page.active { display: block; }
-
-@keyframes fadeSlide {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ═══════════════════════ HERO SECTION ═══════════════════════ */
-.hero {
-  min-height: 560px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 80px 32px;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(26,107,224,0.15) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.hero-kicker {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--cyan);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.hero-kicker::before, .hero-kicker::after {
-  content: '';
-  display: block;
-  height: 1px;
-  width: 40px;
-  background: linear-gradient(to right, transparent, var(--cyan));
-}
-.hero-kicker::after { transform: scaleX(-1); }
-
-.hero-title {
-  font-size: clamp(36px, 5vw, 72px);
-  font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 20px;
-  background: linear-gradient(135deg, #fff 30%, var(--cyan) 70%, var(--blue2) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero-sub {
-  font-size: 18px;
-  color: var(--text2);
-  max-width: 600px;
-  line-height: 1.7;
-  margin-bottom: 40px;
-}
-
-.hero-ctas {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.hero-badges {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 48px;
-}
-
-/* ═══════════════════════ BUTTONS ═══════════════════════ */
-.btn-primary {
-  background: linear-gradient(135deg, var(--blue), var(--cyan));
-  color: #fff;
-  border: none;
-  padding: 14px 32px;
-  border-radius: 12px;
-  font-family: var(--font);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .25s;
-  box-shadow: 0 4px 30px rgba(26,107,224,0.4);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--cyan), var(--blue2));
-  opacity: 0;
-  transition: opacity .25s;
-}
-
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(26,107,224,0.6); }
-.btn-primary:hover::before { opacity: 1; }
-.btn-primary span { position: relative; }
-
-.btn-ghost {
-  background: var(--glass2);
-  color: var(--text);
-  border: 1px solid var(--border2);
-  padding: 14px 32px;
-  border-radius: 12px;
-  font-family: var(--font);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .25s;
-  backdrop-filter: blur(10px);
-}
-
-.btn-ghost:hover {
-  background: var(--glass3);
-  border-color: rgba(0,200,232,0.4);
-  color: var(--cyan2);
-}
-
-/* ═══════════════════════ SECTION ═══════════════════════ */
-.section {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 60px 32px;
-}
-
-.section-title {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.section-title::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(to left, transparent, var(--border2));
-}
-
-.section-desc {
-  color: var(--text2);
-  font-size: 15px;
-  margin-bottom: 40px;
-  max-width: 600px;
-}
-
-/* ═══════════════════════ GLASS CARD ═══════════════════════ */
-.card3d {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius2);
-  padding: 28px;
-  position: relative;
-  overflow: hidden;
-  transition: all .3s cubic-bezier(.4,0,.2,1);
-  cursor: default;
-}
-
-.card3d::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
-}
-
-.card3d::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(0,200,232,0.06) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity .3s;
-  pointer-events: none;
-}
-
-.card3d:hover {
-  border-color: var(--border2);
-  transform: translateY(-4px) perspective(800px) rotateX(2deg);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4), var(--glow);
-}
-
-.card3d:hover::after { opacity: 1; }
-
-.card-glow-accent { box-shadow: inset 0 0 0 1px rgba(26,107,224,0.3), 0 0 40px rgba(26,107,224,0.1); }
-.card-glow-teal   { box-shadow: inset 0 0 0 1px rgba(14,165,122,0.3), 0 0 40px rgba(14,165,122,0.1); }
-.card-glow-amber  { box-shadow: inset 0 0 0 1px rgba(224,165,26,0.3), 0 0 40px rgba(224,165,26,0.1); }
-.card-glow-red    { box-shadow: inset 0 0 0 1px rgba(224,92,26,0.3), 0 0 40px rgba(224,92,26,0.1); }
-.card-glow-purple { box-shadow: inset 0 0 0 1px rgba(130,80,220,0.3), 0 0 40px rgba(130,80,220,0.1); }
-.card-glow-cyan   { box-shadow: inset 0 0 0 1px rgba(0,200,232,0.3), 0 0 40px rgba(0,200,232,0.1); }
-.card-glow-blue   { box-shadow: inset 0 0 0 1px rgba(26,107,224,0.3), 0 0 40px rgba(26,107,224,0.1); }
-
-/* ═══════════════════════ GRID LAYOUTS ═══════════════════════ */
-.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-.grid-5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-
-/* ═══════════════════════ BADGES ═══════════════════════ */
-.badge3d {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 20px;
-  letter-spacing: 0.3px;
-  white-space: nowrap;
-}
-
-.b-blue   { background: rgba(26,107,224,0.15);  color: #60a8ff; border: 1px solid rgba(26,107,224,0.3); }
-.b-cyan   { background: rgba(0,200,232,0.12);   color: #00e5ff; border: 1px solid rgba(0,200,232,0.3); }
-.b-teal   { background: rgba(14,165,122,0.12);  color: #3ed8a8; border: 1px solid rgba(14,165,122,0.3); }
-.b-amber  { background: rgba(224,165,26,0.12);  color: #f5c842; border: 1px solid rgba(224,165,26,0.3); }
-.b-red    { background: rgba(224,92,26,0.12);   color: #ff8a50; border: 1px solid rgba(224,92,26,0.3); }
-.b-purple { background: rgba(130,80,220,0.12);  color: #b89eff; border: 1px solid rgba(130,80,220,0.3); }
-.b-green  { background: rgba(60,200,80,0.12);   color: #60e880; border: 1px solid rgba(60,200,80,0.3); }
-
-/* ═══════════════════════ STAT CARDS ═══════════════════════ */
-.stat-card {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  position: relative;
-  overflow: hidden;
-  transition: all .25s;
-}
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 2px;
-}
-
-.stat-card.s-blue::before  { background: linear-gradient(to right, var(--blue), var(--cyan)); }
-.stat-card.s-teal::before  { background: linear-gradient(to right, var(--teal), #00d4a8); }
-.stat-card.s-amber::before { background: linear-gradient(to right, var(--amber), #ffca28); }
-.stat-card.s-red::before   { background: linear-gradient(to right, var(--red), #ff5722); }
-
-.stat-card:hover { transform: translateY(-3px); border-color: var(--border2); }
-
-.stat-icon {
-  width: 42px; height: 42px;
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  margin-bottom: 4px;
-}
-
-.stat-value {
-  font-size: 36px;
-  font-weight: 900;
-  line-height: 1;
-  background: linear-gradient(135deg, #fff, var(--cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: var(--text2);
-  font-weight: 500;
-}
-
-/* ═══════════════════════ CARD CONTENT ═══════════════════════ */
-.card-icon {
-  width: 48px; height: 48px;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
-  margin-bottom: 16px;
-}
-
-.ci-blue   { background: rgba(26,107,224,0.15); }
-.ci-teal   { background: rgba(14,165,122,0.15); }
-.ci-amber  { background: rgba(224,165,26,0.15); }
-.ci-red    { background: rgba(224,92,26,0.15); }
-.ci-purple { background: rgba(130,80,220,0.15); }
-.ci-cyan   { background: rgba(0,200,232,0.15); }
-
-.card-h3 {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: var(--text);
-}
-
-.card-p {
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--text2);
-}
-
-.tag-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 12px;
-}
-
-/* ═══════════════════════ SCREEN CARDS ═══════════════════════ */
-.screen-card3d {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px 22px;
-  transition: all .25s;
-  position: relative;
-  overflow: hidden;
-}
-
-.screen-card3d::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(to bottom, var(--blue), var(--cyan));
-  opacity: 0;
-  transition: opacity .25s;
-}
-
-.screen-card3d:hover {
-  border-color: var(--border2);
-  transform: translateX(-4px);
-}
-
-.screen-card3d:hover::before { opacity: 1; }
-
-.sc-num {
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--blue);
-  opacity: 0.3;
-  font-family: var(--mono);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.sc-title {
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.sc-desc {
-  font-size: 13px;
-  color: var(--text2);
-  line-height: 1.65;
-}
-
-.sc-prompt {
-  background: rgba(26,107,224,0.08);
-  border: 1px solid rgba(26,107,224,0.2);
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin-top: 12px;
-  font-size: 12px;
-  color: var(--text2);
-  line-height: 1.7;
-  font-family: var(--font);
-}
-
-.sc-prompt b { color: var(--cyan); }
-
-/* ═══════════════════════ PHASE TIMELINE ═══════════════════════ */
-.phase3d {
-  position: relative;
-  padding: 28px 28px 28px 0;
-  margin-bottom: 20px;
-}
-
-.phase3d::before {
-  content: '';
-  position: absolute;
-  right: 0; top: 0;
-  width: 3px;
-  height: 100%;
-  border-radius: 2px;
-}
-
-.phase3d.ph1::before { background: linear-gradient(to bottom, var(--blue), var(--cyan)); }
-.phase3d.ph2::before { background: linear-gradient(to bottom, var(--teal), #00d4a8); }
-.phase3d.ph3::before { background: linear-gradient(to bottom, var(--red), #ff5722); }
-.phase3d.ph4::before { background: linear-gradient(to bottom, var(--amber), #ffca28); }
-
-.phase-header {
-  font-size: 17px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.phase-dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.tl-row {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.tl-row:last-child { border-bottom: none; }
-
-.week-chip {
-  min-width: 90px;
-  font-size: 11px;
-  font-weight: 700;
-  font-family: var(--mono);
-  padding: 5px 10px;
-  border-radius: 8px;
-  text-align: center;
-  background: var(--glass2);
-  border: 1px solid var(--border);
-  color: var(--cyan);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.tl-text {
-  font-size: 13.5px;
-  color: var(--text2);
-  line-height: 1.65;
-}
-
-/* ═══════════════════════ DB TABLES ═══════════════════════ */
-.db-block {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  margin-bottom: 16px;
-}
-
-.db-head {
-  background: rgba(26,107,224,0.1);
-  padding: 12px 20px;
-  font-size: 14px;
-  font-weight: 700;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.db-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-.db-table td {
-  padding: 8px 20px;
-  border-bottom: 1px solid var(--border);
-  color: var(--text2);
-}
-
-.db-table tr:last-child td { border-bottom: none; }
-.db-table td:first-child { font-family: var(--mono); font-size: 12px; color: var(--text); font-weight: 600; }
-.db-table td.pk { color: var(--cyan) !important; }
-.db-table td.fk { color: var(--teal) !important; }
-
-/* ═══════════════════════ API ROWS ═══════════════════════ */
-.api-row3d {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  transition: all .2s;
-}
-
-.api-row3d:last-child { border-bottom: none; }
-.api-row3d:hover { padding-right: 6px; }
-
-.method-chip {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 6px;
-  min-width: 52px;
-  text-align: center;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.m-get  { background: rgba(14,165,122,0.15); color: #3ed8a8; border: 1px solid rgba(14,165,122,0.3); }
-.m-post { background: rgba(26,107,224,0.15); color: #60a8ff; border: 1px solid rgba(26,107,224,0.3); }
-.m-put  { background: rgba(224,165,26,0.15); color: #f5c842; border: 1px solid rgba(224,165,26,0.3); }
-.m-del  { background: rgba(224,92,26,0.15);  color: #ff8a50; border: 1px solid rgba(224,92,26,0.3); }
-
-.ep-code {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--text);
-  margin-bottom: 2px;
-}
-
-.ep-desc {
-  font-size: 12px;
-  color: var(--text3);
-}
-
-/* ═══════════════════════ AI CARDS ═══════════════════════ */
-.ai-block {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius2);
-  padding: 24px 28px;
-  margin-bottom: 16px;
-  position: relative;
-  overflow: hidden;
-  transition: all .3s;
-}
-
-.ai-block::before {
-  content: '';
-  position: absolute;
-  top: 0; right: 0;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(26,107,224,0.08), transparent 70%);
-  pointer-events: none;
-}
-
-.ai-block:hover {
-  border-color: var(--border2);
-  box-shadow: var(--glow);
-}
-
-.ai-block-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.progress3d {
-  height: 6px;
-  background: var(--glass2);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-top: 14px;
-}
-
-.progress-fill3d {
-  height: 100%;
-  border-radius: 4px;
-  background: linear-gradient(to left, var(--blue), var(--cyan));
-  position: relative;
-}
-
-.progress-fill3d::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 40px; height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  from { transform: translateX(-40px); }
-  to   { transform: translateX(100%); }
-}
-
-/* ═══════════════════════ COST TABLE ═══════════════════════ */
-.cost-row3d {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-  color: var(--text2);
-  transition: all .2s;
-}
-
-.cost-row3d:hover { padding-right: 6px; color: var(--text); }
-.cost-row3d:last-child { border-bottom: none; font-weight: 700; color: var(--text); }
-
-/* ═══════════════════════ DASHBOARD METRICS ═══════════════════════ */
-.metric3d {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  text-align: center;
-  transition: all .25s;
-}
-
-.metric3d:hover { transform: scale(1.03); border-color: var(--border2); }
-
-.metric-val3d {
-  font-size: 40px;
-  font-weight: 900;
-  line-height: 1.1;
-  background: linear-gradient(135deg, #fff, var(--cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.metric-label3d {
-  font-size: 12px;
-  color: var(--text3);
-  margin-top: 4px;
-}
-
-/* ═══════════════════════ MONO CODE ═══════════════════════ */
-.code-block {
-  font-family: var(--mono);
-  font-size: 12.5px;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid var(--border);
-  padding: 16px 20px;
-  border-radius: 12px;
-  margin-top: 8px;
-  line-height: 1.9;
-  white-space: pre-wrap;
-  color: var(--text2);
-  overflow-x: auto;
-}
-
-/* ═══════════════════════ COLOR SWATCHES ═══════════════════════ */
-.swatch {
-  width: 60px; height: 60px;
-  border-radius: 12px;
-  display: flex;
-  align-items: flex-end;
-  padding: 4px 5px;
-  font-size: 9px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.7);
-  border: 1px solid rgba(255,255,255,0.1);
-  transition: transform .2s;
-}
-
-.swatch:hover { transform: scale(1.1); }
-
-/* ═══════════════════════ UX FLOW ═══════════════════════ */
-.flow-step {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--border);
-  transition: all .2s;
-}
-
-.flow-step:hover { padding-right: 8px; }
-.flow-step:last-child { border-bottom: none; }
-
-.flow-num {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--blue), var(--cyan));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
-  font-weight: 800;
-  flex-shrink: 0;
-  box-shadow: 0 0 20px rgba(26,107,224,0.4);
-}
-
-.flow-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-.flow-content p  { font-size: 13px; color: var(--text2); line-height: 1.65; }
-
-/* ═══════════════════════ SCALING PHASES ═══════════════════════ */
-.scale-phase {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius2);
-  padding: 24px 28px;
-  margin-bottom: 16px;
-  position: relative;
-  overflow: hidden;
-}
-
-.scale-phase .year-label {
-  font-size: 28px;
-  font-weight: 900;
-  opacity: 0.06;
-  position: absolute;
-  left: 20px;
-  bottom: 10px;
-  font-family: var(--mono);
-  pointer-events: none;
-}
-
-/* ═══════════════════════ MILESTONE ═══════════════════════ */
-.milestone-row {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.milestone-row:last-child { border-bottom: none; }
-
-.m-month {
-  min-width: 80px;
-  font-size: 11px;
-  font-weight: 700;
-  font-family: var(--mono);
-  padding: 5px 10px;
-  border-radius: 8px;
-  text-align: center;
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
-.m-text { font-size: 13.5px; color: var(--text2); line-height: 1.6; }
-
-/* ═══════════════════════ ROLE BADGE ═══════════════════════ */
-.role-card {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  transition: all .25s;
-}
-
-.role-card:hover { border-color: var(--border2); transform: translateY(-3px); }
-
-/* ═══════════════════════ FOOTER ═══════════════════════ */
-.footer {
-  border-top: 1px solid var(--border);
-  padding: 40px 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  max-width: 1400px;
-  margin: 0 auto;
-  color: var(--text3);
-  font-size: 13px;
-}
-
-/* ═══════════════════════ SCROLLBAR ═══════════════════════ */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--navy); }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,200,232,0.4); }
-
-/* ═══════════════════════ TECH STACK PILL ═══════════════════════ */
-.tech-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--glass2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 4px 12px;
-  font-size: 12px;
-  color: var(--text2);
-  font-family: var(--mono);
-  transition: all .2s;
-}
-
-.tech-pill:hover { border-color: var(--cyan); color: var(--cyan); }
-
-/* ═══════════════════════ DIVIDER ═══════════════════════ */
-.divider {
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--border2), transparent);
-  margin: 40px 0;
-}
-
-/* ═══════════════════════ CALLOUT ═══════════════════════ */
-.callout {
-  background: rgba(26,107,224,0.07);
-  border: 1px solid rgba(26,107,224,0.2);
-  border-radius: var(--radius);
-  padding: 20px 24px;
-  margin-bottom: 20px;
-  font-size: 14px;
-  color: var(--text2);
-  line-height: 1.7;
-}
-
-.callout strong { color: var(--cyan); }
-
-/* ═══════════════════════ RESPONSIVE ═══════════════════════ */
-
-/* Tablet: hide badges, keep nav scrollable */
-@media (max-width: 1024px) {
-  .topbar-badges { display: none; }
-}
-
-/* Mobile: show hamburger, hide desktop nav */
-@media (max-width: 768px) {
-  .topbar { padding: 0 14px; gap: 10px; }
-  .topbar-nav { display: none; }          /* hide desktop nav */
-  .topbar-badges { display: none; }
-  .hamburger { display: flex; align-items: center; justify-content: center; }
-
-  .section { padding: 40px 16px; }
-  .hero { padding: 60px 16px; }
-  .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
-
-  .logo-text { font-size: 14px; }
-  .logo-sub  { font-size: 9px; }
-  .logo-icon { width: 32px; height: 32px; font-size: 15px; }
-}
-
-@media (max-width: 480px) {
-  .hero-title { font-size: 32px; }
-  .hero-sub   { font-size: 15px; }
-  .btn-primary, .btn-ghost { padding: 12px 20px; font-size: 14px; }
+:root{
+  --navy:#050d1f;--navy2:#0a1628;--navy3:#0f1e36;
+  --blue:#1a6be0;--blue2:#2a7ff0;--cyan:#00c8e8;--cyan2:#00e5ff;
+  --teal:#0ea57a;--amber:#e0a51a;--red:#e05c1a;--purple:#8250dc;
+  --text:#e8f0ff;--text2:#8ba4cc;--text3:#4d6a99;
+  --glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.08);--glass3:rgba(255,255,255,0.12);
+  --border:rgba(0,180,255,0.12);--border2:rgba(0,180,255,0.22);
+  --glow:0 0 40px rgba(26,107,224,0.25);--glow2:0 0 60px rgba(0,200,232,0.2);
+  --radius:16px;--radius2:24px;
+  --font:'Cairo',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace;
+  --nav-h:68px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--navy);color:var(--text);min-height:100vh;overflow-x:hidden}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.6}
+
+/* ── TOPBAR ── */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:100;background:rgba(5,13,31,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:8px;overflow:hidden}
+.topbar-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;min-width:0}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(26,107,224,0.5);flex-shrink:0}
+.logo-text{font-size:16px;font-weight:700;color:var(--text);line-height:1.2;white-space:nowrap}
+.logo-sub{font-size:10px;color:var(--cyan);font-weight:400;letter-spacing:.5px;white-space:nowrap}
+.topbar-nav{flex:1;min-width:0;display:flex;align-items:center;gap:2px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none;padding:4px 6px;-webkit-mask-image:linear-gradient(to left,transparent 0%,black 5%,black 95%,transparent 100%);mask-image:linear-gradient(to left,transparent 0%,black 5%,black 95%,transparent 100%)}
+.topbar-nav::-webkit-scrollbar{display:none}
+.tnav-btn{background:transparent;border:none;color:var(--text2);font-family:var(--font);font-size:12.5px;font-weight:500;padding:7px 13px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.tnav-btn .nav-num{font-size:10px;color:var(--cyan);font-weight:700;background:rgba(0,200,232,0.12);padding:1px 5px;border-radius:4px}
+.tnav-btn:hover{color:var(--text);background:var(--glass2)}
+.tnav-btn.active{color:var(--cyan2);background:rgba(0,200,232,0.10);border:1px solid rgba(0,200,232,0.25)}
+.topbar-badges{display:flex;gap:6px;flex-shrink:0;align-items:center}
+.hamburger{display:none;background:var(--glass2);border:1px solid var(--border2);border-radius:8px;padding:7px 10px;cursor:pointer;color:var(--text);font-size:18px;flex-shrink:0;line-height:1}
+.mobile-nav-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(5,13,31,0.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);flex-direction:column;padding:24px 20px;gap:8px;overflow-y:auto}
+.mobile-nav-overlay.open{display:flex}
+.mobile-nav-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.mobile-nav-close{background:var(--glass2);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;color:var(--text);font-size:20px;cursor:pointer;line-height:1}
+.mobile-tnav-btn{background:var(--glass);border:1px solid var(--border);color:var(--text2);font-family:var(--font);font-size:15px;font-weight:500;padding:14px 18px;border-radius:10px;cursor:pointer;transition:all .2s;text-align:right;display:flex;align-items:center;gap:10px}
+.mobile-tnav-btn:hover,.mobile-tnav-btn.active{color:var(--cyan2);background:rgba(0,200,232,0.10);border-color:rgba(0,200,232,0.25)}
+
+/* ── LAYOUT ── */
+.app-shell{padding-top:var(--nav-h);min-height:100vh;position:relative;z-index:1}
+.page{display:none;animation:fadeSlide .35s ease}
+.page.active{display:block}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO ── */
+.hero{min-height:560px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 32px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(26,107,224,0.15) 0%,transparent 70%);pointer-events:none}
+.hero-kicker{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.hero-kicker::before,.hero-kicker::after{content:'';display:block;height:1px;width:40px;background:linear-gradient(to right,transparent,var(--cyan))}
+.hero-kicker::after{transform:scaleX(-1)}
+.hero-title{font-size:clamp(36px,5vw,72px);font-weight:900;line-height:1.1;margin-bottom:20px;background:linear-gradient(135deg,#fff 30%,var(--cyan) 70%,var(--blue2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:18px;color:var(--text2);max-width:600px;line-height:1.7;margin-bottom:40px}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.hero-badges{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:48px}
+
+/* ── BUTTONS ── */
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;border:none;padding:14px 32px;border-radius:12px;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;transition:all .25s;box-shadow:0 4px 30px rgba(26,107,224,0.4);position:relative;overflow:hidden}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--cyan),var(--blue2));opacity:0;transition:opacity .25s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(26,107,224,0.6)}
+.btn-primary:hover::before{opacity:1}
+.btn-primary span{position:relative}
+.btn-ghost{background:var(--glass2);color:var(--text);border:1px solid var(--border2);padding:14px 32px;border-radius:12px;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;transition:all .25s;backdrop-filter:blur(10px)}
+.btn-ghost:hover{background:var(--glass3);border-color:rgba(0,200,232,0.4);color:var(--cyan2)}
+
+/* ── SECTION ── */
+.section{max-width:1400px;margin:0 auto;padding:60px 32px}
+.section-title{font-size:28px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to left,transparent,var(--border2))}
+.section-desc{color:var(--text2);font-size:15px;margin-bottom:40px;max-width:600px}
+
+/* ── CARD3D ── */
+.card3d{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius2);padding:28px;position:relative;overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1);cursor:default}
+.card3d::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.15),transparent)}
+.card3d::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(0,200,232,0.06) 0%,transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.card3d:hover{border-color:var(--border2);transform:translateY(-4px) perspective(800px) rotateX(2deg);box-shadow:0 20px 60px rgba(0,0,0,0.4),var(--glow)}
+.card3d:hover::after{opacity:1}
+.card-glow-accent{box-shadow:inset 0 0 0 1px rgba(26,107,224,0.3),0 0 40px rgba(26,107,224,0.1)}
+.card-glow-teal{box-shadow:inset 0 0 0 1px rgba(14,165,122,0.3),0 0 40px rgba(14,165,122,0.1)}
+.card-glow-amber{box-shadow:inset 0 0 0 1px rgba(224,165,26,0.3),0 0 40px rgba(224,165,26,0.1)}
+.card-glow-red{box-shadow:inset 0 0 0 1px rgba(224,92,26,0.3),0 0 40px rgba(224,92,26,0.1)}
+.card-glow-purple{box-shadow:inset 0 0 0 1px rgba(130,80,220,0.3),0 0 40px rgba(130,80,220,0.1)}
+.card-glow-cyan{box-shadow:inset 0 0 0 1px rgba(0,200,232,0.3),0 0 40px rgba(0,200,232,0.1)}
+.card-glow-blue{box-shadow:inset 0 0 0 1px rgba(26,107,224,0.3),0 0 40px rgba(26,107,224,0.1)}
+
+/* ── GRIDS ── */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.grid-5{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+
+/* ── BADGES ── */
+.badge3d{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;letter-spacing:.3px;white-space:nowrap}
+.b-blue{background:rgba(26,107,224,0.15);color:#60a8ff;border:1px solid rgba(26,107,224,0.3)}
+.b-cyan{background:rgba(0,200,232,0.12);color:#00e5ff;border:1px solid rgba(0,200,232,0.3)}
+.b-teal{background:rgba(14,165,122,0.12);color:#3ed8a8;border:1px solid rgba(14,165,122,0.3)}
+.b-amber{background:rgba(224,165,26,0.12);color:#f5c842;border:1px solid rgba(224,165,26,0.3)}
+.b-red{background:rgba(224,92,26,0.12);color:#ff8a50;border:1px solid rgba(224,92,26,0.3)}
+.b-purple{background:rgba(130,80,220,0.12);color:#b89eff;border:1px solid rgba(130,80,220,0.3)}
+.b-green{background:rgba(60,200,80,0.12);color:#60e880;border:1px solid rgba(60,200,80,0.3)}
+
+/* ── STAT CARDS ── */
+.stat-card{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;transition:all .25s}
+.stat-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.stat-card.s-blue::before{background:linear-gradient(to right,var(--blue),var(--cyan))}
+.stat-card.s-teal::before{background:linear-gradient(to right,var(--teal),#00d4a8)}
+.stat-card.s-amber::before{background:linear-gradient(to right,var(--amber),#ffca28)}
+.stat-card.s-red::before{background:linear-gradient(to right,var(--red),#ff5722)}
+.stat-card:hover{transform:translateY(-3px);border-color:var(--border2)}
+.stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:4px}
+.stat-value{font-size:36px;font-weight:900;line-height:1;background:linear-gradient(135deg,#fff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:13px;color:var(--text2);font-weight:500}
+
+/* ── CARD CONTENT ── */
+.card-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.ci-blue{background:rgba(26,107,224,0.15)}.ci-teal{background:rgba(14,165,122,0.15)}.ci-amber{background:rgba(224,165,26,0.15)}.ci-red{background:rgba(224,92,26,0.15)}.ci-purple{background:rgba(130,80,220,0.15)}.ci-cyan{background:rgba(0,200,232,0.15)}
+.card-h3{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text)}
+.card-p{font-size:14px;line-height:1.7;color:var(--text2)}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+
+/* ── SCREEN CARDS ── */
+.screen-card3d{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;transition:all .25s;position:relative;overflow:hidden}
+.screen-card3d::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(to bottom,var(--blue),var(--cyan));opacity:0;transition:opacity .25s}
+.screen-card3d:hover{border-color:var(--border2);transform:translateX(-4px)}
+.screen-card3d:hover::before{opacity:1}
+.sc-num{font-size:28px;font-weight:900;color:var(--blue);opacity:.3;font-family:var(--mono);line-height:1;margin-bottom:4px}
+.sc-title{font-size:15px;font-weight:700;margin-bottom:6px}
+.sc-desc{font-size:13px;color:var(--text2);line-height:1.65}
+.sc-prompt{background:rgba(26,107,224,0.08);border:1px solid rgba(26,107,224,0.2);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:12px;color:var(--text2);line-height:1.7}
+.sc-prompt b{color:var(--cyan)}
+
+/* ── PHASE TIMELINE ── */
+.phase3d{position:relative;padding:28px 28px 28px 0;margin-bottom:20px}
+.phase3d::before{content:'';position:absolute;right:0;top:0;width:3px;height:100%;border-radius:2px}
+.phase3d.ph1::before{background:linear-gradient(to bottom,var(--blue),var(--cyan))}
+.phase3d.ph2::before{background:linear-gradient(to bottom,var(--teal),#00d4a8)}
+.phase3d.ph3::before{background:linear-gradient(to bottom,var(--red),#ff5722)}
+.phase3d.ph4::before{background:linear-gradient(to bottom,var(--amber),#ffca28)}
+.phase-header{font-size:17px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.tl-row{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
+.tl-row:last-child{border-bottom:none}
+.week-chip{min-width:90px;font-size:11px;font-weight:700;font-family:var(--mono);padding:5px 10px;border-radius:8px;text-align:center;background:var(--glass2);border:1px solid var(--border);color:var(--cyan);white-space:nowrap;flex-shrink:0}
+.tl-text{font-size:13.5px;color:var(--text2);line-height:1.65}
+
+/* ── DB TABLES ── */
+.db-block{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.db-head{background:rgba(26,107,224,0.1);padding:12px 20px;font-size:14px;font-weight:700;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.db-table{width:100%;border-collapse:collapse;font-size:13px}
+.db-table td{padding:8px 20px;border-bottom:1px solid var(--border);color:var(--text2)}
+.db-table tr:last-child td{border-bottom:none}
+.db-table td:first-child{font-family:var(--mono);font-size:12px;color:var(--text);font-weight:600}
+.db-table td.pk{color:var(--cyan)!important}
+.db-table td.fk{color:var(--teal)!important}
+
+/* ── API ROWS ── */
+.api-row3d{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);transition:all .2s}
+.api-row3d:last-child{border-bottom:none}
+.api-row3d:hover{padding-right:6px}
+.method-chip{font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 10px;border-radius:6px;min-width:52px;text-align:center;flex-shrink:0;margin-top:2px}
+.m-get{background:rgba(14,165,122,0.15);color:#3ed8a8;border:1px solid rgba(14,165,122,0.3)}
+.m-post{background:rgba(26,107,224,0.15);color:#60a8ff;border:1px solid rgba(26,107,224,0.3)}
+.m-put{background:rgba(224,165,26,0.15);color:#f5c842;border:1px solid rgba(224,165,26,0.3)}
+.m-del{background:rgba(224,92,26,0.15);color:#ff8a50;border:1px solid rgba(224,92,26,0.3)}
+.ep-code{font-family:var(--mono);font-size:13px;color:var(--text);margin-bottom:2px}
+.ep-desc{font-size:12px;color:var(--text3)}
+
+/* ── AI CARDS ── */
+.ai-block{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius2);padding:24px 28px;margin-bottom:16px;position:relative;overflow:hidden;transition:all .3s}
+.ai-block::before{content:'';position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(26,107,224,0.08),transparent 70%);pointer-events:none}
+.ai-block:hover{border-color:var(--border2);box-shadow:var(--glow)}
+.ai-block-title{font-size:16px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.progress3d{height:6px;background:var(--glass2);border-radius:4px;overflow:hidden;margin-top:14px}
+.progress-fill3d{height:100%;border-radius:4px;background:linear-gradient(to left,var(--blue),var(--cyan));position:relative}
+.progress-fill3d::after{content:'';position:absolute;top:0;left:0;width:40px;height:100%;background:linear-gradient(to right,transparent,rgba(255,255,255,0.4),transparent);animation:shimmer 2s infinite}
+@keyframes shimmer{from{transform:translateX(-40px)}to{transform:translateX(100%)}}
+
+/* ── COST / METRIC ── */
+.cost-row3d{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--text2);transition:all .2s}
+.cost-row3d:hover{padding-right:6px;color:var(--text)}
+.cost-row3d:last-child{border-bottom:none;font-weight:700;color:var(--text)}
+.metric3d{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;transition:all .25s}
+.metric3d:hover{transform:scale(1.03);border-color:var(--border2)}
+.metric-val3d{font-size:40px;font-weight:900;line-height:1.1;background:linear-gradient(135deg,#fff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.metric-label3d{font-size:12px;color:var(--text3);margin-top:4px}
+
+/* ── CODE ── */
+.code-block{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,0.3);border:1px solid var(--border);padding:16px 20px;border-radius:12px;margin-top:8px;line-height:1.9;white-space:pre-wrap;color:var(--text2);overflow-x:auto}
+
+/* ── SWATCHES ── */
+.swatch{width:60px;height:60px;border-radius:12px;display:flex;align-items:flex-end;padding:4px 5px;font-size:9px;font-weight:700;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1);transition:transform .2s}
+.swatch:hover{transform:scale(1.1)}
+
+/* ── UX FLOW ── */
+.flow-step{display:flex;gap:16px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--border);transition:all .2s}
+.flow-step:hover{padding-right:8px}
+.flow-step:last-child{border-bottom:none}
+.flow-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;box-shadow:0 0 20px rgba(26,107,224,0.4)}
+.flow-content h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.flow-content p{font-size:13px;color:var(--text2);line-height:1.65}
+
+/* ── SCALE ── */
+.scale-phase{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius2);padding:24px 28px;margin-bottom:16px;position:relative;overflow:hidden}
+.scale-phase .year-label{font-size:28px;font-weight:900;opacity:.06;position:absolute;left:20px;bottom:10px;font-family:var(--mono);pointer-events:none}
+.milestone-row{display:flex;gap:16px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border)}
+.milestone-row:last-child{border-bottom:none}
+.m-month{min-width:80px;font-size:11px;font-weight:700;font-family:var(--mono);padding:5px 10px;border-radius:8px;text-align:center;flex-shrink:0;white-space:nowrap}
+.m-text{font-size:13.5px;color:var(--text2);line-height:1.6}
+.role-card{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:all .25s}
+.role-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--border);padding:40px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;max-width:1400px;margin:0 auto;color:var(--text3);font-size:13px}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,200,232,0.4)}
+
+/* ── TECH PILL ── */
+.tech-pill{display:inline-flex;align-items:center;gap:6px;background:var(--glass2);border:1px solid var(--border);border-radius:8px;padding:4px 12px;font-size:12px;color:var(--text2);font-family:var(--mono);transition:all .2s}
+.tech-pill:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* ── DIVIDER / CALLOUT ── */
+.divider{height:1px;background:linear-gradient(to right,transparent,var(--border2),transparent);margin:40px 0}
+.callout{background:rgba(26,107,224,0.07);border:1px solid rgba(26,107,224,0.2);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;font-size:14px;color:var(--text2);line-height:1.7}
+.callout strong{color:var(--cyan)}
+
+/* ══════════════════════════════════════════
+   DESIGN SYSTEM PAGE — 3D STYLED COMPONENTS
+   ══════════════════════════════════════════ */
+.ds-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px}
+.ds-tab{background:var(--glass);border:1px solid var(--border);color:var(--text2);font-family:var(--font);font-size:13px;font-weight:600;padding:10px 20px;border-radius:10px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.ds-tab:hover{background:var(--glass2);color:var(--text)}
+.ds-tab.ds-on{background:rgba(0,200,232,0.12);color:var(--cyan2);border-color:rgba(0,200,232,0.3)}
+
+.ds-panel{display:none}.ds-panel.ds-on{display:block}
+
+/* token swatches */
+.tok-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-bottom:28px}
+.tok-card{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:14px;transition:all .25s}
+.tok-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.tok-swatch{width:100%;height:40px;border-radius:8px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.08)}
+.tok-label{font-size:11px;color:var(--text3);margin-bottom:3px}
+.tok-val{font-size:11px;font-weight:600;font-family:var(--mono);color:var(--cyan)}
+
+/* type scale */
+.type-scale-row{display:flex;align-items:baseline;gap:20px;padding:12px 0;border-bottom:1px solid var(--border)}
+.type-scale-row:last-child{border-bottom:none}
+.type-meta{font-size:11px;color:var(--text3);min-width:140px;font-family:var(--mono)}
+
+/* interaction states */
+.int-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.int-card{background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:12px 14px;transition:all .2s}
+.int-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.int-label{font-size:10px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.int-val{font-size:12px;font-weight:600;color:var(--text);font-family:var(--mono)}
+
+/* screen navigator */
+.sn-group-btn{background:var(--glass);border:1px solid var(--border);color:var(--text2);font-family:var(--font);font-size:11px;font-weight:600;padding:6px 14px;border-radius:8px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.sn-group-btn:hover{background:var(--glass2);color:var(--text)}
+.sn-group-btn.sn-on{background:rgba(0,200,232,0.12);color:var(--cyan2);border-color:rgba(0,200,232,0.3)}
+
+/* 3D phone mockup */
+.phone-wrap{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:var(--radius2);padding:8px;max-width:340px;margin:0 auto 16px;box-shadow:0 20px 60px rgba(0,0,0,0.5),var(--glow2)}
+.phone-inner{background:var(--navy2);border-radius:14px;overflow:hidden;font-size:13px}
+.ph-status{background:var(--navy);padding:8px 16px;display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:var(--text2);border-bottom:1px solid var(--border)}
+.ph-topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border)}
+.ph-title{font-size:13px;font-weight:700;color:var(--text)}
+.ph-lang{display:flex;gap:0;border:1px solid var(--border2);border-radius:6px;overflow:hidden}
+.ph-lang span{padding:3px 7px;font-size:9px;font-weight:700;cursor:pointer;color:var(--text3);transition:all .15s}
+.ph-lang span.lact{background:rgba(0,200,232,0.2);color:var(--cyan2)}
+.ph-search{padding:8px 14px;border-bottom:1px solid var(--border)}
+.ph-search input{width:100%;background:var(--glass2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--text2);font-family:var(--font)}
+.ph-card{background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:0 0 6px}
+.ph-card-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
+.ph-card-sub{font-size:10px;color:var(--text3)}
+.ph-bar{height:4px;background:var(--glass2);border-radius:2px;overflow:hidden;margin-top:6px}
+.ph-bar-fill{height:100%;background:linear-gradient(to left,var(--blue),var(--cyan));border-radius:2px}
+.ph-metric-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+.ph-metric{background:var(--glass2);border-radius:8px;padding:7px 9px}
+.ph-metric-label{font-size:9px;color:var(--text3);margin-bottom:1px}
+.ph-metric-val{font-size:15px;font-weight:900;color:var(--text)}
+.ph-btn{width:100%;padding:10px;background:linear-gradient(135deg,var(--blue),var(--cyan));border:none;border-radius:8px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--font);margin-bottom:6px}
+.ph-btn-ghost{width:100%;padding:9px;background:var(--glass2);border:1px solid var(--border2);border-radius:8px;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--font);margin-bottom:6px}
+.ph-field{margin-bottom:8px}
+.ph-field label{display:block;font-size:10px;color:var(--text3);margin-bottom:3px}
+.ph-field input,.ph-field select{width:100%;background:var(--glass2);border:1px solid var(--border);border-radius:7px;padding:7px 9px;font-size:11px;color:var(--text);font-family:var(--font)}
+.ph-progress{height:2px;background:var(--glass2);border-radius:2px;margin:6px 0}
+.ph-progress-fill{height:100%;background:linear-gradient(to left,var(--blue),var(--cyan));border-radius:2px}
+.ph-tag{display:inline-block;padding:2px 7px;border:1px solid var(--border2);border-radius:10px;font-size:9px;color:var(--text3);margin:2px}
+.ph-tag.ph-sel{background:rgba(0,200,232,0.15);color:var(--cyan2);border-color:rgba(0,200,232,0.3)}
+.ph-otp-row{display:flex;gap:6px;justify-content:center;margin:14px 0}
+.ph-otp-box{width:34px;height:42px;border:1px solid var(--border2);border-radius:8px;text-align:center;font-size:16px;font-weight:700;background:var(--glass2);color:var(--text);font-family:var(--mono)}
+.ph-chat-ai{background:var(--glass2);border-radius:0 10px 10px 10px;padding:7px 9px;font-size:11px;margin:5px 0;max-width:82%;color:var(--text2);border:1px solid var(--border)}
+.ph-chat-user{background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:10px 10px 0 10px;padding:7px 9px;font-size:11px;margin:5px 0 5px auto;max-width:72%;color:#fff}
+.ph-chip{display:inline-block;padding:4px 9px;border:1px solid var(--border2);border-radius:10px;font-size:9px;color:var(--text3);margin:2px;cursor:pointer;transition:all .15s}
+.ph-chip:hover{border-color:rgba(0,200,232,0.4);color:var(--cyan)}
+.ph-section-head{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);padding:8px 14px 3px}
+.ph-bottom-nav{display:flex;border-top:1px solid var(--border);background:var(--navy)}
+.ph-bn-item{flex:1;padding:7px 4px;text-align:center;cursor:pointer}
+.ph-bn-dot{width:16px;height:16px;margin:0 auto 2px;border:1.5px solid var(--border2);border-radius:4px}
+.ph-bn-label{font-size:8px;color:var(--text3)}
+.ph-bn-item.ph-bn-active .ph-bn-dot{background:linear-gradient(135deg,var(--blue),var(--cyan));border-color:transparent}
+.ph-bn-item.ph-bn-active .ph-bn-label{color:var(--cyan2);font-weight:700}
+.ph-skeleton{background:var(--glass2);border-radius:4px;animation:sk3d 1.4s infinite}
+@keyframes sk3d{0%,100%{opacity:.2}50%{opacity:.6}}
+.ph-score-bar{height:3px;background:var(--glass2);border-radius:2px;margin-top:5px}
+.ph-score-fill{height:100%;background:linear-gradient(to left,var(--blue),var(--cyan));border-radius:2px}
+.ph-compare-table{width:100%;border-collapse:collapse;font-size:10px}
+.ph-compare-table th{padding:5px 7px;background:var(--glass2);font-weight:700;font-size:9px;color:var(--text3);text-align:center;border-bottom:1px solid var(--border)}
+.ph-compare-table td{padding:5px 7px;border-bottom:1px solid var(--border);text-align:center;font-size:10px;color:var(--text2)}
+.ph-compare-table td:first-child{text-align:right;font-size:9px;color:var(--text3)}
+.ph-winner{color:var(--cyan2)!important;font-weight:700}
+
+/* prompt box */
+.ds-prompt-box{background:rgba(26,107,224,0.08);border:1px solid rgba(26,107,224,0.2);border-radius:10px;padding:12px 14px;margin-top:10px;font-size:11px;color:var(--text2);line-height:1.7;font-family:var(--mono)}
+
+/* UX list */
+.ux-list3d{list-style:none;padding:0}
+.ux-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--border);align-items:flex-start;transition:all .2s}
+.ux-item:hover{padding-right:8px}
+.ux-item:last-child{border-bottom:none}
+.ux-num3d{width:30px;min-width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;box-shadow:0 0 16px rgba(26,107,224,0.4)}
+.ux-text3d{flex:1}
+.ux-title3d{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.ux-sub3d{font-size:12px;color:var(--text2);line-height:1.65}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){.topbar-badges{display:none}}
+@media(max-width:768px){
+  .topbar{padding:0 14px;gap:10px}
+  .topbar-nav{display:none}
+  .topbar-badges{display:none}
+  .hamburger{display:flex;align-items:center;justify-content:center}
+  .section{padding:40px 16px}
+  .hero{padding:60px 16px}
+  .grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr}
+  .logo-text{font-size:14px}.logo-sub{font-size:9px}.logo-icon{width:32px;height:32px;font-size:15px}
+}
+@media(max-width:480px){
+  .hero-title{font-size:32px}
+  .hero-sub{font-size:15px}
+  .btn-primary,.btn-ghost{padding:12px 20px;font-size:14px}
 }
 </style>
 </head>
 <body>
-
 <canvas id="bg-canvas"></canvas>
 
-<!-- ══════════════ TOPBAR (FIXED) ══════════════
-     Layout in RTL (right → left):
-     [Logo]  [←────── Nav (flex:1, scrollable) ──────→]  [Badges]  [Hamburger on mobile]
-     All three sections are flex children with proper shrink rules.
-     No margin-*:auto anywhere — that was the original bug.
--->
+<!-- TOPBAR -->
 <header class="topbar">
-
-  <!-- 1. Logo — always RIGHT in RTL, flex-shrink:0 -->
   <a class="topbar-logo" href="#" onclick="showPage('vision');return false;">
     <div class="logo-icon">🎓</div>
     <div>
-      <div class="logo-text">مصر للجامعات</div>
+      <div class="logo-text">UniGuide</div>
       <div class="logo-sub">AI PLATFORM</div>
     </div>
   </a>
-
-  <!-- 2. Desktop Nav — flex:1, scrollable, no margin:auto -->
   <nav class="topbar-nav" id="main-nav">
     <button class="tnav-btn active" onclick="showPage('vision')"><span class="nav-num">①</span>Vision</button>
-    <button class="tnav-btn" onclick="showPage('screens')"><span class="nav-num">②</span>Screens</button>
-    <button class="tnav-btn" onclick="showPage('ux')"><span class="nav-num">③</span>UX Flow</button>
-    <button class="tnav-btn" onclick="showPage('frontend')"><span class="nav-num">④</span>Frontend</button>
-    <button class="tnav-btn" onclick="showPage('backend')"><span class="nav-num">⑤</span>Backend</button>
-    <button class="tnav-btn" onclick="showPage('database')"><span class="nav-num">⑥</span>Database</button>
-    <button class="tnav-btn" onclick="showPage('ai')"><span class="nav-num">⑦</span>AI System</button>
-    <button class="tnav-btn" onclick="showPage('dashboard')"><span class="nav-num">⑧</span>Dashboard</button>
-    <button class="tnav-btn" onclick="showPage('roadmap')"><span class="nav-num">⑨</span>Roadmap</button>
-    <button class="tnav-btn" onclick="showPage('scaling')"><span class="nav-num">⑩</span>Scaling</button>
+    <button class="tnav-btn" onclick="showPage('design')"><span class="nav-num">②</span>Design System</button>
+    <button class="tnav-btn" onclick="showPage('screens')"><span class="nav-num">③</span>Screens</button>
+    <button class="tnav-btn" onclick="showPage('ux')"><span class="nav-num">④</span>UX Flow</button>
+    <button class="tnav-btn" onclick="showPage('frontend')"><span class="nav-num">⑤</span>Frontend</button>
+    <button class="tnav-btn" onclick="showPage('backend')"><span class="nav-num">⑥</span>Backend</button>
+    <button class="tnav-btn" onclick="showPage('database')"><span class="nav-num">⑦</span>Database</button>
+    <button class="tnav-btn" onclick="showPage('ai')"><span class="nav-num">⑧</span>AI System</button>
+    <button class="tnav-btn" onclick="showPage('dashboard')"><span class="nav-num">⑨</span>Dashboard</button>
+    <button class="tnav-btn" onclick="showPage('roadmap')"><span class="nav-num">⑩</span>Roadmap</button>
+    <button class="tnav-btn" onclick="showPage('scaling')"><span class="nav-num">⑪</span>Scaling</button>
   </nav>
-
-  <!-- 3. Badges — flex-shrink:0, hidden below 1024px -->
   <div class="topbar-badges">
-    <span class="badge3d b-blue">v1.0 Startup-Ready</span>
+    <span class="badge3d b-blue">v2.0 Multilingual</span>
     <span class="badge3d b-teal">25 Screens</span>
     <span class="badge3d b-cyan">AI-Powered</span>
   </div>
-
-  <!-- 4. Hamburger — visible only on mobile (≤768px) -->
   <button class="hamburger" onclick="openMobileNav()" aria-label="فتح القائمة">☰</button>
-
 </header>
 
-<!-- ══════════════ MOBILE NAV OVERLAY ══════════════ -->
+<!-- MOBILE NAV -->
 <div class="mobile-nav-overlay" id="mobile-nav">
   <div class="mobile-nav-header">
     <div style="display:flex;align-items:center;gap:10px;">
       <div class="logo-icon">🎓</div>
-      <div>
-        <div class="logo-text">مصر للجامعات</div>
-        <div class="logo-sub">AI PLATFORM</div>
-      </div>
+      <div><div class="logo-text">UniGuide</div><div class="logo-sub">AI PLATFORM</div></div>
     </div>
     <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
   </div>
-
   <button class="mobile-tnav-btn active" onclick="showPage('vision');closeMobileNav()"><span class="nav-num">①</span>Vision</button>
-  <button class="mobile-tnav-btn" onclick="showPage('screens');closeMobileNav()"><span class="nav-num">②</span>Screens</button>
-  <button class="mobile-tnav-btn" onclick="showPage('ux');closeMobileNav()"><span class="nav-num">③</span>UX Flow</button>
-  <button class="mobile-tnav-btn" onclick="showPage('frontend');closeMobileNav()"><span class="nav-num">④</span>Frontend</button>
-  <button class="mobile-tnav-btn" onclick="showPage('backend');closeMobileNav()"><span class="nav-num">⑤</span>Backend</button>
-  <button class="mobile-tnav-btn" onclick="showPage('database');closeMobileNav()"><span class="nav-num">⑥</span>Database</button>
-  <button class="mobile-tnav-btn" onclick="showPage('ai');closeMobileNav()"><span class="nav-num">⑦</span>AI System</button>
-  <button class="mobile-tnav-btn" onclick="showPage('dashboard');closeMobileNav()"><span class="nav-num">⑧</span>Dashboard</button>
-  <button class="mobile-tnav-btn" onclick="showPage('roadmap');closeMobileNav()"><span class="nav-num">⑨</span>Roadmap</button>
-  <button class="mobile-tnav-btn" onclick="showPage('scaling');closeMobileNav()"><span class="nav-num">⑩</span>Scaling</button>
-
+  <button class="mobile-tnav-btn" onclick="showPage('design');closeMobileNav()"><span class="nav-num">②</span>Design System</button>
+  <button class="mobile-tnav-btn" onclick="showPage('screens');closeMobileNav()"><span class="nav-num">③</span>Screens</button>
+  <button class="mobile-tnav-btn" onclick="showPage('ux');closeMobileNav()"><span class="nav-num">④</span>UX Flow</button>
+  <button class="mobile-tnav-btn" onclick="showPage('frontend');closeMobileNav()"><span class="nav-num">⑤</span>Frontend</button>
+  <button class="mobile-tnav-btn" onclick="showPage('backend');closeMobileNav()"><span class="nav-num">⑥</span>Backend</button>
+  <button class="mobile-tnav-btn" onclick="showPage('database');closeMobileNav()"><span class="nav-num">⑦</span>Database</button>
+  <button class="mobile-tnav-btn" onclick="showPage('ai');closeMobileNav()"><span class="nav-num">⑧</span>AI System</button>
+  <button class="mobile-tnav-btn" onclick="showPage('dashboard');closeMobileNav()"><span class="nav-num">⑨</span>Dashboard</button>
+  <button class="mobile-tnav-btn" onclick="showPage('roadmap');closeMobileNav()"><span class="nav-num">⑩</span>Roadmap</button>
+  <button class="mobile-tnav-btn" onclick="showPage('scaling');closeMobileNav()"><span class="nav-num">⑪</span>Scaling</button>
   <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;">
-    <span class="badge3d b-blue">v1.0 Startup-Ready</span>
+    <span class="badge3d b-blue">v2.0 Multilingual</span>
     <span class="badge3d b-teal">25 Screens</span>
     <span class="badge3d b-cyan">AI-Powered</span>
   </div>
@@ -1226,9 +417,8 @@ body {
 
 <main class="app-shell">
 
-<!-- ══════════════ PAGE 1: VISION ══════════════ -->
+<!-- PAGE 1: VISION -->
 <div id="page-vision" class="page active">
-
   <div class="hero">
     <div class="hero-kicker">Egypt College AI Platform</div>
     <h1 class="hero-title">اختار مستقبلك بذكاء</h1>
@@ -1244,115 +434,117 @@ body {
       <span class="badge3d b-amber">MENA Expansion Ready</span>
     </div>
   </div>
-
   <div class="section">
     <h2 class="section-title">🎯 Product Vision</h2>
     <p class="section-desc">المشكلة، الحل، والسوق المستهدف</p>
-
     <div class="grid-3" style="margin-bottom:40px;">
-      <div class="card3d card-glow-red">
-        <div class="card-icon ci-red">⚡</div>
-        <div class="badge3d b-red" style="margin-bottom:12px;">Problem</div>
-        <h3 class="card-h3">المشكلة</h3>
-        <p class="card-p">أكتر من 700,000 طالب ثانوية عامة كل سنة في مصر بيتخبطوا في اختيار الكلية بدون توجيه حقيقي يعتمد على بياناتهم الشخصية.</p>
-      </div>
-      <div class="card3d card-glow-teal">
-        <div class="card-icon ci-teal">🚀</div>
-        <div class="badge3d b-teal" style="margin-bottom:12px;">Solution</div>
-        <h3 class="card-h3">الحل</h3>
-        <p class="card-p">منصة ذكاء اصطناعي تحلل ميول الطالب، درجاته، واهتماماته وتقترح الكلية والتخصص والجامعة المناسبة مع Roadmap واضح.</p>
-      </div>
-      <div class="card3d card-glow-purple">
-        <div class="card-icon ci-purple">🎯</div>
-        <div class="badge3d b-purple" style="margin-bottom:12px;">Target Market</div>
-        <h3 class="card-h3">السوق المستهدف</h3>
-        <p class="card-p">طلاب الثانوية العامة وأولياء الأمور في مصر — السوق الفوري 700K+ طالب سنوياً، قابل للتوسع لـ MENA.</p>
-      </div>
+      <div class="card3d card-glow-red"><div class="card-icon ci-red">⚡</div><div class="badge3d b-red" style="margin-bottom:12px;">Problem</div><h3 class="card-h3">المشكلة</h3><p class="card-p">أكتر من 700,000 طالب ثانوية عامة كل سنة في مصر بيتخبطوا في اختيار الكلية بدون توجيه حقيقي يعتمد على بياناتهم الشخصية.</p></div>
+      <div class="card3d card-glow-teal"><div class="card-icon ci-teal">🚀</div><div class="badge3d b-teal" style="margin-bottom:12px;">Solution</div><h3 class="card-h3">الحل</h3><p class="card-p">منصة ذكاء اصطناعي تحلل ميول الطالب، درجاته، واهتماماته وتقترح الكلية والتخصص والجامعة المناسبة مع Roadmap واضح.</p></div>
+      <div class="card3d card-glow-purple"><div class="card-icon ci-purple">🎯</div><div class="badge3d b-purple" style="margin-bottom:12px;">Target Market</div><h3 class="card-h3">السوق المستهدف</h3><p class="card-p">طلاب الثانوية العامة وأولياء الأمور في مصر — السوق الفوري 700K+ طالب سنوياً، قابل للتوسع لـ MENA.</p></div>
     </div>
-
     <h2 class="section-title">💡 Core Value Propositions</h2>
     <p class="section-desc">ما الذي يجعل المنصة فريدة؟</p>
-
     <div class="grid-3">
-      <div class="card3d">
-        <div class="card-icon ci-blue">🤖</div>
-        <div class="badge3d b-blue" style="margin-bottom:10px;">AI Matching</div>
-        <p class="card-p">توصيات مخصصة لكل طالب بناءً على Quiz + بيانات سلوكية في الوقت الفعلي</p>
-      </div>
-      <div class="card3d">
-        <div class="card-icon ci-teal">📊</div>
-        <div class="badge3d b-teal" style="margin-bottom:10px;">Real Data</div>
-        <p class="card-p">مصاريف حقيقية + فرص عمل + متوسط رواتب في السوق المصري محدثة ربع سنوياً</p>
-      </div>
-      <div class="card3d">
-        <div class="card-icon ci-amber">👨‍👩‍👧</div>
-        <div class="badge3d b-amber" style="margin-bottom:10px;">Parent Layer</div>
-        <p class="card-p">Dashboard لولي الأمر يتابع فيه تقدم ابنه واهتماماته ويشارك في القرار</p>
-      </div>
-      <div class="card3d">
-        <div class="card-icon ci-purple">🗺️</div>
-        <div class="badge3d b-purple" style="margin-bottom:10px;">Career Path</div>
-        <p class="card-p">خريطة مسار مهني واضحة من أول يوم في الكلية لحد سوق العمل الفعلي</p>
-      </div>
-      <div class="card3d">
-        <div class="card-icon ci-cyan">💬</div>
-        <div class="badge3d b-cyan" style="margin-bottom:10px;">AI Chatbot</div>
-        <p class="card-p">مساعد ذكي 24/7 يجاوب على كل أسئلة الطالب بالعربي بدقة واحترافية</p>
-      </div>
-      <div class="card3d">
-        <div class="card-icon ci-red">💰</div>
-        <div class="badge3d b-red" style="margin-bottom:10px;">Salary Predictor</div>
-        <p class="card-p">توقعات راتب بناءً على التخصص والجامعة وسنوات الخبرة باستخدام ML</p>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <h2 class="section-title">🎨 Design System</h2>
-    <p class="section-desc">الهوية البصرية للمنصة</p>
-
-    <div class="card3d" style="margin-bottom:20px;">
-      <h3 class="card-h3" style="margin-bottom:16px;">Color Palette</h3>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <div class="swatch" style="background:#1a6be0;">Primary</div>
-        <div class="swatch" style="background:#00c8e8;">Cyan</div>
-        <div class="swatch" style="background:#0ea57a;">Teal</div>
-        <div class="swatch" style="background:#e0a51a;">Amber</div>
-        <div class="swatch" style="background:#e05c1a;">Orange</div>
-        <div class="swatch" style="background:#8250dc;">Purple</div>
-        <div class="swatch" style="background:#050d1f;">Navy</div>
-        <div class="swatch" style="background:#1e2d4a;">Surface</div>
-      </div>
-    </div>
-
-    <div class="grid-3">
-      <div class="card3d">
-        <h3 class="card-h3">Typography</h3>
-        <p class="card-p">Cairo — خط عربي احترافي للعناوين والنصوص. IBM Plex Mono — للكود والأرقام التقنية.</p>
-        <div class="tag-row">
-          <span class="tech-pill">Cairo 900 — Headlines</span>
-          <span class="tech-pill">Cairo 400 — Body</span>
-          <span class="tech-pill">IBM Plex Mono — Code</span>
-        </div>
-      </div>
-      <div class="card3d">
-        <h3 class="card-h3">Spacing Scale</h3>
-        <p class="card-p">4px base grid — 4, 8, 12, 16, 24, 32, 48, 64, 80px steps للتناسق الكامل في التصميم</p>
-      </div>
-      <div class="card3d">
-        <h3 class="card-h3">Border Radius</h3>
-        <p class="card-p">8px — components صغيرة. 16px — cards. 24px — panels كبيرة. 9999px — pills وbadges</p>
-      </div>
+      <div class="card3d"><div class="card-icon ci-blue">🤖</div><div class="badge3d b-blue" style="margin-bottom:10px;">AI Matching</div><p class="card-p">توصيات مخصصة لكل طالب بناءً على Quiz + بيانات سلوكية في الوقت الفعلي</p></div>
+      <div class="card3d"><div class="card-icon ci-teal">📊</div><div class="badge3d b-teal" style="margin-bottom:10px;">Real Data</div><p class="card-p">مصاريف حقيقية + فرص عمل + متوسط رواتب في السوق المصري محدثة ربع سنوياً</p></div>
+      <div class="card3d"><div class="card-icon ci-amber">👨‍👩‍👧</div><div class="badge3d b-amber" style="margin-bottom:10px;">Parent Layer</div><p class="card-p">Dashboard لولي الأمر يتابع فيه تقدم ابنه واهتماماته ويشارك في القرار</p></div>
+      <div class="card3d"><div class="card-icon ci-purple">🗺️</div><div class="badge3d b-purple" style="margin-bottom:10px;">Career Path</div><p class="card-p">خريطة مسار مهني واضحة من أول يوم في الكلية لحد سوق العمل الفعلي</p></div>
+      <div class="card3d"><div class="card-icon ci-cyan">💬</div><div class="badge3d b-cyan" style="margin-bottom:10px;">AI Chatbot</div><p class="card-p">مساعد ذكي 24/7 يجاوب على كل أسئلة الطالب بالعربي بدقة واحترافية</p></div>
+      <div class="card3d"><div class="card-icon ci-red">💰</div><div class="badge3d b-red" style="margin-bottom:10px;">Salary Predictor</div><p class="card-p">توقعات راتب بناءً على التخصص والجامعة وسنوات الخبرة باستخدام ML</p></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ PAGE 2: SCREENS ══════════════ -->
+<!-- PAGE 2: DESIGN SYSTEM (NEW — 3D STYLED) -->
+<div id="page-design" class="page">
+  <div class="section">
+    <h2 class="section-title">🎨 Design System</h2>
+    <p class="section-desc">نظام تصميم متكامل — Monochrome + RTL + Dark/Light + Multilingual</p>
+
+    <div class="ds-tabs">
+      <button class="ds-tab ds-on" onclick="dsShow('tokens',this)">Design Tokens</button>
+      <button class="ds-tab" onclick="dsShow('screens-ds',this)">25 Screens</button>
+      <button class="ds-tab" onclick="dsShow('uxlist',this)">UX Improvements</button>
+      <button class="ds-tab" onclick="dsShow('prompts-ds',this)">AI Prompts</button>
+    </div>
+
+    <!-- TOKENS -->
+    <div class="ds-panel ds-on" id="dsp-tokens">
+      <h3 class="card-h3" style="margin-bottom:16px;">Color scale — monochrome system</h3>
+      <div class="tok-grid">
+        <div class="tok-card"><div class="tok-swatch" style="background:#0A0A0A;"></div><div class="tok-label">Ink / primary</div><div class="tok-val">#0A0A0A</div></div>
+        <div class="tok-card"><div class="tok-swatch" style="background:#3A3A3A;"></div><div class="tok-label">Ink secondary</div><div class="tok-val">#3A3A3A</div></div>
+        <div class="tok-card"><div class="tok-swatch" style="background:#6B6B6B;"></div><div class="tok-label">Ink tertiary</div><div class="tok-val">#6B6B6B</div></div>
+        <div class="tok-card"><div class="tok-swatch" style="background:#9A9A9A;"></div><div class="tok-label">Ink muted</div><div class="tok-val">#9A9A9A</div></div>
+        <div class="tok-card"><div class="tok-swatch" style="background:#E0E0E0;border:1px solid rgba(255,255,255,0.1)"></div><div class="tok-label">Border default</div><div class="tok-val">#E0E0E0</div></div>
+        <div class="tok-card"><div class="tok-swatch" style="background:#F0F0F0;border:1px solid rgba(255,255,255,0.1)"></div><div class="tok-label">Surface 3</div><div class="tok-val">#F0F0F0</div></div>
+        <div class="tok-card"><div class="tok-swatch" style="background:#F7F7F7;border:1px solid rgba(255,255,255,0.1)"></div><div class="tok-label">Surface 2</div><div class="tok-val">#F7F7F7</div></div>
+        <div class="tok-card"><div class="tok-swatch" style="background:#FFFFFF;border:1px solid rgba(255,255,255,0.1)"></div><div class="tok-label">Surface / white</div><div class="tok-val">#FFFFFF</div></div>
+      </div>
+
+      <h3 class="card-h3" style="margin-bottom:16px;">Typography scale</h3>
+      <div class="card3d" style="padding:0 20px;margin-bottom:24px;">
+        <div class="type-scale-row"><span class="type-meta">Display / 28px 900</span><span style="font-size:20px;font-weight:900;color:var(--text)">UniGuide</span></div>
+        <div class="type-scale-row"><span class="type-meta">H1 / 22px 700</span><span style="font-size:16px;font-weight:700;color:var(--text)">اختر مستقبلك بذكاء</span></div>
+        <div class="type-scale-row"><span class="type-meta">H2 / 18px 700</span><span style="font-size:14px;font-weight:700;color:var(--text)">نتائج الاختبار</span></div>
+        <div class="type-scale-row"><span class="type-meta">Body / 14px 400</span><span style="font-size:13px;color:var(--text2)">معلومات شاملة عن الكليات المصرية</span></div>
+        <div class="type-scale-row"><span class="type-meta">Caption / 12px 400</span><span style="font-size:11px;color:var(--text3)">درجة التوافق · نسبة التوظيف · المصاريف</span></div>
+        <div class="type-scale-row"><span class="type-meta">Label / 11px 700 mono</span><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--cyan);font-family:var(--mono)">AR / EN / FR</span></div>
+      </div>
+
+      <h3 class="card-h3" style="margin-bottom:16px;">Font stacks</h3>
+      <div class="card3d" style="margin-bottom:24px;">
+        <p class="card-p" style="line-height:2.2;">
+          Arabic (RTL): <span style="color:var(--cyan);font-family:var(--mono);font-size:12px;">"Cairo", "IBM Plex Sans Arabic", sans-serif</span><br>
+          Latin (LTR): <span style="color:var(--cyan);font-family:var(--mono);font-size:12px;">"Inter", system-ui, sans-serif</span><br>
+          Mono: <span style="color:var(--cyan);font-family:var(--mono);font-size:12px;">"IBM Plex Mono", monospace</span>
+        </p>
+      </div>
+
+      <h3 class="card-h3" style="margin-bottom:16px;">Spacing & radius</h3>
+      <div class="int-grid" style="margin-bottom:24px;">
+        <div class="int-card"><div class="int-label">Base unit</div><div class="int-val">4px</div></div>
+        <div class="int-card"><div class="int-label">radius-sm</div><div class="int-val">6px</div></div>
+        <div class="int-card"><div class="int-label">radius-md</div><div class="int-val">8px</div></div>
+        <div class="int-card"><div class="int-label">radius-lg</div><div class="int-val">12px</div></div>
+        <div class="int-card"><div class="int-label">radius-xl</div><div class="int-val">16px</div></div>
+        <div class="int-card"><div class="int-label">radius-pill</div><div class="int-val">100px</div></div>
+      </div>
+
+      <h3 class="card-h3" style="margin-bottom:16px;">Interaction states</h3>
+      <div class="int-grid">
+        <div class="int-card"><div class="int-label">Hover</div><div class="int-val">surface shift</div></div>
+        <div class="int-card"><div class="int-label">Active</div><div class="int-val">scale(0.98)</div></div>
+        <div class="int-card"><div class="int-label">Focus ring</div><div class="int-val">2px offset 2px</div></div>
+        <div class="int-card"><div class="int-label">Transition</div><div class="int-val">150ms ease</div></div>
+        <div class="int-card"><div class="int-label">Skeleton</div><div class="int-val">opacity pulse 1.4s</div></div>
+        <div class="int-card"><div class="int-label">Page enter</div><div class="int-val">translateY 8→0</div></div>
+      </div>
+    </div>
+
+    <!-- SCREENS DS -->
+    <div class="ds-panel" id="dsp-screens-ds">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;" id="ds-screen-nav"></div>
+      <div id="ds-screen-area"></div>
+    </div>
+
+    <!-- UX LIST -->
+    <div class="ds-panel" id="dsp-uxlist">
+      <ul class="ux-list3d" id="ux3d-list"></ul>
+    </div>
+
+    <!-- PROMPTS -->
+    <div class="ds-panel" id="dsp-prompts-ds">
+      <div id="ds-prompt-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: SCREENS (original) -->
 <div id="page-screens" class="page">
   <div class="section">
     <h2 class="section-title">📱 Screens & Prompts</h2>
     <p class="section-desc">25 شاشة مصممة بالكامل مع AI prompts لكل شاشة</p>
-
     <h3 style="font-size:17px;font-weight:700;margin-bottom:16px;color:var(--cyan);">Auth Flow (Screens 1–5)</h3>
     <div class="grid-2" style="margin-bottom:32px;">
       <div class="screen-card3d"><div class="sc-num">01</div><div class="sc-title">Splash / Onboarding</div><div class="sc-desc">شاشة البداية مع 3 slides توضيحية عن المنصة وزرار "ابدأ الآن" و"سجل دخول"</div><div class="sc-prompt"><b>Prompt:</b> Design an onboarding screen for an Egyptian college guidance app. Show animated illustrations of students choosing their future. Arabic RTL. Dark navy background with blue gradient accents. 3 swipeable slides.</div></div>
@@ -1361,7 +553,6 @@ body {
       <div class="screen-card3d"><div class="sc-num">04</div><div class="sc-title">Student Profile Setup</div><div class="sc-desc">Section (علمي/أدبي/تجاري)، درجة الثانوية، المحافظة، الاهتمامات (multi-select)</div><div class="sc-prompt"><b>Prompt:</b> Student profile completion screen. Section selector (علمي/أدبي/تجاري), score input (0-410), multi-select interests chips. Progress bar showing completion %. Modern card UI.</div></div>
       <div class="screen-card3d"><div class="sc-num">05</div><div class="sc-title">Login</div><div class="sc-desc">Phone + Password login مع "نسيت كلمة السر؟" و Social login (Google)</div><div class="sc-prompt"><b>Prompt:</b> Login screen with phone number and password fields. Forgot password link. Google OAuth button. Biometric login toggle. Remember me checkbox. Arabic RTL layout.</div></div>
     </div>
-
     <h3 style="font-size:17px;font-weight:700;margin-bottom:16px;color:var(--teal);">Core Platform (Screens 6–15)</h3>
     <div class="grid-2" style="margin-bottom:32px;">
       <div class="screen-card3d"><div class="sc-num">06</div><div class="sc-title">Home Dashboard</div><div class="sc-desc">Greeting + AI recommendation card + Quick actions + Trending colleges section</div><div class="sc-prompt"><b>Prompt:</b> Student home dashboard. Personalized greeting with name. Top 3 AI-recommended colleges as horizontal scrollable cards showing match %. Quick action buttons: Take Quiz, Find Colleges, Saved, Chat AI.</div></div>
@@ -1371,7 +562,6 @@ body {
       <div class="screen-card3d"><div class="sc-num">10</div><div class="sc-title">Quiz Results</div><div class="sc-desc">نوع الشخصية + Top 10 توصيات كليات مرتبة بـ match score مع explanation</div><div class="sc-prompt"><b>Prompt:</b> Quiz results screen. Personality type reveal with animation. Top 10 college recommendations as ranked list with match percentage bars. Each recommendation shows why it matched.</div></div>
       <div class="screen-card3d"><div class="sc-num">11</div><div class="sc-title">Compare Colleges</div><div class="sc-desc">مقارنة 2-3 كليات جنب بعض في table تفاعلية مع highlight للأفضل</div><div class="sc-prompt"><b>Prompt:</b> Side-by-side college comparison table. 2-3 colleges in columns. Rows: fees, min score, employment %, avg salary, location, specializations count. Highlight winner in each row with green accent.</div></div>
     </div>
-
     <h3 style="font-size:17px;font-weight:700;margin-bottom:16px;color:var(--amber);">AI Features (Screens 16–22)</h3>
     <div class="grid-2" style="margin-bottom:32px;">
       <div class="screen-card3d"><div class="sc-num">16</div><div class="sc-title">AI Chatbot</div><div class="sc-desc">chat interface كامل بالعربي مع streaming responses، suggested questions، وcollege cards</div><div class="sc-prompt"><b>Prompt:</b> AI chatbot for Egyptian college guidance. Chat bubbles RTL Arabic. Streaming text animation. Suggested questions chips at bottom. College recommendation cards appear inline in chat.</div></div>
@@ -1381,7 +571,6 @@ body {
       <div class="screen-card3d"><div class="sc-num">20</div><div class="sc-title">Alternative Recommendations</div><div class="sc-desc">لو الطالب مش واصل للدرجة: بدائل مقترحة بناءً على similarity score</div><div class="sc-prompt"><b>Prompt:</b> Alternative colleges screen triggered when student score is below minimum. Show 5 similar alternatives with similarity score. Explain why each is a good alternative. Encouraging tone.</div></div>
       <div class="screen-card3d"><div class="sc-num">21</div><div class="sc-title">Scholarships</div><div class="sc-desc">قاعدة بيانات المنح الدراسية مع eligibility checker ذكي</div><div class="sc-prompt"><b>Prompt:</b> Scholarships database with AI eligibility checker. Filter by: score range, financial need, specialization, location. Each scholarship card: amount, deadline, requirements. Eligibility match percentage.</div></div>
     </div>
-
     <h3 style="font-size:17px;font-weight:700;margin-bottom:16px;color:var(--red);">Parent & Admin (Screens 23–25)</h3>
     <div class="grid-2">
       <div class="screen-card3d"><div class="sc-num">23</div><div class="sc-title">Parent Dashboard</div><div class="sc-desc">متابعة نشاط الأبناء، الكليات المحفوظة، نتائج Quiz، والتوصيات</div><div class="sc-prompt"><b>Prompt:</b> Parent dashboard showing linked students' activity. Child's quiz results, saved colleges, time spent. Insights: most viewed colleges, personality type. Notification settings.</div></div>
@@ -1391,7 +580,7 @@ body {
   </div>
 </div>
 
-<!-- ══════════════ PAGE 3: UX FLOW ══════════════ -->
+<!-- PAGE 4: UX FLOW -->
 <div id="page-ux" class="page">
   <div class="section">
     <h2 class="section-title">🔄 UX Flow & Navigation</h2>
@@ -1441,58 +630,55 @@ body {
   </div>
 </div>
 
-<!-- ══════════════ PAGE 4: FRONTEND ══════════════ -->
+<!-- PAGE 5: FRONTEND -->
 <div id="page-frontend" class="page">
   <div class="section">
     <h2 class="section-title">⚛️ Frontend Architecture</h2>
-    <p class="section-desc">Next.js 14 + TypeScript + Tailwind CSS</p>
+    <p class="section-desc">Angular 17 + NgRx + Angular Material + i18n</p>
     <div class="grid-2" style="margin-bottom:32px;">
       <div class="card3d card-glow-blue">
         <h3 class="card-h3">Tech Stack</h3>
         <div class="tag-row" style="margin-top:12px;">
-          <span class="tech-pill">Next.js 14 (App Router)</span><span class="tech-pill">TypeScript</span><span class="tech-pill">Tailwind CSS</span><span class="tech-pill">Shadcn/UI</span><span class="tech-pill">Zustand</span><span class="tech-pill">React Query</span><span class="tech-pill">Framer Motion</span><span class="tech-pill">Recharts</span><span class="tech-pill">Three.js</span><span class="tech-pill">i18next (Arabic)</span>
+          <span class="tech-pill">Angular 17+</span><span class="tech-pill">TypeScript 5</span><span class="tech-pill">Angular Material</span><span class="tech-pill">NgRx 17+</span><span class="tech-pill">RxJS 7</span><span class="tech-pill">SCSS</span><span class="tech-pill">@ngx-translate</span><span class="tech-pill">Cairo Font</span><span class="tech-pill">Jasmine + Karma</span>
         </div>
       </div>
       <div class="card3d card-glow-teal">
         <h3 class="card-h3">Folder Structure</h3>
-        <div class="code-block">src/
-├── app/
-├── components/
-│   ├── ui/
-│   ├── college/
-│   ├── quiz/
-│   └── ai/
-├── lib/
-├── hooks/
-├── store/
-└── types/</div>
+        <div class="code-block">src/app/
+├── core/         # guards, interceptors
+├── i18n/         # RTL + lang service
+├── themes/       # light/dark tokens
+├── shared/       # reusable components
+├── layouts/      # shell layouts
+├── features/     # lazy-loaded pages
+└── store/        # NgRx state</div>
       </div>
     </div>
     <div class="grid-3">
-      <div class="card3d"><div class="badge3d b-blue" style="margin-bottom:12px;">State Management</div><h3 class="card-h3">Zustand</h3><p class="card-p">useAuthStore + useQuizStore + useCollegeStore + useChatStore</p></div>
-      <div class="card3d"><div class="badge3d b-teal" style="margin-bottom:12px;">Data Fetching</div><h3 class="card-h3">React Query</h3><p class="card-p">Server state، caching، background refetch، optimistic updates. Streaming للـ AI chat.</p></div>
-      <div class="card3d"><div class="badge3d b-purple" style="margin-bottom:12px;">Internationalization</div><h3 class="card-h3">RTL-First</h3><p class="card-p">Arabic primary. dir="rtl" على root. i18next لـ dynamic strings. Cairo font.</p></div>
-      <div class="card3d"><div class="badge3d b-amber" style="margin-bottom:12px;">Performance</div><h3 class="card-h3">Optimizations</h3><p class="card-p">Next.js Image optimization. Dynamic imports. Virtualized lists. Service Worker للـ offline.</p></div>
-      <div class="card3d"><div class="badge3d b-cyan" style="margin-bottom:12px;">UI Components</div><h3 class="card-h3">Design System</h3><p class="card-p">Shadcn/UI base + customized Tailwind. Dark mode only. Consistent variants.</p></div>
-      <div class="card3d"><div class="badge3d b-red" style="margin-bottom:12px;">Testing</div><h3 class="card-h3">Quality</h3><p class="card-p">Vitest + React Testing Library. Playwright للـ E2E. Storybook لـ component docs.</p></div>
+      <div class="card3d"><div class="badge3d b-blue" style="margin-bottom:12px;">State Management</div><h3 class="card-h3">NgRx + Signals</h3><p class="card-p">NgRx for global auth/college/quiz state. Angular Signals for UI reactivity (lang, theme, direction).</p></div>
+      <div class="card3d"><div class="badge3d b-teal" style="margin-bottom:12px;">i18n — RTL First</div><h3 class="card-h3">AR / EN / FR</h3><p class="card-p">Dynamic language switching without reload. Per-feature JSON translation chunks. dir="rtl" binding on &lt;html&gt;.</p></div>
+      <div class="card3d"><div class="badge3d b-amber" style="margin-bottom:12px;">Theming</div><h3 class="card-h3">Dark / Light</h3><p class="card-p">CSS custom properties. Angular Material M3 palettes. [data-theme=dark] token override. Persisted to localStorage.</p></div>
+      <div class="card3d"><div class="badge3d b-purple" style="margin-bottom:12px;">Performance</div><h3 class="card-h3">Optimizations</h3><p class="card-p">Lazy-loaded routes. Per-feature translation chunks. Skeleton loaders. OnPush change detection.</p></div>
+      <div class="card3d"><div class="badge3d b-cyan" style="margin-bottom:12px;">AI Streaming</div><h3 class="card-h3">SSE Chat</div><p class="card-p">EventSource service for token-by-token chat streaming. Auto-scroll with user-override detection.</p></div>
+      <div class="card3d"><div class="badge3d b-red" style="margin-bottom:12px;">Testing</div><h3 class="card-h3">Quality</h3><p class="card-p">Jasmine + Karma unit tests. ≥80% coverage gate. RTL layout regression tests. i18n switching E2E.</p></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ PAGE 5: BACKEND ══════════════ -->
+<!-- PAGE 6: BACKEND -->
 <div id="page-backend" class="page">
   <div class="section">
     <h2 class="section-title">⚙️ Backend Architecture</h2>
-    <p class="section-desc">Node.js + Express + PostgreSQL + Redis</p>
+    <p class="section-desc">NestJS 10 + PostgreSQL 16 + Redis 7</p>
     <div class="grid-2" style="margin-bottom:32px;">
       <div class="card3d card-glow-teal">
         <h3 class="card-h3">Tech Stack</h3>
-        <div class="tag-row" style="margin-top:12px;"><span class="tech-pill">Node.js 20 LTS</span><span class="tech-pill">Express.js</span><span class="tech-pill">TypeScript</span><span class="tech-pill">PostgreSQL 16</span><span class="tech-pill">Redis 7</span><span class="tech-pill">Prisma ORM</span><span class="tech-pill">JWT + Refresh Tokens</span><span class="tech-pill">Bull.js</span><span class="tech-pill">Socket.io</span><span class="tech-pill">AWS S3</span></div>
+        <div class="tag-row" style="margin-top:12px;"><span class="tech-pill">NestJS 10</span><span class="tech-pill">TypeScript 5</span><span class="tech-pill">TypeORM</span><span class="tech-pill">PostgreSQL 16</span><span class="tech-pill">Redis 7</span><span class="tech-pill">JWT + Refresh</span><span class="tech-pill">Passport.js</span><span class="tech-pill">Swagger 3</span><span class="tech-pill">Jest 29</span></div>
       </div>
       <div class="card3d card-glow-amber">
         <h3 class="card-h3">Microservices Architecture</h3>
         <p class="card-p" style="margin-bottom:12px;">Monolith to start, microservices-ready:</p>
-        <div class="tag-row"><span class="badge3d b-blue">API Gateway</span><span class="badge3d b-teal">Auth Service</span><span class="badge3d b-amber">College Service</span><span class="badge3d b-purple">AI Service (Python)</span><span class="badge3d b-cyan">Notification Service</span><span class="badge3d b-red">Analytics Service</span></div>
+        <div class="tag-row"><span class="badge3d b-blue">API Gateway</span><span class="badge3d b-teal">Auth Service</span><span class="badge3d b-amber">College Service</span><span class="badge3d b-purple">AI Service (Python)</span><span class="badge3d b-cyan">i18n Middleware</span><span class="badge3d b-red">Analytics Service</span></div>
       </div>
     </div>
     <div class="card3d" style="margin-bottom:16px;">
@@ -1502,42 +688,42 @@ body {
       <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/auth/otp/send</div><div class="ep-desc">إرسال OTP على الموبايل</div></div></div>
       <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/auth/otp/verify</div><div class="ep-desc">تحقق من OTP</div></div></div>
     </div>
-    <div class="card3d" style="margin-bottom:16px;">
+    <div class="card3d">
       <h3 class="card-h3" style="margin-bottom:16px;">AI Endpoints</h3>
-      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/ai/quiz/submit</div><div class="ep-desc">Quiz → AI recommendations (Top 10)</div></div></div>
-      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/ai/chat</div><div class="ep-desc">AI Chatbot + Server-Sent Events streaming</div></div></div>
+      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/ai/quiz/submit</div><div class="ep-desc">Quiz → AI recommendations (Top 10) — multilingual response</div></div></div>
+      <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/ai/chat</div><div class="ep-desc">AI Chatbot + SSE streaming — detects user language</div></div></div>
       <div class="api-row3d"><span class="method-chip m-post">POST</span><div><div class="ep-code">/api/ai/salary-predict</div><div class="ep-desc">توقع الراتب بـ XGBoost ML model</div></div></div>
       <div class="api-row3d"><span class="method-chip m-get">GET</span><div><div class="ep-code">/api/ai/roadmap/:studentId</div><div class="ep-desc">خريطة طريق مهنية شخصية</div></div></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ PAGE 6: DATABASE ══════════════ -->
+<!-- PAGE 7: DATABASE -->
 <div id="page-database" class="page">
   <div class="section">
     <h2 class="section-title">🗄️ Database Architecture</h2>
     <p class="section-desc">PostgreSQL 16 + pgvector + Redis</p>
-    <div class="db-block"><div class="db-head">👤 users</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td>Primary key</td></tr><tr><td>name</td><td>VARCHAR(100)</td><td>اسم المستخدم</td></tr><tr><td>phone</td><td>VARCHAR(15)</td><td>رقم الموبايل المصري</td></tr><tr><td>role</td><td>ENUM(student,parent,admin)</td><td>نوع المستخدم</td></tr><tr><td>governorate</td><td>VARCHAR(50)</td><td>المحافظة</td></tr></table></div>
-    <div class="db-block"><div class="db-head">🎓 colleges</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td></td></tr><tr><td>name_ar</td><td>VARCHAR(200)</td><td>اسم الكلية بالعربي</td></tr><tr><td class="fk">university_id (FK)</td><td>UUID→universities</td><td></td></tr><tr><td>type</td><td>ENUM(gov,private,national)</td><td>حكومي/خاص/أهلي</td></tr><tr><td>min_score</td><td>DECIMAL(5,2)</td><td>درجة القبول الدنيا</td></tr><tr><td>annual_fees</td><td>INTEGER</td><td>المصاريف السنوية</td></tr><tr><td>employment_rate</td><td>DECIMAL(5,2)</td><td>نسبة التوظيف %</td></tr></table></div>
-    <div class="db-block"><div class="db-head">📝 quiz_sessions</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td></td></tr><tr><td class="fk">student_id (FK)</td><td>UUID→users</td><td></td></tr><tr><td>answers</td><td>JSONB</td><td>إجابات الـ 15 سؤال</td></tr><tr><td>personality_type</td><td>VARCHAR(50)</td><td>نوع الشخصية</td></tr></table></div>
-    <div class="db-block"><div class="db-head">🤖 ai_recommendations</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td></td></tr><tr><td class="fk">student_id (FK)</td><td>UUID→users</td><td></td></tr><tr><td class="fk">college_id (FK)</td><td>UUID→colleges</td><td></td></tr><tr><td>match_score</td><td>DECIMAL(5,2)</td><td>نسبة التطابق 0-100</td></tr><tr><td>reasons</td><td>JSONB</td><td>أسباب التوصية بالعربي</td></tr></table></div>
+    <div class="db-block"><div class="db-head">👤 users</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td>Primary key</td></tr><tr><td>name</td><td>VARCHAR(100)</td><td>اسم المستخدم</td></tr><tr><td>phone</td><td>VARCHAR(15)</td><td>رقم الموبايل المصري</td></tr><tr><td>role</td><td>ENUM(student,parent,admin)</td><td>نوع المستخدم</td></tr><tr><td>preferred_lang</td><td>ENUM(ar,en,fr)</td><td>اللغة المفضلة</td></tr><tr><td>theme</td><td>ENUM(light,dark)</td><td>الثيم المفضل</td></tr><tr><td>governorate</td><td>VARCHAR(50)</td><td>المحافظة</td></tr></table></div>
+    <div class="db-block"><div class="db-head">🎓 colleges</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td></td></tr><tr><td>name_ar</td><td>VARCHAR(200)</td><td>اسم الكلية بالعربي</td></tr><tr><td>name_en</td><td>VARCHAR(200)</td><td>College name in English</td></tr><tr><td class="fk">university_id (FK)</td><td>UUID→universities</td><td></td></tr><tr><td>type</td><td>ENUM(gov,private,national)</td><td>حكومي/خاص/أهلي</td></tr><tr><td>min_score</td><td>DECIMAL(5,2)</td><td>درجة القبول الدنيا</td></tr><tr><td>annual_fees</td><td>INTEGER</td><td>المصاريف السنوية</td></tr><tr><td>employment_rate</td><td>DECIMAL(5,2)</td><td>نسبة التوظيف %</td></tr></table></div>
+    <div class="db-block"><div class="db-head">📝 quiz_sessions</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td></td></tr><tr><td class="fk">student_id (FK)</td><td>UUID→users</td><td></td></tr><tr><td>answers</td><td>JSONB</td><td>إجابات الـ 15 سؤال</td></tr><tr><td>personality_type</td><td>VARCHAR(50)</td><td>نوع الشخصية</td></tr><tr><td>lang</td><td>ENUM(ar,en,fr)</td><td>لغة الجلسة</td></tr></table></div>
+    <div class="db-block"><div class="db-head">🤖 ai_recommendations</div><table class="db-table"><tr><td class="pk">id (PK)</td><td>UUID</td><td></td></tr><tr><td class="fk">student_id (FK)</td><td>UUID→users</td><td></td></tr><tr><td class="fk">college_id (FK)</td><td>UUID→colleges</td><td></td></tr><tr><td>match_score</td><td>DECIMAL(5,2)</td><td>نسبة التطابق 0-100</td></tr><tr><td>reasons</td><td>JSONB</td><td>أسباب التوصية — متعدد اللغات</td></tr></table></div>
   </div>
 </div>
 
-<!-- ══════════════ PAGE 7: AI SYSTEM ══════════════ -->
+<!-- PAGE 8: AI SYSTEM -->
 <div id="page-ai" class="page">
   <div class="section">
     <h2 class="section-title">🤖 AI System Design</h2>
-    <p class="section-desc">5 نماذج AI متكاملة</p>
-    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-purple">Model 1</span>AI Recommendation Engine</div><p class="card-p">Hybrid (Content-based + Collaborative Filtering + LLM reranking). Stack: Python FastAPI → Scikit-learn → GPT-4o reranking.</p><div class="progress3d"><div class="progress-fill3d" style="width:82%;"></div></div><p style="font-size:12px;margin-top:6px;color:var(--text3);">Target accuracy: 82%+ user satisfaction rate</p></div>
-    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-blue">Model 2</span>AI Chatbot — Arabic NLP</div><p class="card-p">RAG (Retrieval Augmented Generation) فوق قاعدة بيانات الكليات المصرية. LLM: GPT-4o. Vector DB: pgvector. Streaming via Server-Sent Events.</p></div>
-    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-amber">Model 3</span>Salary Predictor</div><p class="card-p">Gradient Boosting Regressor (XGBoost) trained on Egyptian job market data. Features: college_type, specialization, governorate, years_exp.</p><div class="progress3d"><div class="progress-fill3d" style="width:76%;background:linear-gradient(to left,var(--amber),#ffca28);"></div></div></div>
+    <p class="section-desc">5 نماذج AI متكاملة — Arabic NLP first</p>
+    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-purple">Model 1</span>AI Recommendation Engine</div><p class="card-p">Hybrid (Content-based + Collaborative Filtering + LLM reranking). Stack: Python FastAPI → Scikit-learn → GPT-4o reranking. Responds in user's selected language.</p><div class="progress3d"><div class="progress-fill3d" style="width:82%;"></div></div><p style="font-size:12px;margin-top:6px;color:var(--text3);">Target accuracy: 82%+ user satisfaction rate</p></div>
+    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-blue">Model 2</span>AI Chatbot — Multilingual NLP</div><p class="card-p">RAG (Retrieval Augmented Generation) فوق قاعدة بيانات الكليات المصرية. LLM: GPT-4o. Vector DB: pgvector. Streaming via SSE. Auto-detects Arabic / English / French and responds in same language.</p></div>
+    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-amber">Model 3</span>Salary Predictor</div><p class="card-p">Gradient Boosting Regressor (XGBoost) trained on Egyptian job market data. Features: college_type, specialization, governorate, years_exp. Output formatted in user's locale (Arabic numerals for AR).</p><div class="progress3d"><div class="progress-fill3d" style="width:76%;background:linear-gradient(to left,var(--amber),#ffca28);"></div></div></div>
     <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-teal">Model 4</span>Alternative Recommendations</div><p class="card-p">Rule-based + ML: similarity score بين الكليات بناءً على subject areas، career outcomes، fee ranges.</p></div>
-    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-cyan">Model 5</span>Behavior Tracking</div><p class="card-p">Real-time event tracking → Redis queue → async processing → تحديث user preference vector → إعادة ترتيب التوصيات.</p></div>
+    <div class="ai-block"><div class="ai-block-title"><span class="badge3d b-cyan">Model 5</span>Behavior Tracking + Lang Router</div><p class="card-p">Real-time event tracking → Redis queue → async processing → تحديث user preference vector. lang_router.py routes Arabic prompts to ar-optimized system prompt for best NLP quality.</p></div>
   </div>
 </div>
 
-<!-- ══════════════ PAGE 8: DASHBOARD ══════════════ -->
+<!-- PAGE 9: DASHBOARD -->
 <div id="page-dashboard" class="page">
   <div class="section">
     <h2 class="section-title">📊 Smart Analytics Dashboard</h2>
@@ -1557,24 +743,24 @@ body {
   </div>
 </div>
 
-<!-- ══════════════ PAGE 9: ROADMAP ══════════════ -->
+<!-- PAGE 10: ROADMAP -->
 <div id="page-roadmap" class="page">
   <div class="section">
     <h2 class="section-title">🚀 MVP Roadmap</h2>
     <p class="section-desc">خطة تنفيذ 20 أسبوع للوصول للـ MVP</p>
-    <div class="phase3d ph1"><div class="phase-header"><div class="phase-dot" style="background:var(--blue);"></div>Phase 1 — Foundation<span class="badge3d b-blue">Weeks 1–4</span></div><div class="tl-row"><div class="week-chip">Week 1-2</div><div class="tl-text">Project setup: Next.js + Backend boilerplate، DB schema، CI/CD pipeline</div></div><div class="tl-row"><div class="week-chip">Week 3-4</div><div class="tl-text">Auth flow (Screens 1-5)، JWT + Refresh tokens، OTP integration</div></div></div>
+    <div class="phase3d ph1"><div class="phase-header"><div class="phase-dot" style="background:var(--blue);"></div>Phase 1 — Foundation<span class="badge3d b-blue">Weeks 1–4</span></div><div class="tl-row"><div class="week-chip">Week 1-2</div><div class="tl-text">Project setup: Angular 17 + NestJS boilerplate، DB schema، CI/CD pipeline، i18n scaffold</div></div><div class="tl-row"><div class="week-chip">Week 3-4</div><div class="tl-text">Auth flow (Screens 1-5)، JWT + Refresh tokens، OTP integration، RTL layout system</div></div></div>
     <div class="phase3d ph2"><div class="phase-header"><div class="phase-dot" style="background:var(--teal);"></div>Phase 2 — Core Features<span class="badge3d b-teal">Weeks 5–10</span></div><div class="tl-row"><div class="week-chip">Week 5-6</div><div class="tl-text">Home Dashboard، University Finder، College Details، Database seeding (500+ كلية)</div></div><div class="tl-row"><div class="week-chip">Week 7-10</div><div class="tl-text">AI Quiz، Compare، Saved، Career Path، Admission Steps</div></div></div>
-    <div class="phase3d ph3"><div class="phase-header"><div class="phase-dot" style="background:var(--red);"></div>Phase 3 — AI Features<span class="badge3d b-red">Weeks 11–16</span></div><div class="tl-row"><div class="week-chip">Week 11-12</div><div class="tl-text">AI Chatbot (RAG)، Arabic NLP، streaming interface</div></div><div class="tl-row"><div class="week-chip">Week 13-16</div><div class="tl-text">Salary Predictor، Alternative Recommendations، Parent Dashboard</div></div></div>
+    <div class="phase3d ph3"><div class="phase-header"><div class="phase-dot" style="background:var(--red);"></div>Phase 3 — AI Features<span class="badge3d b-red">Weeks 11–16</span></div><div class="tl-row"><div class="week-chip">Week 11-12</div><div class="tl-text">AI Chatbot (RAG)، Arabic NLP، streaming interface، multilingual AI responses</div></div><div class="tl-row"><div class="week-chip">Week 13-16</div><div class="tl-text">Salary Predictor، Alternative Recommendations، Parent Dashboard، FR language support</div></div></div>
     <div class="phase3d ph4"><div class="phase-header"><div class="phase-dot" style="background:var(--amber);"></div>Phase 4 — Polish & Launch<span class="badge3d b-amber">Weeks 17–20</span></div><div class="tl-row"><div class="week-chip">Week 17-18</div><div class="tl-text">Analytics Dashboard، Performance optimization، RTL QA، User testing (50 طالب)</div></div><div class="tl-row"><div class="week-chip">Week 19-20</div><div class="tl-text">Beta launch (1,000 طالب)، App Store submission، Marketing campaign</div></div></div>
     <div class="divider"></div>
     <div class="grid-2">
-      <div class="card3d"><h3 class="card-h3" style="margin-bottom:16px;">Monthly OpEx</h3><div class="cost-row3d"><span>Infrastructure (AWS/GCP)</span><span class="badge3d b-blue">~4,500 EGP</span></div><div class="cost-row3d"><span>AI API (OpenAI/Gemini)</span><span class="badge3d b-amber">~8,000 EGP</span></div><div class="cost-row3d"><span>SMS OTP</span><span class="badge3d b-teal">~2,000 EGP</span></div><div class="cost-row3d"><span>Total Monthly OpEx</span><span class="badge3d b-red">~17,000 EGP</span></div></div>
-      <div class="card3d"><h3 class="card-h3" style="margin-bottom:16px;">Monetization</h3><div class="cost-row3d"><span>🎯 Freemium (B2C)</span><span class="badge3d b-blue">99 EGP/شهر</span></div><div class="cost-row3d"><span>🏫 B2B Schools</span><span class="badge3d b-teal">2,000 EGP/مدرسة</span></div><div class="cost-row3d"><span>🎓 University Ads</span><span class="badge3d b-amber">Sponsored slots</span></div><div class="cost-row3d"><span>📊 Data Insights B2B</span><span class="badge3d b-purple">Annual reports</span></div></div>
+      <div class="card3d"><h3 class="card-h3" style="margin-bottom:16px;">Monthly OpEx</h3><div class="cost-row3d"><span>Infrastructure (AWS Cairo)</span><span class="badge3d b-blue">~4,500 EGP</span></div><div class="cost-row3d"><span>AI API (OpenAI/Gemini)</span><span class="badge3d b-amber">~8,000 EGP</span></div><div class="cost-row3d"><span>SMS OTP</span><span class="badge3d b-teal">~2,000 EGP</span></div><div class="cost-row3d"><span>Total Monthly OpEx</span><span class="badge3d b-red">~17,000 EGP</span></div></div>
+      <div class="card3d"><h3 class="card-h3" style="margin-bottom:16px;">Monetization</h3><div class="cost-row3d"><span>Freemium (B2C)</span><span class="badge3d b-blue">99 EGP/شهر</span></div><div class="cost-row3d"><span>B2B Schools</span><span class="badge3d b-teal">2,000 EGP/مدرسة</span></div><div class="cost-row3d"><span>University Ads</span><span class="badge3d b-amber">Sponsored slots</span></div><div class="cost-row3d"><span>Data Insights B2B</span><span class="badge3d b-purple">Annual reports</span></div></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ PAGE 10: SCALING ══════════════ -->
+<!-- PAGE 11: SCALING -->
 <div id="page-scaling" class="page">
   <div class="section">
     <h2 class="section-title">📈 Scaling Strategy</h2>
@@ -1600,142 +786,571 @@ body {
   <div class="footer">
     <div style="display:flex;align-items:center;gap:10px;">
       <div class="logo-icon" style="width:28px;height:28px;font-size:14px;">🎓</div>
-      <span>مصر للجامعات © 2025 — AI Platform</span>
+      <span>UniGuide © 2026 — AI Platform</span>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
-      <span class="tech-pill">Next.js 14</span>
-      <span class="tech-pill">PostgreSQL</span>
+      <span class="tech-pill">Angular 17</span>
+      <span class="tech-pill">NestJS 10</span>
+      <span class="tech-pill">PostgreSQL 16</span>
       <span class="tech-pill">GPT-4o</span>
       <span class="tech-pill">AWS Cairo</span>
     </div>
-    <span>Startup-Ready v1.0</span>
+    <span>Startup-Ready v2.0</span>
   </div>
 </footer>
 
 <script>
-// ══════════════ THREE.JS BACKGROUND ══════════════
-(function() {
-  const canvas = document.getElementById('bg-canvas');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 30;
-
-  const particleCount = 200;
-  const geo = new THREE.BufferGeometry();
-  const positions = new Float32Array(particleCount * 3);
-  const sizes = new Float32Array(particleCount);
-
-  for (let i = 0; i < particleCount; i++) {
-    positions[i * 3]     = (Math.random() - 0.5) * 100;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 60;
-    sizes[i] = Math.random() * 2 + 0.5;
-  }
-
-  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-  const mat = new THREE.PointsMaterial({ color: 0x1a6be0, size: 0.3, transparent: true, opacity: 0.6, sizeAttenuation: true });
-  const particles = new THREE.Points(geo, mat);
+// ══════ THREE.JS BACKGROUND ══════
+(function(){
+  const canvas=document.getElementById('bg-canvas');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,1000);
+  camera.position.z=30;
+  const particleCount=200;
+  const geo=new THREE.BufferGeometry();
+  const positions=new Float32Array(particleCount*3);
+  const sizes=new Float32Array(particleCount);
+  for(let i=0;i<particleCount;i++){positions[i*3]=(Math.random()-.5)*100;positions[i*3+1]=(Math.random()-.5)*80;positions[i*3+2]=(Math.random()-.5)*60;sizes[i]=Math.random()*2+.5}
+  geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+  geo.setAttribute('size',new THREE.BufferAttribute(sizes,1));
+  const mat=new THREE.PointsMaterial({color:0x1a6be0,size:.3,transparent:true,opacity:.6,sizeAttenuation:true});
+  const particles=new THREE.Points(geo,mat);
   scene.add(particles);
-
-  const shapes = [];
-  const shapeGeos = [new THREE.OctahedronGeometry(1.5,0), new THREE.TetrahedronGeometry(1.2,0), new THREE.IcosahedronGeometry(1.0,0)];
-  const wireMat = new THREE.MeshBasicMaterial({ color: 0x00c8e8, wireframe: true, transparent: true, opacity: 0.15 });
-
-  for (let i = 0; i < 6; i++) {
-    const mesh = new THREE.Mesh(shapeGeos[i % 3], wireMat.clone());
-    mesh.position.set((Math.random()-.5)*60, (Math.random()-.5)*40, (Math.random()-.5)*20-10);
-    mesh.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
-    shapes.push(mesh);
-    scene.add(mesh);
-  }
-
-  const gridHelper = new THREE.GridHelper(120, 30, 0x1a3a7a, 0x0f1e36);
-  gridHelper.position.y = -20;
-  gridHelper.material.transparent = true;
-  gridHelper.material.opacity = 0.3;
+  const shapes=[];
+  const shapeGeos=[new THREE.OctahedronGeometry(1.5,0),new THREE.TetrahedronGeometry(1.2,0),new THREE.IcosahedronGeometry(1.0,0)];
+  const wireMat=new THREE.MeshBasicMaterial({color:0x00c8e8,wireframe:true,transparent:true,opacity:.15});
+  for(let i=0;i<6;i++){const mesh=new THREE.Mesh(shapeGeos[i%3],wireMat.clone());mesh.position.set((Math.random()-.5)*60,(Math.random()-.5)*40,(Math.random()-.5)*20-10);mesh.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,0);shapes.push(mesh);scene.add(mesh)}
+  const gridHelper=new THREE.GridHelper(120,30,0x1a3a7a,0x0f1e36);
+  gridHelper.position.y=-20;gridHelper.material.transparent=true;gridHelper.material.opacity=.3;
   scene.add(gridHelper);
-
-  let mouseX = 0, mouseY = 0;
-  document.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-  });
-
-  let t = 0;
-  function animate() {
-    requestAnimationFrame(animate);
-    t += 0.005;
-    particles.rotation.y = t * 0.05;
-    particles.rotation.x = t * 0.02;
-    shapes.forEach((s, i) => { s.rotation.x += 0.004+i*.001; s.rotation.y += 0.006+i*.001; s.position.y += Math.sin(t+i)*.008; });
-    camera.position.x += (mouseX * 3 - camera.position.x) * 0.02;
-    camera.position.y += (-mouseY * 2 - camera.position.y) * 0.02;
-    camera.lookAt(scene.position);
-    renderer.render(scene, camera);
-  }
+  let mouseX=0,mouseY=0;
+  document.addEventListener('mousemove',e=>{mouseX=(e.clientX/window.innerWidth-.5)*2;mouseY=(e.clientY/window.innerHeight-.5)*2});
+  let t=0;
+  function animate(){requestAnimationFrame(animate);t+=.005;particles.rotation.y=t*.05;particles.rotation.x=t*.02;shapes.forEach((s,i)=>{s.rotation.x+=.004+i*.001;s.rotation.y+=.006+i*.001;s.position.y+=Math.sin(t+i)*.008});camera.position.x+=(mouseX*3-camera.position.x)*.02;camera.position.y+=(-mouseY*2-camera.position.y)*.02;camera.lookAt(scene.position);renderer.render(scene,camera)}
   animate();
-
-  window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-  });
+  window.addEventListener('resize',()=>{renderer.setSize(window.innerWidth,window.innerHeight);camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix()});
 })();
 
-// ══════════════ NAVIGATION ══════════════
-const pageMap = { vision:0, screens:1, ux:2, frontend:3, backend:4, database:5, ai:6, dashboard:7, roadmap:8, scaling:9 };
-
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tnav-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.mobile-tnav-btn').forEach(b => b.classList.remove('active'));
-
-  document.getElementById('page-' + id).classList.add('active');
-
-  const idx = pageMap[id];
-  const desktopBtns = document.querySelectorAll('.tnav-btn');
-  const mobileBtns  = document.querySelectorAll('.mobile-tnav-btn');
-  if (desktopBtns[idx]) desktopBtns[idx].classList.add('active');
-  if (mobileBtns[idx])  mobileBtns[idx].classList.add('active');
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+// ══════ NAVIGATION ══════
+const pageMap={vision:0,design:1,screens:2,ux:3,frontend:4,backend:5,database:6,ai:7,dashboard:8,roadmap:9,scaling:10};
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tnav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mobile-tnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const idx=pageMap[id];
+  const db=document.querySelectorAll('.tnav-btn');
+  const mb=document.querySelectorAll('.mobile-tnav-btn');
+  if(db[idx])db[idx].classList.add('active');
+  if(mb[idx])mb[idx].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-
-// ══════════════ MOBILE NAV ══════════════
-function openMobileNav() {
-  document.getElementById('mobile-nav').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeMobileNav() {
-  document.getElementById('mobile-nav').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// Close on backdrop click
-document.getElementById('mobile-nav').addEventListener('click', function(e) {
-  if (e.target === this) closeMobileNav();
+function openMobileNav(){document.getElementById('mobile-nav').classList.add('open');document.body.style.overflow='hidden'}
+function closeMobileNav(){document.getElementById('mobile-nav').classList.remove('open');document.body.style.overflow=''}
+document.getElementById('mobile-nav').addEventListener('click',function(e){if(e.target===this)closeMobileNav()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobileNav()});
+document.querySelectorAll('.card3d').forEach(card=>{
+  card.addEventListener('mousemove',e=>{const rect=card.getBoundingClientRect();card.style.setProperty('--mx',((e.clientX-rect.left)/rect.width*100)+'%');card.style.setProperty('--my',((e.clientY-rect.top)/rect.height*100)+'%')})
 });
 
-// Close on Escape
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeMobileNav();
-});
+// ══════ DESIGN SYSTEM TAB SWITCHER ══════
+function dsShow(id,btn){
+  document.querySelectorAll('.ds-panel').forEach(p=>p.classList.remove('ds-on'));
+  document.querySelectorAll('.ds-tab').forEach(b=>b.classList.remove('ds-on'));
+  document.getElementById('dsp-'+id).classList.add('ds-on');
+  btn.classList.add('ds-on');
+}
 
-// ══════════════ 3D CARD MOUSE TRACKING ══════════════
-document.querySelectorAll('.card3d').forEach(card => {
-  card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
-    card.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+// ══════ SCREEN DATA ══════
+const SCREENS=[
+  {id:'01',g:'Auth Flow',ar:'Splash / Onboarding',desc:'3 slides قابلة للتمرير. عنوان كبير أبيض على خلفية سوداء. زر CTA مزدوج.',mock:'onboarding',prompt:'Design a 3-slide onboarding for an Egyptian college guidance app. Monochrome: black/white/gray only. Slide 1: large bold headline + geometric white shape on black. Slide 2: feature highlight. Slide 3: CTA pair. Arabic RTL. AR/EN/FR toggle top-right. Apple-inspired spacing.'},
+  {id:'02',g:'Auth Flow',ar:'Registration',desc:'نموذج تسجيل نظيف. اسم، موبايل (+20)، محافظة، نوع الحساب.',mock:'register',prompt:'Monochrome registration form for Egyptian students in {lang}. Fields: name, phone +20, governorate, account type (radio cards), password. Progress indicator Step 1/2. Submit button full-width black.'},
+  {id:'03',g:'Auth Flow',ar:'OTP Verification',desc:'6 خانات OTP مع countdown timer 60 ثانية.',mock:'otp',prompt:'Minimal OTP screen in {lang}. 6 white boxes hairline borders. 60s countdown. Resend appears after timer. Success: boxes fill black with white checks. No color.'},
+  {id:'04',g:'Auth Flow',ar:'Profile Setup',desc:'Section picker + درجة + اهتمامات multi-select.',mock:'profile',prompt:'Profile setup in {lang}. 3 section cards (علمي/أدبي/تجاري): selected = black bg white text. Score input 0-410. Interest chips: selected = dark filled pill. Progress bar black. Monochrome.'},
+  {id:'05',g:'Auth Flow',ar:'Login',desc:'موبايل + باسورد + Google OAuth.',mock:'login',prompt:'Minimal login in {lang} RTL/LTR. Phone + password. Google OAuth button border-only. Forgot password inline. Biometric toggle. Error messages dark gray italic.'},
+  {id:'06',g:'Core Platform',ar:'Home Dashboard',desc:'تحية + بانر الاستمرارية + Top 3 AI cards + Quick actions.',mock:'home',prompt:'Student home dashboard in {lang}. Large greeting. Dismissable "continue where you left off" banner. 3 AI match cards horizontal scroll. 4 quick-action grid. Bottom nav 5 tabs. Monochrome.'},
+  {id:'07',g:'Core Platform',ar:'University Finder',desc:'Search bar ثابت + فلترة + نتائج مع match bar.',mock:'finder',prompt:'College search in {lang}. Sticky search bar. Filter chips: governorate/type/score/fees. Cards: name, match bar (black fill), employment %, fees. Skeleton loaders on load. Monochrome.'},
+  {id:'08',g:'Core Platform',ar:'College Details',desc:'4 metrics + tabs + save button.',mock:'college',prompt:'College detail in {lang}. No hero image — 4-column stat bar: fees/score/employment/salary. Tabs: Overview · Specializations · Admission. Save heart button 200ms animation. Monochrome.'},
+  {id:'09',g:'Core Platform',ar:'AI Quiz',desc:'سؤال واحد في الشاشة + 4 خيارات.',mock:'quiz',prompt:'One-question quiz in {lang}. Question + progress bar top. 4 answer cards: selected = black bg white text. Back/Next navigation. Estimated time remaining. Auto-saves. Monochrome.'},
+  {id:'10',g:'Core Platform',ar:'Quiz Results',desc:'نوع الشخصية + Top 10 توصيات.',mock:'results',prompt:'Quiz results in {lang}. Personality type fade-in animation. Top 10 ranked list: name, match bar, 1-sentence reason. AI suggestion chips. Monochrome.'},
+  {id:'11',g:'Core Platform',ar:'Compare Colleges',desc:'جدول مقارنة 2-3 كليات.',mock:'compare',prompt:'College comparison in {lang}. Up to 3 columns. Rows: fees/score/employment/salary/location. Best cell per row: bold black (no color). Horizontal scroll mobile. Monochrome.'},
+  {id:'12',g:'Core Platform',ar:'Saved Colleges',desc:'قائمة المحفوظة مع sort.',mock:'saved',prompt:'Saved list in {lang}. Sort: match/fees/recent. Card: name + match bar + fees + remove. Empty state: friendly {lang} message + CTA. Monochrome.'},
+  {id:'13',g:'Core Platform',ar:'Notifications',desc:'تنبيهات مجمعة حسب اليوم.',mock:'notif',prompt:'Notification center in {lang}. Groups: Today/Earlier. Swipe-to-dismiss. Deadline alerts bold. Empty state centered. Monochrome.'},
+  {id:'14',g:'Core Platform',ar:'Settings',desc:'إعدادات الحساب والتفضيلات.',mock:'settings',prompt:'Settings screen in {lang}. Card sections: Account / Preferences (lang AR/EN/FR, font) / Notifications / Privacy. Language change triggers instant re-render. Monochrome.'},
+  {id:'15',g:'Core Platform',ar:'Scholarships',desc:'قاعدة بيانات المنح + eligibility checker.',mock:'scholar',prompt:'Scholarships in {lang}. Filter chips. Cards: name, amount, deadline, eligibility match bar. AI chip: check eligibility. Empty state. Monochrome.'},
+  {id:'16',g:'AI Features',ar:'AI Chatbot',desc:'تشات RTL مع streaming + chips.',mock:'chat',prompt:'Bilingual chatbot in {lang}. System responds in user message language. RTL Arabic bubbles, LTR for EN/FR. Streaming tokens. Suggestion chips. Inline college cards. Monochrome.'},
+  {id:'17',g:'AI Features',ar:'Salary Predictor',desc:'تخصص + نوع جامعة + خبرة → bar chart.',mock:'salary',prompt:'Salary predictor in {lang}. Specialization dropdown + university type 3 cards + experience slider 0-20. Output: 3 animated bars min/median/max in EGP. Monochrome.'},
+  {id:'18',g:'AI Features',ar:'Career Path',desc:'Timeline: كلية → تدريب → وظيفة → نمو.',mock:'career',prompt:'Career timeline in {lang}. 5 stages vertical list: college→internship→first job→growth→senior. Each: duration, skills chips, salary range. Monochrome.'},
+  {id:'19',g:'AI Features',ar:'Learning Roadmap',desc:'شجرة المهارات + كورسات مقترحة.',mock:'roadmap',prompt:'Learning roadmap in {lang}. Skill tree checklist: core→advanced→optional. Each skill: course name + platform text label. Bookmark. Progress ring top. Monochrome.'},
+  {id:'20',g:'AI Features',ar:'Alternatives',desc:'بدائل لمن لم يصل للدرجة.',mock:'alts',prompt:'Alternative colleges in {lang}. Triggered when score < minimum. 5 alternatives: similarity bar, why it matches, score difference from target. Encouraging tone. AI chips. Monochrome.'},
+  {id:'21',g:'AI Features',ar:'Admission Steps',desc:'Checklist خطوة بخطوة + progress ring.',mock:'admission',prompt:'Admission guide in {lang}. Progress ring top. Tappable checklist rows with checkbox + due date. Documents list. Share with parent button. Monochrome.'},
+  {id:'22',g:'AI Features',ar:'AI Insights',desc:'نظرة أسبوعية ذكية.',mock:'insights',prompt:'Weekly AI insight card in {lang}. 3 bullet AI insights from activity. Match score trend line. Suggested next action CTA. Dismissable. Monochrome.'},
+  {id:'23',g:'Parent & Admin',ar:'Parent Dashboard',desc:'متابعة نشاط الابن.',mock:'parent',prompt:'Parent dashboard in {lang}. Student card: name, last active, quiz %. Sections: quiz results, saved colleges (read-only), time on platform. Notification settings. Monochrome.'},
+  {id:'24',g:'Parent & Admin',ar:'Admin Analytics',desc:'KPIs + charts + heatmap.',mock:'admin',prompt:'Admin analytics in {lang}. KPI cards: users/DAU/quiz/revenue. Charts: growth line, interest bars, AI satisfaction score. Egypt heatmap placeholder. Data export. Monochrome SaaS.'},
+  {id:'25',g:'Parent & Admin',ar:'Empty / Error States',desc:'404 + offline + empty states.',mock:'empty',prompt:'Error and empty states in {lang}. 404: large light gray number + friendly message + go home. Offline: geometric icon + retry. Empty saved: {lang} message + CTA. Monochrome no illustrations.'},
+];
+
+const MOCKS={
+  onboarding:()=>`<div style="background:linear-gradient(180deg,#0A0A0A 0%,#1a1a1a 100%);padding:36px 18px 18px;text-align:center">
+    <div style="width:36px;height:36px;background:#fff;border-radius:8px;margin:0 auto 10px;"></div>
+    <div style="color:#fff;font-size:19px;font-weight:900;line-height:1.25;margin-bottom:4px">اختر مستقبلك<br>بذكاء</div>
+    <div style="color:#666;font-size:10px;margin-bottom:14px">منصة التوجيه الجامعي الأولى في مصر</div>
+    <div style="display:flex;justify-content:center;gap:4px;margin-bottom:14px">
+      <div style="width:18px;height:2px;background:#fff;border-radius:2px"></div>
+      <div style="width:5px;height:2px;background:#444;border-radius:2px"></div>
+      <div style="width:5px;height:2px;background:#444;border-radius:2px"></div>
+    </div>
+    </div>
+    <div style="padding:12px 16px">
+    <button class="ph-btn">ابدأ الآن</button>
+    <button class="ph-btn-ghost">سجل دخول</button>
+    </div>`,
+  register:()=>`<div style="padding:12px 14px">
+    <div style="font-size:15px;font-weight:900;color:var(--text);margin-bottom:4px">إنشاء حساب</div>
+    <div class="ph-progress"><div class="ph-progress-fill" style="width:50%"></div></div>
+    <div class="ph-field" style="margin-top:8px"><label>الاسم الكامل</label><input type="text" placeholder="محمد أحمد"></div>
+    <div class="ph-field"><label>رقم الموبايل</label><input type="tel" placeholder="+20 1XX XXX XXXX"></div>
+    <div class="ph-field"><label>المحافظة</label><select><option>القاهرة</option><option>الإسكندرية</option></select></div>
+    <div class="ph-field"><label>نوع الحساب</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px">
+        <div style="border:1px solid rgba(0,200,232,0.4);border-radius:7px;padding:7px 4px;text-align:center;background:rgba(0,200,232,0.1);color:var(--cyan2);font-size:11px;font-weight:700">طالب</div>
+        <div style="border:1px solid var(--border);border-radius:7px;padding:7px 4px;text-align:center;font-size:11px;color:var(--text3)">ولي أمر</div>
+      </div>
+    </div>
+    <button class="ph-btn" style="margin-top:8px">التالي</button></div>`,
+  otp:()=>`<div style="padding:22px 14px;text-align:center">
+    <div style="font-size:15px;font-weight:900;color:var(--text);margin-bottom:4px">تحقق من رقمك</div>
+    <div style="font-size:10px;color:var(--text3);margin-bottom:14px">أرسلنا كود على +20 100 XXX XXXX</div>
+    <div class="ph-otp-row">
+      <input class="ph-otp-box" maxlength="1" value="3">
+      <input class="ph-otp-box" maxlength="1" value="7">
+      <input class="ph-otp-box" maxlength="1" value="">
+      <input class="ph-otp-box" maxlength="1" value="">
+      <input class="ph-otp-box" maxlength="1" value="">
+      <input class="ph-otp-box" maxlength="1" value="">
+    </div>
+    <div style="font-size:10px;color:var(--text3);margin-bottom:14px">إعادة الإرسال بعد <span style="color:var(--cyan2);font-weight:700">48</span> ثانية</div>
+    <button class="ph-btn">تأكيد</button></div>`,
+  profile:()=>`<div style="padding:12px 14px">
+    <div style="font-size:14px;font-weight:900;color:var(--text);margin-bottom:4px">أكمل ملفك</div>
+    <div class="ph-progress"><div class="ph-progress-fill" style="width:75%"></div></div>
+    <div style="font-size:10px;color:var(--text3);margin:8px 0 6px">القسم الدراسي</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:10px">
+      <div style="border:1px solid rgba(0,200,232,0.4);border-radius:7px;padding:7px 4px;text-align:center;background:rgba(0,200,232,0.1);color:var(--cyan2);font-size:10px;font-weight:700">علمي</div>
+      <div style="border:1px solid var(--border);border-radius:7px;padding:7px 4px;text-align:center;font-size:10px;color:var(--text3)">أدبي</div>
+      <div style="border:1px solid var(--border);border-radius:7px;padding:7px 4px;text-align:center;font-size:10px;color:var(--text3)">تجاري</div>
+    </div>
+    <div class="ph-field"><label>الدرجة / ٤١٠</label><input type="number" placeholder="٣٢٥"></div>
+    <div style="font-size:10px;color:var(--text3);margin-bottom:5px">الاهتمامات</div>
+    <div><span class="ph-tag ph-sel">برمجة</span><span class="ph-tag ph-sel">طب</span><span class="ph-tag">هندسة</span><span class="ph-tag">فنون</span><span class="ph-tag ph-sel">أعمال</span><span class="ph-tag">تصميم</span></div>
+    <button class="ph-btn" style="margin-top:12px">ابدأ رحلتك</button></div>`,
+  login:()=>`<div style="padding:22px 14px">
+    <div style="font-size:16px;font-weight:900;color:var(--text);margin-bottom:14px">مرحباً بعودتك</div>
+    <div class="ph-field"><label>رقم الموبايل</label><input type="tel" placeholder="+20 1XX XXX XXXX"></div>
+    <div class="ph-field"><label>كلمة المرور</label><input type="password" placeholder="••••••••"></div>
+    <div style="text-align:left;margin-bottom:12px"><span style="font-size:10px;color:var(--text3)">نسيت كلمة المرور؟</span></div>
+    <button class="ph-btn">دخول</button>
+    <div style="text-align:center;margin:6px 0;font-size:10px;color:var(--text3)">أو</div>
+    <button class="ph-btn-ghost" style="font-size:11px">G  تسجيل بـ Google</button></div>`,
+  home:()=>`<div>
+    <div class="ph-topbar"><div class="ph-title">مساء الخير، محمد</div><div class="ph-lang"><span class="lact">AR</span><span>EN</span><span>FR</span></div></div>
+    <div style="margin:8px 14px;border:1px solid var(--border2);border-radius:8px;padding:7px 10px;font-size:10px;display:flex;justify-content:space-between;color:var(--text2);background:rgba(0,200,232,0.05)">
+      <span>اكمل الاختبار — ٦٠٪ مكتمل</span><span style="color:var(--text3)">✕</span>
+    </div>
+    <div class="ph-search"><input placeholder="ابحث عن كلية أو تخصص..."></div>
+    <div class="ph-section-head">أفضل توصياتك</div>
+    <div style="padding:0 14px 8px;display:grid;grid-template-columns:1fr 1fr;gap:7px">
+      <div class="ph-card"><div class="ph-card-title">هندسة القاهرة</div><div class="ph-score-bar"><div class="ph-score-fill" style="width:94%"></div></div><div class="ph-card-sub" style="margin-top:4px">٩٤٪</div></div>
+      <div class="ph-card"><div class="ph-card-title">علوم الحاسب</div><div class="ph-score-bar"><div class="ph-score-fill" style="width:87%"></div></div><div class="ph-card-sub" style="margin-top:4px">٨٧٪</div></div>
+    </div>
+    <div class="ph-section-head">إجراءات سريعة</div>
+    <div style="padding:0 14px 8px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px">
+      <div style="background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:7px;padding:9px 3px;text-align:center;font-size:8px;font-weight:700;color:#fff">اختبار</div>
+      <div style="background:var(--glass2);border:1px solid var(--border);border-radius:7px;padding:9px 3px;text-align:center;font-size:8px;color:var(--text2)">استكشف</div>
+      <div style="background:var(--glass2);border:1px solid var(--border);border-radius:7px;padding:9px 3px;text-align:center;font-size:8px;color:var(--text2)">محفوظ</div>
+      <div style="background:var(--glass2);border:1px solid var(--border);border-radius:7px;padding:9px 3px;text-align:center;font-size:8px;color:var(--text2)">تشات</div>
+    </div></div>`,
+  finder:()=>`<div>
+    <div class="ph-topbar"><div class="ph-title">استكشف الكليات</div></div>
+    <div class="ph-search"><input placeholder="ابحث..."></div>
+    <div style="padding:5px 14px;display:flex;gap:5px;overflow:hidden">
+      <span class="ph-tag ph-sel">القاهرة</span><span class="ph-tag">حكومي</span><span class="ph-tag">٣٠٠+</span>
+    </div>
+    <div style="padding:8px 14px">
+      <div class="ph-card">
+        <div style="display:flex;justify-content:space-between">
+          <div><div class="ph-card-title">كلية الهندسة — القاهرة</div><div class="ph-card-sub">القاهرة · حكومي</div></div>
+          <div style="font-size:10px;font-weight:700;color:var(--cyan2)">٩٤٪</div>
+        </div>
+        <div class="ph-score-bar" style="margin-top:7px"><div class="ph-score-fill" style="width:94%"></div></div>
+        <div style="display:flex;gap:8px;margin-top:5px">
+          <span style="font-size:9px;color:var(--text3)">٣٠٠ نقطة</span><span style="font-size:9px;color:var(--text3)">٤٠٠٠ ج</span><span style="font-size:9px;color:var(--text3)">٨٩٪ توظيف</span>
+        </div>
+      </div>
+      <div class="ph-card" style="margin-top:6px">
+        <div class="ph-skeleton" style="height:11px;width:65%;margin-bottom:5px"></div>
+        <div class="ph-skeleton" style="height:7px;width:38%"></div>
+      </div>
+    </div></div>`,
+  college:()=>`<div>
+    <div class="ph-topbar"><div class="ph-title">كلية الهندسة</div><div style="font-size:16px;cursor:pointer;color:var(--text2)">♡</div></div>
+    <div style="padding:10px 14px">
+      <div class="ph-metric-row">
+        <div class="ph-metric"><div class="ph-metric-label">المصاريف/سنة</div><div class="ph-metric-val" style="font-size:13px">٤٠٠٠ج</div></div>
+        <div class="ph-metric"><div class="ph-metric-label">الحد الأدنى</div><div class="ph-metric-val" style="font-size:13px">٣٠٠</div></div>
+        <div class="ph-metric"><div class="ph-metric-label">التوظيف</div><div class="ph-metric-val" style="font-size:13px">٨٩٪</div></div>
+        <div class="ph-metric"><div class="ph-metric-label">الراتب</div><div class="ph-metric-val" style="font-size:13px">١٢ك</div></div>
+      </div>
+      <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:6px;overflow:hidden;margin-bottom:10px">
+        <div style="flex:1;padding:5px;text-align:center;font-size:9px;background:rgba(0,200,232,0.12);color:var(--cyan2);font-weight:700">نظرة عامة</div>
+        <div style="flex:1;padding:5px;text-align:center;font-size:9px;color:var(--text3)">التخصصات</div>
+        <div style="flex:1;padding:5px;text-align:center;font-size:9px;color:var(--text3)">التقديم</div>
+      </div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:7px">إحدى أعرق كليات الهندسة في مصر. تأسست ١٩٠٥. ١٣ قسماً هندسياً.</div>
+      <div><span class="ph-tag ph-sel">حاسبات</span><span class="ph-tag">مدني</span><span class="ph-tag">كهرباء</span></div>
+    </div></div>`,
+  quiz:()=>`<div style="padding:12px 14px">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-bottom:5px"><span>سؤال ٨ من ١٥</span><span>~٣ دقائق</span></div>
+    <div class="ph-progress"><div class="ph-progress-fill" style="width:53%"></div></div>
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin:12px 0 10px;line-height:1.5">عندما تواجه مشكلة معقدة، ماذا تفعل؟</div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <div style="border:1px solid rgba(0,200,232,0.4);border-radius:8px;padding:9px 11px;font-size:11px;background:rgba(0,200,232,0.12);color:var(--cyan2)">تحليلها خطوة بخطوة</div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:11px;color:var(--text2)">أطلب مساعدة من الآخرين</div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:11px;color:var(--text2)">أبحث عن حل إبداعي</div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:11px;color:var(--text2)">أستشير خبيراً</div>
+    </div>
+    <button class="ph-btn" style="margin-top:12px">التالي</button></div>`,
+  results:()=>`<div style="padding:12px 14px">
+    <div style="font-size:10px;color:var(--text3);margin-bottom:3px">نوع شخصيتك</div>
+    <div style="font-size:18px;font-weight:900;color:var(--text);margin-bottom:3px">المبدع التحليلي</div>
+    <div style="font-size:10px;color:var(--text2);margin-bottom:12px;line-height:1.5">تجمع بين التفكير المنطقي والإبداع</div>
+    ${[['هندسة القاهرة','٩٤',94],['علوم الحاسب','٨٩',89],['هندسة الاتصالات','٨٣',83]].map(([n,s,w])=>`
+    <div class="ph-card" style="margin-bottom:5px">
+      <div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:700;color:var(--text)">${n}</span><span style="font-size:10px;color:var(--cyan2)">${s}٪</span></div>
+      <div class="ph-score-bar" style="margin:4px 0"><div class="ph-score-fill" style="width:${w}%"></div></div>
+    </div>`).join('')}
+    <div style="margin-top:7px;display:flex;gap:3px;flex-wrap:wrap">
+      <span class="ph-chip">اسألني عن الأولى</span><span class="ph-chip">قارن بين الأولى والثانية</span>
+    </div></div>`,
+  compare:()=>`<div style="padding:12px 14px">
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">مقارنة الكليات</div>
+    <div style="overflow-x:auto">
+      <table class="ph-compare-table">
+        <thead><tr><th></th><th>هندسة القاهرة</th><th>حاسبات عين شمس</th></tr></thead>
+        <tbody>
+          <tr><td>المصاريف</td><td class="ph-winner">٤٠٠٠ج</td><td>٥٠٠٠ج</td></tr>
+          <tr><td>الحد الأدنى</td><td>٣٠٠</td><td class="ph-winner">٢٨٠</td></tr>
+          <tr><td>التوظيف</td><td class="ph-winner">٨٩٪</td><td>٨٥٪</td></tr>
+          <tr><td>الراتب</td><td class="ph-winner">١٢ك</td><td>١١ك</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:9px;color:var(--text3);margin-top:6px">المائل = الأفضل في كل صف</div></div>`,
+  chat:()=>`<div>
+    <div class="ph-topbar"><div class="ph-title">المساعد الذكي</div><div class="ph-lang"><span class="lact">AR</span><span>EN</span></div></div>
+    <div style="padding:8px 14px 4px">
+      <div class="ph-chat-ai">أهلاً! أنا هنا أساعدك في اختيار الكلية المناسبة. اخبرني عن اهتماماتك ودرجتك.</div>
+      <div style="display:flex;justify-content:flex-start"><div class="ph-chat-user">درجتي ٣٢٠ وبحب البرمجة</div></div>
+      <div class="ph-chat-ai">ممتاز! أنصحك بـ
+        <div class="ph-card" style="margin-top:5px;padding:7px 9px">
+          <div style="font-size:10px;font-weight:700;color:var(--text)">علوم الحاسب — القاهرة</div>
+          <div class="ph-score-bar" style="margin-top:3px"><div class="ph-score-fill" style="width:91%"></div></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:6px">
+        <span class="ph-chip">ما مصاريف الكلية؟</span><span class="ph-chip">بدائل أخرى</span>
+      </div>
+    </div>
+    <div style="padding:7px 14px;border-top:1px solid var(--border);display:flex;gap:7px">
+      <input style="flex:1;background:var(--glass2);border:1px solid var(--border);border-radius:7px;padding:6px 9px;font-size:10px;color:var(--text2);font-family:var(--font);" placeholder="اكتب سؤالك...">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:6px;display:flex;align-items:center;justify-content:center">
+        <div style="width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:6px solid #fff"></div>
+      </div>
+    </div></div>`,
+  salary:()=>`<div style="padding:12px 14px">
+    <div style="font-size:14px;font-weight:900;color:var(--text);margin-bottom:12px">توقع راتبك</div>
+    <div class="ph-field"><label>التخصص</label><select><option>هندسة حاسبات</option></select></div>
+    <div style="margin-bottom:9px">
+      <div style="font-size:10px;color:var(--text3);margin-bottom:5px">نوع الجامعة</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px">
+        <div style="border:1px solid rgba(0,200,232,0.4);border-radius:6px;padding:6px;text-align:center;font-size:9px;background:rgba(0,200,232,0.1);color:var(--cyan2);font-weight:700">حكومي</div>
+        <div style="border:1px solid var(--border);border-radius:6px;padding:6px;text-align:center;font-size:9px;color:var(--text3)">خاص</div>
+        <div style="border:1px solid var(--border);border-radius:6px;padding:6px;text-align:center;font-size:9px;color:var(--text3)">أهلي</div>
+      </div>
+    </div>
+    <div class="ph-field"><label>سنوات الخبرة: <span style="color:var(--cyan2);font-weight:700">٥ سنوات</span></label><input type="range" min="0" max="20" value="5" style="width:100%"></div>
+    <div style="margin-top:10px;border:1px solid var(--border);border-radius:10px;padding:10px">
+      <div style="font-size:9px;color:var(--text3);margin-bottom:7px">الراتب المتوقع (ج.م / شهر)</div>
+      ${[['الحد الأدنى','٦٫٠٠٠','30%'],['المتوسط','١٢٫٠٠٠','60%'],['الأعلى','٢٠٫٠٠٠','100%']].map(([l,v,w])=>`
+      <div style="margin-bottom:7px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px"><span style="color:var(--text3)">${l}</span><span style="font-weight:700;color:var(--text)">${v}</span></div>
+        <div style="height:4px;background:var(--glass2);border-radius:2px"><div style="height:100%;width:${w};background:linear-gradient(to left,var(--blue),var(--cyan));border-radius:2px"></div></div>
+      </div>`).join('')}
+    </div></div>`,
+  career:()=>`<div style="padding:12px 14px">
+    <div style="font-size:14px;font-weight:900;color:var(--text);margin-bottom:12px">مسارك المهني</div>
+    ${[['سنوات الكلية','٤ سنوات','رياضيات · برمجة'],['تدريب صيفي','٣–٦ أشهر','٢٠٠٠–٤٠٠٠ج'],['أول وظيفة','١–٢ سنة','٦٠٠٠–١٠٠٠٠ج'],['نمو مهني','٢–٤ سنوات','١٠٠٠٠–١٨٠٠٠ج'],['مستوى أول','٥+ سنوات','٢٠٠٠٠+ج']].map(([t,d,s],i,a)=>`
+    <div style="display:flex;gap:9px;margin-bottom:8px">
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <div style="width:8px;height:8px;border-radius:50%;${i===0?'background:linear-gradient(135deg,var(--blue),var(--cyan))':'border:1.5px solid var(--border2);background:transparent'};flex-shrink:0"></div>
+        ${i<a.length-1?'<div style="width:1px;background:var(--border2);flex:1;min-height:28px;margin-top:2px"></div>':''}
+      </div>
+      <div style="flex:1;padding-bottom:${i<a.length-1?'8':'0'}px">
+        <div style="font-size:11px;font-weight:700;color:var(--text)">${t}</div>
+        <div style="font-size:9px;color:var(--text3)">${d} · ${s}</div>
+      </div>
+    </div>`).join('')}
+  </div>`,
+  roadmap:()=>`<div style="padding:12px 14px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-size:14px;font-weight:900;color:var(--text)">خريطة التعلم</div>
+      <div style="font-size:10px;color:var(--text3)">٣ / ١٢ مهارة</div>
+    </div>
+    ${[['المهارات الأساسية',[['Python Basics','Coursera',true],['Data Structures','YouTube',true]]],['المتقدمة',[['Machine Learning','Coursera',false],['System Design','Udemy',false]]]].map(([g,skills])=>`
+    <div style="margin-bottom:9px">
+      <div style="font-size:9px;font-weight:700;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em">${g}</div>
+      ${skills.map(([s,p,d])=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 9px;border:1px solid var(--border);border-radius:8px;margin-bottom:4px;background:${d?'rgba(0,200,232,0.05)':'var(--glass)'}">
+        <div><div style="font-size:10px;${d?'text-decoration:line-through;color:var(--text3)':'color:var(--text)'}">${s}</div><div style="font-size:9px;color:var(--text3)">${p}</div></div>
+        <div style="font-size:13px;color:${d?'var(--cyan2)':'var(--text3)'}">${d?'✓':'♡'}</div>
+      </div>`).join('')}
+    </div>`).join('')}
+  </div>`,
+  alts:()=>`<div style="padding:12px 14px">
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">بدائل مقترحة</div>
+    <div style="font-size:10px;color:var(--text2);margin-bottom:10px;line-height:1.5">درجتك ٢٨٠ · الحد ٣٠٠ — إليك خيارات ممتازة</div>
+    ${[['هندسة أسيوط','٩٢',92],['حاسبات حلوان','٨٨',88]].map(([n,s,w])=>`
+    <div class="ph-card" style="margin-bottom:6px">
+      <div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:700;color:var(--text)">${n}</span><span style="font-size:9px;color:var(--text3)">تشابه ${s}٪</span></div>
+      <div class="ph-score-bar" style="margin:4px 0"><div class="ph-score-fill" style="width:${w}%"></div></div>
+    </div>`).join('')}
+    <span class="ph-chip" style="margin-top:5px;display:inline-block">كيف أرفع درجتي؟</span></div>`,
+  admission:()=>`<div style="padding:12px 14px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:700;color:var(--text)">خطوات التقديم</div>
+      <div style="font-size:10px;color:var(--cyan2)">٣ / ٧</div>
+    </div>
+    ${[['الحصول على الشهادة الأصلية',true],['تصوير بطاقة الهوية',true],['سداد رسوم التقديم',true],['التقديم إلكترونياً',false],['المقابلة الشخصية',false]].map(([t,d])=>`
+    <div style="display:flex;gap:9px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)">
+      <div style="width:14px;height:14px;border-radius:3px;flex-shrink:0;${d?'background:linear-gradient(135deg,var(--blue),var(--cyan))':'border:1.5px solid var(--border2)'}"></div>
+      <div style="font-size:11px;${d?'text-decoration:line-through;color:var(--text3)':'color:var(--text)'}">${t}</div>
+    </div>`).join('')}
+    <button class="ph-btn-ghost" style="margin-top:10px;font-size:10px">مشاركة مع ولي الأمر</button></div>`,
+  insights:()=>`<div style="padding:12px 14px">
+    <div style="font-size:14px;font-weight:900;color:var(--text);margin-bottom:10px">نظرة ذكية هذا الأسبوع</div>
+    <div class="ph-card">
+      <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:6px">ما يقوله الذكاء الاصطناعي عنك</div>
+      ${['شاهدت ٣ كليات هندسية — ميلك واضح نحو STEM','أكملت ٦٠٪ من الاختبار — أكمله لنحسّن التوصيات','معدل تطابقك مع الهندسة ارتفع ٧ نقاط'].map(s=>`
+      <div style="font-size:10px;color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border)">${s}</div>`).join('')}
+    </div>
+    <button class="ph-btn" style="margin-top:8px;font-size:11px">أكمل الاختبار الآن</button></div>`,
+  saved:()=>`<div>
+    <div class="ph-topbar"><div class="ph-title">المحفوظات</div></div>
+    <div style="padding:7px 14px">
+      <div style="display:flex;gap:5px;margin-bottom:8px">
+        <span class="ph-tag ph-sel">التوافق</span><span class="ph-tag">المصاريف</span><span class="ph-tag">الأحدث</span>
+      </div>
+      ${[['هندسة القاهرة','٩٤٪','٤٠٠٠ج',94],['علوم الحاسب','٨٩٪','٥٠٠٠ج',89]].map(([n,s,f,w])=>`
+      <div class="ph-card" style="margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div><div style="font-size:11px;font-weight:700;color:var(--text)">${n}</div><div style="font-size:9px;color:var(--text3)">${f}</div></div>
+          <div style="font-size:14px;color:var(--red)">♥</div>
+        </div>
+        <div class="ph-score-bar" style="margin-top:5px"><div class="ph-score-fill" style="width:${w}%"></div></div>
+      </div>`).join('')}
+    </div></div>`,
+  notif:()=>`<div>
+    <div class="ph-topbar"><div class="ph-title">الإشعارات</div></div>
+    <div style="padding:7px 14px">
+      <div style="font-size:9px;font-weight:700;color:var(--text3);margin-bottom:5px">اليوم</div>
+      ${[['موعد تقديم جامعة القاهرة بعد ٣ أيام','٩:٢٠ص'],['تم تحديث توصياتك','٨:١٠ص']].map(([t,d])=>`
+      <div class="ph-card" style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="font-size:10px;color:var(--text2);flex:1">${t}</div>
+          <div style="font-size:9px;color:var(--text3);margin-right:7px">${d}</div>
+        </div>
+      </div>`).join('')}
+    </div></div>`,
+  settings:()=>`<div>
+    <div class="ph-topbar"><div class="ph-title">الإعدادات</div></div>
+    <div style="padding:7px 14px">
+      ${[['الحساب',[['الاسم','محمد أحمد'],['الموبايل','+20 100 000 0000']]],['التفضيلات',[['اللغة','AR / EN / FR'],['الإشعارات','مفعل']]]].map(([g,items])=>`
+      <div style="margin-bottom:12px">
+        <div style="font-size:9px;font-weight:700;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.07em">${g}</div>
+        <div style="border:1px solid var(--border);border-radius:9px;overflow:hidden">
+          ${items.map(([l,v],i,a)=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 11px;${i<a.length-1?'border-bottom:1px solid var(--border)':''}">
+            <span style="font-size:11px;color:var(--text)">${l}</span>
+            <span style="font-size:10px;color:var(--text3)">${v}</span>
+          </div>`).join('')}
+        </div>
+      </div>`).join('')}
+    </div></div>`,
+  scholar:()=>`<div>
+    <div class="ph-topbar"><div class="ph-title">المنح الدراسية</div></div>
+    <div class="ph-search"><input placeholder="ابحث عن منحة..."></div>
+    <div style="padding:0 14px">
+      <div class="ph-card" style="margin-bottom:7px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+          <div style="font-size:11px;font-weight:700;color:var(--text)">منحة وزارة التعليم العالي</div>
+          <div style="font-size:10px;font-weight:700;color:var(--cyan2)">٥٠٠٠ج</div>
+        </div>
+        <div style="font-size:9px;color:var(--text3);margin-bottom:5px">ينتهي: ١ مارس</div>
+        <div class="ph-score-bar"><div class="ph-score-fill" style="width:88%"></div></div>
+        <div style="font-size:9px;color:var(--text3);margin-top:3px">أهليتك: ٨٨٪</div>
+        <span class="ph-chip" style="margin-top:5px;display:inline-block">تحقق من الأهلية</span>
+      </div>
+    </div></div>`,
+  parent:()=>`<div>
+    <div class="ph-topbar"><div class="ph-title">لوحة ولي الأمر</div></div>
+    <div style="padding:12px 14px">
+      <div style="font-size:11px;color:var(--text2);margin-bottom:9px">ابنك: محمد · آخر نشاط: منذ ساعتين</div>
+      <div class="ph-metric-row">
+        <div class="ph-metric"><div class="ph-metric-label">الاختبار</div><div class="ph-metric-val">٦٠٪</div></div>
+        <div class="ph-metric"><div class="ph-metric-label">كليات محفوظة</div><div class="ph-metric-val">٥</div></div>
+      </div>
+      <div style="font-size:9px;font-weight:700;color:var(--text3);margin:9px 0 5px">الكليات المحفوظة</div>
+      ${[['هندسة القاهرة','٩٤٪'],['علوم الحاسب','٨٩٪']].map(([n,s])=>`
+      <div class="ph-card" style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:11px;font-weight:700;color:var(--text)">${n}</span>
+          <span style="font-size:10px;color:var(--text3)">${s}</span>
+        </div>
+      </div>`).join('')}
+    </div></div>`,
+  admin:()=>`<div>
+    <div class="ph-topbar"><div class="ph-title">لوحة التحكم</div><div class="ph-lang"><span class="lact">AR</span><span>EN</span><span>FR</span></div></div>
+    <div style="padding:10px 14px">
+      <div class="ph-metric-row">
+        <div class="ph-metric"><div class="ph-metric-label">المستخدمون</div><div class="ph-metric-val">١٢.٤ك</div></div>
+        <div class="ph-metric"><div class="ph-metric-label">اليوم</div><div class="ph-metric-val">٨٤٢</div></div>
+        <div class="ph-metric"><div class="ph-metric-label">اختبارات</div><div class="ph-metric-val">٦.١ك</div></div>
+        <div class="ph-metric"><div class="ph-metric-label">رضا AI</div><div class="ph-metric-val">٩٢٪</div></div>
+      </div>
+      <div style="margin-top:9px;border:1px solid var(--border);border-radius:9px;padding:9px">
+        <div style="font-size:9px;color:var(--text3);margin-bottom:6px">نمو المستخدمين — ٧ أيام</div>
+        <div style="display:flex;align-items:flex-end;gap:5px;height:44px">
+          ${[30,50,40,70,55,80,90].map(h=>`<div style="flex:1;background:linear-gradient(to top,var(--blue),var(--cyan));border-radius:2px;height:${h}%;min-width:0;opacity:.8"></div>`).join('')}
+        </div>
+      </div>
+    </div></div>`,
+  empty:()=>`<div style="padding:36px 14px;text-align:center">
+    <div style="width:44px;height:44px;border:1.5px solid var(--border2);border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center">
+      <div style="width:18px;height:18px;border:1.5px solid var(--border2);border-radius:50%"></div>
+    </div>
+    <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px">لم تحفظ أي كلية بعد</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:18px;line-height:1.6">ابدأ باستكشاف الكليات وحفظ ما يناسبك</div>
+    <button class="ph-btn" style="max-width:180px;margin:0 auto">استكشف الكليات</button></div>`,
+};
+
+// ══════ BUILD SCREEN NAVIGATOR ══════
+function buildDsScreens(){
+  const nav=document.getElementById('ds-screen-nav');
+  const groups=[...new Set(SCREENS.map(s=>s.g))];
+  const allBtn=document.createElement('button');
+  allBtn.className='sn-group-btn sn-on';allBtn.textContent='الكل';
+  allBtn.onclick=()=>filterDs(null,allBtn);
+  nav.appendChild(allBtn);
+  groups.forEach(g=>{
+    const btn=document.createElement('button');
+    btn.className='sn-group-btn';btn.textContent=g;
+    btn.onclick=()=>filterDs(g,btn);
+    nav.appendChild(btn);
   });
-});
+  renderDsScreen(SCREENS[0]);
+}
+
+function filterDs(g,btn){
+  document.querySelectorAll('.sn-group-btn').forEach(b=>b.classList.remove('sn-on'));
+  btn.classList.add('sn-on');
+  const list=g?SCREENS.filter(s=>s.g===g):SCREENS;
+  renderDsScreen(list[0]);
+}
+
+function renderDsScreen(s){
+  const area=document.getElementById('ds-screen-area');
+  const mockFn=MOCKS[s.mock]||(()=>'<div style="padding:20px;font-size:12px;color:var(--text3)">Preview</div>');
+  area.innerHTML=`
+  <div class="grid-2" style="gap:20px">
+    <div>
+      <div class="phone-wrap">
+        <div class="phone-inner" dir="rtl">
+          <div class="ph-status"><span>٩:٤١</span><span>الشبكة ٤G ●●●</span></div>
+          ${mockFn()}
+          <div class="ph-bottom-nav">
+            <div class="ph-bn-item ph-bn-active"><div class="ph-bn-dot"></div><div class="ph-bn-label">الرئيسية</div></div>
+            <div class="ph-bn-item"><div class="ph-bn-dot"></div><div class="ph-bn-label">استكشف</div></div>
+            <div class="ph-bn-item"><div class="ph-bn-dot"></div><div class="ph-bn-label">اختبار</div></div>
+            <div class="ph-bn-item"><div class="ph-bn-dot"></div><div class="ph-bn-label">تشات</div></div>
+            <div class="ph-bn-item"><div class="ph-bn-dot"></div><div class="ph-bn-label">حسابي</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="font-family:var(--mono);font-size:22px;font-weight:900;color:var(--blue);opacity:.4">${s.id}</div>
+        <div>
+          <div style="font-size:17px;font-weight:700;color:var(--text)">${s.ar}</div>
+          <span class="badge3d b-${s.g==='Auth Flow'?'blue':s.g==='Core Platform'?'teal':s.g==='AI Features'?'amber':'red'}" style="margin-top:4px;display:inline-flex">${s.g}</span>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">${s.desc}</div>
+      <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Updated AI Prompt</div>
+      <div class="ds-prompt-box">${s.prompt}</div>
+      <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap">
+        ${SCREENS.filter(x=>x.g===s.g&&x.id!==s.id).map(x=>`<button class="sn-group-btn" onclick="goDs('${x.id}')" style="font-size:10px;padding:4px 10px">${x.ar}</button>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function goDs(id){const s=SCREENS.find(x=>x.id===id);if(s)renderDsScreen(s)}
+
+// ══════ BUILD UX LIST ══════
+const UX=[
+  ['Global sticky search bar','Persists on every screen. Searches colleges, majors, chat history. Press "/" to focus. Debounced 300ms.'],
+  ['Language toggle — global persistent','AR/EN/FR pill always visible. Switches layout direction RTL↔LTR without reload. Synced to localStorage + backend user profile.'],
+  ['Bottom navigation (mobile)','5 tabs: Home · Explore · Quiz · Chat · Profile. Active tab uses gradient fill. Haptic feedback on tap.'],
+  ['Skeleton loaders on every data screen','College cards, quiz results, salary charts — skeleton-first. Eliminates layout shift. Gone in <300ms on fast connections.'],
+  ['"Continue where you left off" system','Persists quiz progress, chat history, comparison. Shown as dismissable banner on home. Clears after 7 days.'],
+  ['AI suggestion chips everywhere','Context-aware follow-up prompts below AI responses, on quiz results, on college cards. One tap to continue.'],
+  ['Smart empty states','Every empty state has primary CTA + friendly copy. No blank screens. لم تحفظ أي كلية بعد — ابدأ الاستكشاف pattern.'],
+  ['Progressive disclosure in quiz','One question per screen. Previous answers visible as condensed timeline. Skip + back supported. Auto-saves every answer.'],
+  ['Match score visual hierarchy','Match % as thin horizontal fill bar beside every college card. 85%+ = full bar. No color — only density.'],
+  ['Micro-interactions on all CTAs','Save: heart fill 200ms. Quiz submit: radial progress. Chat send: message slides from edge. All reversible.'],
+  ['Inline streaming for AI chat','Tokens render word-by-word. Cursor blinking indicator. Auto-scroll pauses if user scrolls up. "Jump to latest" button.'],
+  ['Admission checklist persistence','Checked items stored per college per user. Progress ring % complete. Share checklist as link with parent.'],
+];
+function buildUxList(){
+  const ul=document.getElementById('ux3d-list');
+  UX.forEach(([t,s],i)=>{
+    ul.innerHTML+=`<li class="ux-item"><div class="ux-num3d">${i+1}</div><div class="ux-text3d"><div class="ux-title3d">${t}</div><div class="ux-sub3d">${s}</div></div></li>`;
+  });
+}
+
+// ══════ BUILD PROMPTS LIST ══════
+function buildPromptsList(){
+  const div=document.getElementById('ds-prompt-list');
+  SCREENS.forEach(s=>{
+    div.innerHTML+=`
+    <div style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="font-family:var(--mono);font-size:12px;color:var(--text3)">${s.id}</span>
+        <span style="font-size:13px;font-weight:700;color:var(--text)">${s.ar}</span>
+        <span class="badge3d b-${s.g==='Auth Flow'?'blue':s.g==='Core Platform'?'teal':s.g==='AI Features'?'amber':'red'}" style="font-size:9px;padding:2px 7px">${s.g}</span>
+      </div>
+      <div class="ds-prompt-box">${s.prompt}</div>
+    </div>`;
+  });
+}
+
+buildDsScreens();
+buildUxList();
+buildPromptsList();
 </script>
 </body>
 </html>

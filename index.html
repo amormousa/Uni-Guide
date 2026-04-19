@@ -336,7 +336,41 @@ body{font-family:var(--font);background:var(--navy);color:var(--text);min-height
 .ux-title3d{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
 .ux-sub3d{font-size:12px;color:var(--text2);line-height:1.65}
 
-/* ── RESPONSIVE ── */
+/* ── PROMPT GENERATOR ── */
+.pg-header{margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.pg-controls{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:28px;align-items:flex-start}
+.pg-ctrl-group{display:flex;flex-direction:column;gap:8px}
+.pg-ctrl-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3)}
+.pg-pill-row{display:flex;gap:6px;flex-wrap:wrap}
+.pg-pill{background:var(--glass);border:1px solid var(--border);color:var(--text2);font-family:var(--font);font-size:12px;font-weight:600;padding:7px 16px;border-radius:100px;cursor:pointer;transition:all .18s;white-space:nowrap}
+.pg-pill:hover{background:var(--glass2);color:var(--text);border-color:var(--border2)}
+.pg-pill.pg-pill-on{background:linear-gradient(135deg,rgba(26,107,224,0.25),rgba(0,200,232,0.18));color:var(--cyan2);border-color:rgba(0,200,232,0.4)}
+.pg-ctrl-info{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding-top:18px}
+.pg-info-chip{display:inline-flex;align-items:center;gap:4px;background:var(--glass2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;font-family:var(--mono);color:var(--text3)}
+.pg-screen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px;margin-bottom:24px}
+.pg-sc-btn{background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer;text-align:right;transition:all .15s;position:relative;overflow:hidden;font-family:var(--font)}
+.pg-sc-btn::before{content:'';position:absolute;top:0;right:0;width:3px;height:100%;background:linear-gradient(to bottom,var(--blue),var(--cyan));opacity:0;transition:opacity .2s}
+.pg-sc-btn:hover{border-color:var(--border2);transform:translateY(-2px)}
+.pg-sc-btn:hover::before{opacity:1}
+.pg-sc-btn.pg-sc-on{border-color:rgba(0,200,232,0.35);background:rgba(0,200,232,0.07)}
+.pg-sc-btn.pg-sc-on::before{opacity:1}
+.pg-sc-num{font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:3px;display:block}
+.pg-sc-name{font-size:12px;font-weight:700;color:var(--text);display:block;line-height:1.4;margin-bottom:3px}
+.pg-sc-group{font-size:10px;color:var(--text3);display:block}
+.pg-output{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius2);padding:20px 24px;animation:fadeSlide .25s ease}
+.pg-output-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.pg-output-meta{font-size:12px;color:var(--text2)}
+.pg-output-meta strong{color:var(--text);font-weight:700}
+.pg-copy-btn{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;border:none;font-family:var(--font);font-size:12px;font-weight:700;padding:8px 20px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.pg-copy-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,107,224,0.4)}
+.pg-copy-btn.pg-copied{background:linear-gradient(135deg,var(--teal),#00d4a8)}
+.pg-output-divider{height:1px;background:var(--border);margin-bottom:16px}
+.pg-prompt-text{font-family:var(--mono);font-size:11.5px;color:var(--text2);line-height:1.75;white-space:pre-wrap;word-break:break-word;max-height:420px;overflow-y:auto;padding-left:4px}
+.pg-prompt-text::-webkit-scrollbar{width:4px}
+.pg-prompt-text::-webkit-scrollbar-track{background:transparent}
+.pg-prompt-text::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+/* ── END PROMPT GENERATOR ── */
+
 @media(max-width:1024px){.topbar-badges{display:none}}
 @media(max-width:768px){
   .topbar{padding:0 14px;gap:10px}
@@ -466,9 +500,8 @@ body{font-family:var(--font);background:var(--navy);color:var(--text);min-height
       <button class="ds-tab" onclick="dsShow('screens-ds',this)">25 Screens</button>
       <button class="ds-tab" onclick="dsShow('uxlist',this)">UX Improvements</button>
       <button class="ds-tab" onclick="dsShow('prompts-ds',this)">AI Prompts</button>
+      <button class="ds-tab" onclick="dsShow('prompt-gen',this)">⚡ Prompt Generator</button>
     </div>
-
-    <!-- TOKENS -->
     <div class="ds-panel ds-on" id="dsp-tokens">
       <h3 class="card-h3" style="margin-bottom:16px;">Color scale — monochrome system</h3>
       <div class="tok-grid">
@@ -522,20 +555,62 @@ body{font-family:var(--font);background:var(--navy);color:var(--text);min-height
       </div>
     </div>
 
-    <!-- SCREENS DS -->
     <div class="ds-panel" id="dsp-screens-ds">
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;" id="ds-screen-nav"></div>
       <div id="ds-screen-area"></div>
     </div>
 
-    <!-- UX LIST -->
+    
     <div class="ds-panel" id="dsp-uxlist">
       <ul class="ux-list3d" id="ux3d-list"></ul>
     </div>
 
-    <!-- PROMPTS -->
+    
     <div class="ds-panel" id="dsp-prompts-ds">
       <div id="ds-prompt-list"></div>
+    </div>
+
+    <!-- PROMPT GENERATOR PANEL -->
+    <div class="ds-panel" id="dsp-prompt-gen">
+      <div class="pg-header">
+        <div class="pg-header-text">
+          <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px">Prompt Generator</div>
+          <div style="font-size:13px;color:var(--text2)">اختر اللغة، المود، والشاشة — احصل على الـ prompt الكامل جاهز للـ copy</div>
+        </div>
+      </div>
+
+      <!-- CONTROLS ROW -->
+      <div class="pg-controls">
+        <div class="pg-ctrl-group">
+          <div class="pg-ctrl-label">Language</div>
+          <div class="pg-pill-row" id="pg-lang-pills">
+            <button class="pg-pill pg-pill-on" data-lang="ar">العربية</button>
+            <button class="pg-pill" data-lang="en">English</button>
+            <button class="pg-pill" data-lang="fr">Français</button>
+          </div>
+        </div>
+        <div class="pg-ctrl-group">
+          <div class="pg-ctrl-label">Theme</div>
+          <div class="pg-pill-row" id="pg-mode-pills">
+            <button class="pg-pill pg-pill-on" data-mode="dark">Dark</button>
+            <button class="pg-pill" data-mode="light">Light</button>
+          </div>
+        </div>
+        <div class="pg-ctrl-info" id="pg-info-badges"></div>
+      </div>
+
+      <!-- SCREEN GRID -->
+      <div class="pg-screen-grid" id="pg-screen-grid"></div>
+
+      <!-- PROMPT OUTPUT -->
+      <div class="pg-output" id="pg-output" style="display:none">
+        <div class="pg-output-header">
+          <div class="pg-output-meta" id="pg-output-meta"></div>
+          <button class="pg-copy-btn" id="pg-copy-btn" onclick="pgCopy()">Copy Prompt</button>
+        </div>
+        <div class="pg-output-divider"></div>
+        <pre class="pg-prompt-text" id="pg-prompt-text"></pre>
+      </div>
     </div>
   </div>
 </div>
@@ -1351,6 +1426,230 @@ function buildPromptsList(){
 buildDsScreens();
 buildUxList();
 buildPromptsList();
+
+// ══════ PROMPT GENERATOR ══════
+(function(){
+  const PG_SCREENS=[
+    {num:'01',ar:'Splash / Onboarding',en:'Splash / Onboarding',fr:'Accueil / Intro',g:'Auth Flow'},
+    {num:'02',ar:'التسجيل',en:'Registration',fr:'Inscription',g:'Auth Flow'},
+    {num:'03',ar:'التحقق من الرقم',en:'OTP Verification',fr:'Vérification OTP',g:'Auth Flow'},
+    {num:'04',ar:'إكمال الملف',en:'Profile Setup',fr:'Profil étudiant',g:'Auth Flow'},
+    {num:'05',ar:'تسجيل الدخول',en:'Login',fr:'Connexion',g:'Auth Flow'},
+    {num:'06',ar:'الصفحة الرئيسية',en:'Home Dashboard',fr:'Tableau de bord',g:'Core Platform'},
+    {num:'07',ar:'البحث عن الكليات',en:'University Finder',fr:'Recherche université',g:'Core Platform'},
+    {num:'08',ar:'تفاصيل الكلية',en:'College Details',fr:'Détails université',g:'Core Platform'},
+    {num:'09',ar:'الاختبار الذكي',en:'AI Quiz',fr:'Quiz IA',g:'Core Platform'},
+    {num:'10',ar:'نتائج الاختبار',en:'Quiz Results',fr:'Résultats du quiz',g:'Core Platform'},
+    {num:'11',ar:'مقارنة الكليات',en:'Compare Colleges',fr:'Comparaison',g:'Core Platform'},
+    {num:'12',ar:'الكليات المحفوظة',en:'Saved Colleges',fr:'Favoris',g:'Core Platform'},
+    {num:'13',ar:'الإشعارات',en:'Notifications',fr:'Notifications',g:'Core Platform'},
+    {num:'14',ar:'الإعدادات',en:'Settings',fr:'Paramètres',g:'Core Platform'},
+    {num:'15',ar:'المنح الدراسية',en:'Scholarships',fr:'Bourses',g:'Core Platform'},
+    {num:'16',ar:'المساعد الذكي',en:'AI Chatbot',fr:'Chat IA',g:'AI Features'},
+    {num:'17',ar:'توقع الراتب',en:'Salary Predictor',fr:'Prédiction salaire',g:'AI Features'},
+    {num:'18',ar:'المسار المهني',en:'Career Path',fr:'Parcours carrière',g:'AI Features'},
+    {num:'19',ar:'خريطة التعلم',en:'Learning Roadmap',fr:'Feuille de route',g:'AI Features'},
+    {num:'20',ar:'البدائل المقترحة',en:'Alternative Recommendations',fr:'Alternatives',g:'AI Features'},
+    {num:'21',ar:'خطوات التقديم',en:'Admission Steps',fr:"Étapes d'admission",g:'AI Features'},
+    {num:'22',ar:'الرؤى الذكية',en:'AI Insights',fr:'Insights IA',g:'AI Features'},
+    {num:'23',ar:'لوحة ولي الأمر',en:'Parent Dashboard',fr:'Tableau parent',g:'Parent & Admin'},
+    {num:'24',ar:'لوحة الإدارة',en:'Admin Analytics',fr:'Tableau admin',g:'Parent & Admin'},
+    {num:'25',ar:'الحالات الخاصة',en:'Error / Empty States',fr:'États vides / erreurs',g:'Parent & Admin'},
+  ];
+
+  const PG_CONTENT={
+    '01':'3 swipeable onboarding slides. Slide 1: large hero headline + abstract geometric shape + tagline. Slide 2: feature highlight with icon grid. Slide 3: dual CTA (primary filled + ghost outlined button). Dot pagination indicator. Language toggle AR/EN/FR top-right. Skip button top-left.',
+    '02':'Single-column registration form. Fields: full name, Egyptian phone (+20), governorate dropdown (27 options), account type (student/parent as 2 radio cards side-by-side), password with show/hide toggle. Step progress bar 50%. Full-width submit button. Link to login below.',
+    '03':'6 auto-advancing OTP input boxes centered on screen. Instructional text with masked phone number. 60-second countdown timer. Resend button (disabled until timer ends). Full-width confirm button. Back arrow navigation.',
+    '04':'Step 2/2 profile completion. 3-card section picker (علمي / أدبي / تجاري — selected = filled black/dark). Score input 0-410 with live validation. Multi-select interest chips (6 visible: selected = filled, unselected = outlined). Progress bar 75%. Continue button.',
+    '05':'Minimal login. Phone + password fields. Forgot password inline link. Google OAuth button border-only (no color). Biometric fingerprint toggle. Thin divider. Link to registration. Language toggle top-right.',
+    '06':"Greeting headline with student name (22px bold). Dismissable 'continue quiz' banner 60% progress. 2-column grid: 2 AI college recommendation cards (name + thin match bar + match %). 4-icon quick-action row (Quiz/Explore/Saved/Chat). Bottom nav 5 tabs.",
+    '07':'Sticky search bar. Horizontal scrollable filter chips: governorate (active), type, score, fees. 1 full college result card: name, location tag, match bar 94%, employment %, annual fees, 3 stat tags. Second card = skeleton loader animation. Filter chips row.',
+    '08':'2×2 metric grid at top: fees/year, min score, employment rate, avg salary — each bordered metric box. 3-tab segmented control: Overview/Specializations/Admission (Overview active). Description text 2 lines. 3 specialty tags. Save heart button top-right. Share icon.',
+    '09':"Counter '8 / 15' + estimated time right. Thin progress bar 53% filled. Question text 2 lines. 4 answer cards stacked: first card selected (filled dark + white text), rest outlined + muted text. Back text link + Next full-width button.",
+    '10':'Personality type small label + large type name bold. 2-line description muted. Hairline divider. 3 ranked college rows: number + name + match bar (94%, 89%, 83%) + 1-line reason. 2 AI suggestion chips at bottom.',
+    '11':'2-column comparison table. Row labels: Fees / Min Score / Employment / Avg Salary / Location. Column 1 wins in Fees + Employment + Salary (bold). Column 2 wins in Score (bold). Note caption below table. Dashed add-column card.',
+    '12':'3 sort chips: Match (active/filled) / Fees / Recent. 2 saved college cards: name + fees tag + match bar + red filled heart. Empty state variant below: centered circle icon + message + CTA button.',
+    '13':"Section label 'Today'. 2 notification rows in bordered cards: deadline alert (bold title, 3 days) + recommendation update. Timestamps right. Section label 'Earlier'. 1 older notification (low opacity). Mark-all-read top-right text link.",
+    '14':'3 card sections: Account (name row + phone row with chevrons), Preferences (Language row showing active lang + Notifications toggle ON), Privacy row + About row. Each section separated by spacing. Language row highlights active language with filled pill.',
+    '15':"Search input + 3 filter chips. 1 scholarship card: name bold, amount right-aligned, deadline date, eligibility match bar 88%. 'Check eligibility' AI chip. Second scholarship card below. Empty state section if filters return nothing.",
+    '16':'Topbar: AI assistant label + language toggle. AI bubble left (0→10px→10px→10px radius corners): welcome message. User bubble right (10px→10px→10px→0 radius, filled dark): user reply. Second AI bubble with embedded college card (name + match bar). 2 suggestion chips. Input bar + filled send button.',
+    '17':"Specialization dropdown (filled value). 3 university type radio cards side-by-side (gov selected = dark fill). Experience range slider value=5, label '5 years'. Output panel: 3 horizontal bars Min/Median/Max with EGP values, bars left-filled proportionally. All monochrome.",
+    '18':'Vertical timeline 5 stages. Stage 1 (active): filled circle + bold stage name. Stages 2-5: outlined circles + stage names. Thin vertical line connecting all. Each stage has: duration text + 2 skills tags + salary range in small caption. All monochrome.',
+    '19':"Progress ring top-right '3/12'. 2 skill groups: Core Skills header + 2 skill rows (both checked = strikethrough + filled checkbox + checkmark icon). Advanced group: 2 skill rows unchecked (outlined checkbox + bookmark icon). Platform labels (Coursera, YouTube) in caption size.",
+    '20':"Encouraging headline + context: 'Your score 280 · Target 300'. 2 alternative college cards: similarity bar, 1-line match reason, score difference badge. AI suggestion chips: 2 chips below. Positive encouraging visual tone.",
+    '21':"Progress ring '3/7' complete. 5 checklist rows: 3 checked (filled square checkbox + strikethrough text), 2 unchecked (outlined square checkbox). Optional due date in caption right-aligned. Documents required tag list. Share with parent ghost button.",
+    '22':'Insight card with header label. 3 insight rows separated by hairlines, each 1 line with bullet. Mini sparkline chart (3 point upward trend). Suggested next action: full-width CTA button inside card. Dismiss X button card top-right.',
+    '23':'Student profile card: name + last active + quiz % progress bar. 2×2 metric grid: Quiz %, Saved Colleges, Time on Platform, AI Chats — all as numbered metric boxes. 2 saved college read-only rows below. Notification preferences section.',
+    '24':'4-column KPI row: Total Users / DAU / Quiz Completions / AI Satisfaction. Each KPI: small label above + large bold number below. Bar chart below: 7 bars (7-day growth), monochrome, tallest bar darkest. AI satisfaction large percentage with up arrow. Export data button.',
+    '25':'3 stacked state designs: (1) 404 page — large light gray \'404\' number + short message + home button. (2) No internet — thin outlined wifi/circle icon + retry button. (3) Empty saved list — minimal geometric icon + encouraging message + explore button. Equal vertical spacing between each state.'
+  };
+
+  const LANG_CFG={
+    ar:{label:'Arabic',dir:'RTL',font:'Cairo (900/700/400)',langLine:'Arabic (Modern Standard Arabic, Egyptian university context)',toggleLine:'AR pill is active (filled), EN and FR are outlined — positioned top-right',fontLine:'Cairo (900 for headings, 700 for subheadings, 400 for body text)',dirLine:'RTL — all elements flow right-to-left',numeral:'Eastern Arabic numerals (٠١٢٣٤٥٦٧٨٩)',allText:'Arabic'},
+    en:{label:'English',dir:'LTR',font:'Inter (700/400)',langLine:'English (clear, professional, accessible)',toggleLine:'EN pill is active (filled), AR and FR are outlined — positioned top-right',fontLine:'Inter (700 for headings, 400 for body text)',dirLine:'LTR — all elements flow left-to-right',numeral:'Western Arabic numerals (0123456789)',allText:'English'},
+    fr:{label:'Français',dir:'LTR',font:'Inter (700/400)',langLine:'French (professional French, education context)',toggleLine:'FR pill is active (filled), AR and EN are outlined — positioned top-right',fontLine:'Inter (700 for headings, 400 for body text)',dirLine:'LTR — all elements flow left-to-right',numeral:'Western Arabic numerals (0123456789)',allText:'French'}
+  };
+
+  const DARK_THEME=`• Background: #0A0A0A (true black)
+• Card surface: rgba(255,255,255,0.04) with 1px rgba(0,180,255,0.12) border
+• Primary text: #E8F0FF
+• Secondary text: #8BA4CC
+• Muted/hint text: #4D6A99
+• Border hover: rgba(0,180,255,0.22)
+• CTA buttons ONLY: blue-to-cyan gradient fill (#1a6be0 → #00c8e8), white text
+• Active selected states: rgba(0,200,232,0.12) background, #00E5FF text
+• Match bars: gradient #1a6be0 → #00c8e8
+• Skeleton loader: rgba(255,255,255,0.04) pulsing opacity
+• All non-CTA elements: strictly monochrome blacks/whites/grays`;
+
+  const LIGHT_THEME=`• Background: #FFFFFF (pure white)
+• Card surface: #FFFFFF with 0.5px #E0E0E0 border
+• Secondary surface: #F7F7F7
+• Tertiary surface: #F0F0F0
+• Primary text: #0A0A0A
+• Secondary text: #3A3A3A
+• Muted text: #6B6B6B
+• Hint text: #9A9A9A
+• Border: #E0E0E0 (default), #C8C8C8 (hover/emphasis)
+• CTA buttons ONLY: #0A0A0A filled, #FFFFFF text
+• Active selected states: #0A0A0A filled background, #FFFFFF text
+• Match bars: #0A0A0A fill, #F0F0F0 track
+• Skeleton loader: #F0F0F0 pulsing
+• All elements: strictly monochrome blacks/whites/grays`;
+
+  const GLOBAL_RULES=`1. MONOCHROME ONLY — Zero color except: gradient on CTA buttons and match bars in dark mode.
+2. Typography: Display 28px/900 weight, H1 22px/700, H2 18px/700, Body 14px/400, Caption 12px/400, Label 11px/700 uppercase letter-spaced.
+3. Radius system: tiny components 6px, inputs/chips 8px, cards 12px, large panels 16px, pills 100px.
+4. Match bars: 3px height, full container width, filled proportionally left-to-right.
+5. Bottom navigation: always 5 tabs, active tab = filled square icon + label bold, inactive = outlined square icon.
+6. Language toggle: always visible top-right, 3 pill buttons (AR | EN | FR), active pill filled dark or gradient.
+7. Spacing: 4px grid, minimum 24px page margins, 16px card padding, generous breathing room.
+8. Apple-inspired: ultra-clean, minimal, no decorative elements, no shadows (except subtle on cards), no textures.
+9. Inputs: 44pt minimum height, thin border, subtle focus ring, clear label above.
+10. All text real and contextual in the specified language — no lorem ipsum, no placeholder boxes.`;
+
+  let pgLang='ar', pgMode='dark', pgScreen=null;
+
+  function pgName(s){ return s[pgLang]||s.en; }
+
+  function pgBuildPrompt(num){
+    const s=PG_SCREENS.find(x=>x.num===num);
+    const lc=LANG_CFG[pgLang];
+    const theme=pgMode==='dark'?DARK_THEME:LIGHT_THEME;
+    const themeLabel=pgMode==='dark'?'DARK MODE':'LIGHT MODE';
+    return `Design a high-fidelity mobile app screen for UniGuide — an AI-powered Egyptian university guidance platform for high school students choosing their college, major, and career path.
+
+SCREEN: ${pgName(s)} | Group: ${s.g} | Screen ${num} of 25
+
+LANGUAGE & DIRECTION:
+• Language: ${lc.langLine}
+• Layout direction: ${lc.dirLine}
+• Font family: ${lc.fontLine}
+• Numeric display: ${lc.numeral}
+• Language toggle: ${lc.toggleLine}
+• All UI copy, labels, placeholders, buttons, error messages in ${lc.allText}
+
+THEME — ${themeLabel}:
+${theme}
+
+GLOBAL DESIGN RULES (apply to every element without exception):
+${GLOBAL_RULES}
+
+SCREEN-SPECIFIC LAYOUT & CONTENT:
+${PG_CONTENT[num]}
+
+TECHNICAL OUTPUT SPECS:
+• Device: iPhone 14 Pro viewport (390×844pt), screen content only, no device bezel
+• Orientation: Portrait
+• Status bar: top row, time left / signal+battery right, text color matches theme
+• Bottom safe area respected
+• Quality: photorealistic UI mockup, 4K sharpness, flat-on perspective (0° angle)
+• Background outside screen area: transparent or white
+• All text must be real, contextual, in ${lc.allText} — zero lorem ipsum or placeholder labels`;
+  }
+
+  function pgUpdateInfo(){
+    const lc=LANG_CFG[pgLang];
+    const el=document.getElementById('pg-info-badges');
+    if(!el)return;
+    el.innerHTML=`<span class="pg-info-chip">${lc.label}</span><span class="pg-info-chip">${pgMode==='dark'?'Dark':'Light'} Mode</span><span class="pg-info-chip">${lc.dir}</span><span class="pg-info-chip">${lc.font.split(' ')[0]}</span>`;
+  }
+
+  function pgRenderGrid(){
+    const grid=document.getElementById('pg-screen-grid');
+    if(!grid)return;
+    const gcol={
+      'Auth Flow':'b-blue','Core Platform':'b-teal',
+      'AI Features':'b-amber','Parent & Admin':'b-red'
+    };
+    grid.innerHTML='';
+    PG_SCREENS.forEach(s=>{
+      const btn=document.createElement('button');
+      btn.className='pg-sc-btn'+(pgScreen===s.num?' pg-sc-on':'');
+      const gc=gcol[s.g]||'b-blue';
+      btn.innerHTML=`<span class="pg-sc-num">Screen ${s.num}</span><span class="pg-sc-name">${pgName(s)}</span><span class="pg-sc-group badge3d ${gc}" style="font-size:9px;padding:2px 7px;margin-top:4px;display:inline-flex">${s.g}</span>`;
+      btn.addEventListener('click',()=>{
+        pgScreen=s.num;
+        pgRenderGrid();
+        pgShowOutput(s.num);
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  function pgShowOutput(num){
+    const s=PG_SCREENS.find(x=>x.num===num);
+    const lc=LANG_CFG[pgLang];
+    const box=document.getElementById('pg-output');
+    const meta=document.getElementById('pg-output-meta');
+    const txt=document.getElementById('pg-prompt-text');
+    const copyBtn=document.getElementById('pg-copy-btn');
+    if(!box)return;
+    meta.innerHTML=`<strong>Screen ${num}/25</strong> — ${pgName(s)} &nbsp;·&nbsp; ${lc.label} &nbsp;·&nbsp; ${pgMode==='dark'?'Dark':'Light'} Mode`;
+    txt.textContent=pgBuildPrompt(num);
+    box.style.display='block';
+    copyBtn.textContent='Copy Prompt';
+    copyBtn.classList.remove('pg-copied');
+    box.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  window.pgCopy=function(){
+    if(!pgScreen)return;
+    const txt=pgBuildPrompt(pgScreen);
+    navigator.clipboard.writeText(txt).then(()=>{
+      const btn=document.getElementById('pg-copy-btn');
+      btn.textContent='Copied!';
+      btn.classList.add('pg-copied');
+      setTimeout(()=>{btn.textContent='Copy Prompt';btn.classList.remove('pg-copied');},2200);
+    });
+  };
+
+  document.querySelectorAll('#pg-lang-pills .pg-pill').forEach(p=>{
+    p.addEventListener('click',()=>{
+      pgLang=p.dataset.lang;
+      document.querySelectorAll('#pg-lang-pills .pg-pill').forEach(x=>x.classList.remove('pg-pill-on'));
+      p.classList.add('pg-pill-on');
+      pgUpdateInfo();
+      pgRenderGrid();
+      if(pgScreen)pgShowOutput(pgScreen);
+    });
+  });
+
+  document.querySelectorAll('#pg-mode-pills .pg-pill').forEach(p=>{
+    p.addEventListener('click',()=>{
+      pgMode=p.dataset.mode;
+      document.querySelectorAll('#pg-mode-pills .pg-pill').forEach(x=>x.classList.remove('pg-pill-on'));
+      p.classList.add('pg-pill-on');
+      pgUpdateInfo();
+      if(pgScreen)pgShowOutput(pgScreen);
+    });
+  });
+
+  pgUpdateInfo();
+  pgRenderGrid();
+})();
+
 </script>
 </body>
 </html>

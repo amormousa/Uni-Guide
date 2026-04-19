@@ -1,5 +1,9 @@
-body {
-  font-family: sans-serif;
-  margin: 20px;
-  background-color: #f4f4f4;
-}
+@use 'tokens';
+@use 'dark';
+@use 'rtl';
+@use 'typography';
+@use 'mixins';
+@use 'a11y';
+
+/* Global Reset & Base */
+html, body { height: 100%; margin: 0; }

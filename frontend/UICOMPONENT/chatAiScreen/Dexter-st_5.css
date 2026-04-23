@@ -8,7 +8,7 @@ body {
 .container_chat_bot {
   display: flex;
   flex-direction: column;
-  max-width: 260px;
+  max-width: 460px;
   width: 100%;
 }
 

@@ -616,7 +616,7 @@ body{font-family:var(--font);background:var(--navy);color:var(--text);min-height
 </div>
 
 <!-- PAGE 3: SCREENS (original) -->
-<div id="page-screens" class="page">
+<!-- <div id="page-screens" class="page">
   <div class="section">
     <h2 class="section-title">📱 Screens & Prompts</h2>
     <p class="section-desc">25 شاشة مصممة بالكامل مع AI prompts لكل شاشة</p>
@@ -653,7 +653,7 @@ body{font-family:var(--font);background:var(--navy);color:var(--text);min-height
       <div class="screen-card3d"><div class="sc-num">25</div><div class="sc-title">Admission Steps</div><div class="sc-desc">دليل خطوة بخطوة لإجراءات التقديم لكل كلية مع checklist تفاعلي</div><div class="sc-prompt"><b>Prompt:</b> Step-by-step admission guide for specific college. Interactive checklist with document requirements. Important dates calendar. Official links. Progress tracker showing how many steps completed.</div></div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- PAGE 4: UX FLOW -->
 <div id="page-ux" class="page">
@@ -940,34 +940,215 @@ function dsShow(id,btn){
 }
 
 // ══════ SCREEN DATA ══════
-const SCREENS=[
-  {id:'01',g:'Auth Flow',ar:'Splash / Onboarding',desc:'3 slides قابلة للتمرير. عنوان كبير أبيض على خلفية سوداء. زر CTA مزدوج.',mock:'onboarding',prompt:'Design a 3-slide onboarding for an Egyptian college guidance app. Monochrome: black/white/gray only. Slide 1: large bold headline + geometric white shape on black. Slide 2: feature highlight. Slide 3: CTA pair. Arabic RTL. AR/EN/FR toggle top-right. Apple-inspired spacing.'},
-  {id:'02',g:'Auth Flow',ar:'Registration',desc:'نموذج تسجيل نظيف. اسم، موبايل (+20)، محافظة، نوع الحساب.',mock:'register',prompt:'Monochrome registration form for Egyptian students in {lang}. Fields: name, phone +20, governorate, account type (radio cards), password. Progress indicator Step 1/2. Submit button full-width black.'},
-  {id:'03',g:'Auth Flow',ar:'OTP Verification',desc:'6 خانات OTP مع countdown timer 60 ثانية.',mock:'otp',prompt:'Minimal OTP screen in {lang}. 6 white boxes hairline borders. 60s countdown. Resend appears after timer. Success: boxes fill black with white checks. No color.'},
-  {id:'04',g:'Auth Flow',ar:'Profile Setup',desc:'Section picker + درجة + اهتمامات multi-select.',mock:'profile',prompt:'Profile setup in {lang}. 3 section cards (علمي/أدبي/تجاري): selected = black bg white text. Score input 0-410. Interest chips: selected = dark filled pill. Progress bar black. Monochrome.'},
-  {id:'05',g:'Auth Flow',ar:'Login',desc:'موبايل + باسورد + Google OAuth.',mock:'login',prompt:'Minimal login in {lang} RTL/LTR. Phone + password. Google OAuth button border-only. Forgot password inline. Biometric toggle. Error messages dark gray italic.'},
-  {id:'06',g:'Core Platform',ar:'Home Dashboard',desc:'تحية + بانر الاستمرارية + Top 3 AI cards + Quick actions.',mock:'home',prompt:'Student home dashboard in {lang}. Large greeting. Dismissable "continue where you left off" banner. 3 AI match cards horizontal scroll. 4 quick-action grid. Bottom nav 5 tabs. Monochrome.'},
-  {id:'07',g:'Core Platform',ar:'University Finder',desc:'Search bar ثابت + فلترة + نتائج مع match bar.',mock:'finder',prompt:'College search in {lang}. Sticky search bar. Filter chips: governorate/type/score/fees. Cards: name, match bar (black fill), employment %, fees. Skeleton loaders on load. Monochrome.'},
-  {id:'08',g:'Core Platform',ar:'College Details',desc:'4 metrics + tabs + save button.',mock:'college',prompt:'College detail in {lang}. No hero image — 4-column stat bar: fees/score/employment/salary. Tabs: Overview · Specializations · Admission. Save heart button 200ms animation. Monochrome.'},
-  {id:'09',g:'Core Platform',ar:'AI Quiz',desc:'سؤال واحد في الشاشة + 4 خيارات.',mock:'quiz',prompt:'One-question quiz in {lang}. Question + progress bar top. 4 answer cards: selected = black bg white text. Back/Next navigation. Estimated time remaining. Auto-saves. Monochrome.'},
-  {id:'10',g:'Core Platform',ar:'Quiz Results',desc:'نوع الشخصية + Top 10 توصيات.',mock:'results',prompt:'Quiz results in {lang}. Personality type fade-in animation. Top 10 ranked list: name, match bar, 1-sentence reason. AI suggestion chips. Monochrome.'},
-  {id:'11',g:'Core Platform',ar:'Compare Colleges',desc:'جدول مقارنة 2-3 كليات.',mock:'compare',prompt:'College comparison in {lang}. Up to 3 columns. Rows: fees/score/employment/salary/location. Best cell per row: bold black (no color). Horizontal scroll mobile. Monochrome.'},
-  {id:'12',g:'Core Platform',ar:'Saved Colleges',desc:'قائمة المحفوظة مع sort.',mock:'saved',prompt:'Saved list in {lang}. Sort: match/fees/recent. Card: name + match bar + fees + remove. Empty state: friendly {lang} message + CTA. Monochrome.'},
-  {id:'13',g:'Core Platform',ar:'Notifications',desc:'تنبيهات مجمعة حسب اليوم.',mock:'notif',prompt:'Notification center in {lang}. Groups: Today/Earlier. Swipe-to-dismiss. Deadline alerts bold. Empty state centered. Monochrome.'},
-  {id:'14',g:'Core Platform',ar:'Settings',desc:'إعدادات الحساب والتفضيلات.',mock:'settings',prompt:'Settings screen in {lang}. Card sections: Account / Preferences (lang AR/EN/FR, font) / Notifications / Privacy. Language change triggers instant re-render. Monochrome.'},
-  {id:'15',g:'Core Platform',ar:'Scholarships',desc:'قاعدة بيانات المنح + eligibility checker.',mock:'scholar',prompt:'Scholarships in {lang}. Filter chips. Cards: name, amount, deadline, eligibility match bar. AI chip: check eligibility. Empty state. Monochrome.'},
-  {id:'16',g:'AI Features',ar:'AI Chatbot',desc:'تشات RTL مع streaming + chips.',mock:'chat',prompt:'Bilingual chatbot in {lang}. System responds in user message language. RTL Arabic bubbles, LTR for EN/FR. Streaming tokens. Suggestion chips. Inline college cards. Monochrome.'},
-  {id:'17',g:'AI Features',ar:'Salary Predictor',desc:'تخصص + نوع جامعة + خبرة → bar chart.',mock:'salary',prompt:'Salary predictor in {lang}. Specialization dropdown + university type 3 cards + experience slider 0-20. Output: 3 animated bars min/median/max in EGP. Monochrome.'},
-  {id:'18',g:'AI Features',ar:'Career Path',desc:'Timeline: كلية → تدريب → وظيفة → نمو.',mock:'career',prompt:'Career timeline in {lang}. 5 stages vertical list: college→internship→first job→growth→senior. Each: duration, skills chips, salary range. Monochrome.'},
-  {id:'19',g:'AI Features',ar:'Learning Roadmap',desc:'شجرة المهارات + كورسات مقترحة.',mock:'roadmap',prompt:'Learning roadmap in {lang}. Skill tree checklist: core→advanced→optional. Each skill: course name + platform text label. Bookmark. Progress ring top. Monochrome.'},
-  {id:'20',g:'AI Features',ar:'Alternatives',desc:'بدائل لمن لم يصل للدرجة.',mock:'alts',prompt:'Alternative colleges in {lang}. Triggered when score < minimum. 5 alternatives: similarity bar, why it matches, score difference from target. Encouraging tone. AI chips. Monochrome.'},
-  {id:'21',g:'AI Features',ar:'Admission Steps',desc:'Checklist خطوة بخطوة + progress ring.',mock:'admission',prompt:'Admission guide in {lang}. Progress ring top. Tappable checklist rows with checkbox + due date. Documents list. Share with parent button. Monochrome.'},
-  {id:'22',g:'AI Features',ar:'AI Insights',desc:'نظرة أسبوعية ذكية.',mock:'insights',prompt:'Weekly AI insight card in {lang}. 3 bullet AI insights from activity. Match score trend line. Suggested next action CTA. Dismissable. Monochrome.'},
-  {id:'23',g:'Parent & Admin',ar:'Parent Dashboard',desc:'متابعة نشاط الابن.',mock:'parent',prompt:'Parent dashboard in {lang}. Student card: name, last active, quiz %. Sections: quiz results, saved colleges (read-only), time on platform. Notification settings. Monochrome.'},
-  {id:'24',g:'Parent & Admin',ar:'Admin Analytics',desc:'KPIs + charts + heatmap.',mock:'admin',prompt:'Admin analytics in {lang}. KPI cards: users/DAU/quiz/revenue. Charts: growth line, interest bars, AI satisfaction score. Egypt heatmap placeholder. Data export. Monochrome SaaS.'},
-  {id:'25',g:'Parent & Admin',ar:'Empty / Error States',desc:'404 + offline + empty states.',mock:'empty',prompt:'Error and empty states in {lang}. 404: large light gray number + friendly message + go home. Offline: geometric icon + retry. Empty saved: {lang} message + CTA. Monochrome no illustrations.'},
-];
+const SCREENS = [
+  // ─── Auth Flow ───────────────────────────────────────────────────────────────
+  {
+    id: '01',
+    g: 'Auth Flow',
+    ar: 'Splash / Onboarding',
+    desc: '3 slides قابلة للتمرير أفقياً. عنوان كبير أبيض على خلفية سوداء. زر CTA مزدوج. تخطيط two-column على الديسكتوب.',
+    mock: 'onboarding',
+    prompt: 'Design a 3-slide onboarding for an Egyptian college guidance web app. Monochrome: black/white/gray only. Desktop two-column layout: left = large bold headline + geometric white shape on black; right = illustration/feature area. Slide 1: hero headline. Slide 2: feature highlight. Slide 3: CTA pair. Arabic RTL. AR/EN/FR language toggle top-right header. Apple-inspired spacing. Horizontal dot pagination. Keyboard arrow navigation.',
+  },
+  {
+    id: '02',
+    g: 'Auth Flow',
+    ar: 'Registration',
+    desc: 'نموذج تسجيل نظيف في بطاقة مركزية. اسم، موبايل (+20)، محافظة، نوع الحساب. تخطيط grid على الديسكتوب.',
+    mock: 'register',
+    prompt: 'Monochrome registration page for Egyptian students in {lang}. Centered card max-width 560px on white/light gray page. Fields: name, phone +20, governorate (dropdown), account type (radio cards side by side), password with show/hide. Progress indicator Step 1/2 top of card. Submit button full-width black. Inline validation. Header with logo + language switcher.',
+  },
+  {
+    id: '03',
+    g: 'Auth Flow',
+    ar: 'OTP Verification',
+    desc: '6 خانات OTP في منتصف الصفحة. countdown timer 60 ثانية. تركيز تلقائي.',
+    mock: 'otp',
+    prompt: 'Minimal OTP verification page in {lang}. Centered card on gray background. 6 white input boxes hairline borders, auto-focus advances on each digit. 60s countdown timer. Resend link appears after expiry. Success state: boxes fill black with white checkmarks animated. Paste from clipboard support note. Monochrome. Header with back button.',
+  },
+  {
+    id: '04',
+    g: 'Auth Flow',
+    ar: 'Profile Setup',
+    desc: 'Section picker + درجة + اهتمامات multi-select. تخطيط ثلاثي الأعمدة للشاشات الكبيرة.',
+    mock: 'profile',
+    prompt: 'Profile setup page in {lang}. Desktop: 3-column card grid for section cards (علمي/أدبي/تجاري) — selected = black bg white text. Score input 0–410 with numeric keyboard hint. Interest chips in a wrapping flex row: selected = dark filled pill. Top progress bar black. Right sidebar shows live summary of selections. Monochrome.',
+  },
+  {
+    id: '05',
+    g: 'Auth Flow',
+    ar: 'Login',
+    desc: 'موبايل + باسورد + Google OAuth. تخطيط split-screen على الديسكتوب.',
+    mock: 'login',
+    prompt: 'Login page in {lang}. Desktop split-screen: left half = large monochrome brand illustration/slogan; right half = login form card. Phone field + password with show/hide. Google OAuth button border-only. Forgot password link. Remember me checkbox. Error messages dark gray italic below fields. RTL-aware layout for Arabic. Monochrome.',
+  },
 
+  // ─── Core Platform ────────────────────────────────────────────────────────────
+  {
+    id: '06',
+    g: 'Core Platform',
+    ar: 'Home Dashboard',
+    desc: 'تحية + بانر الاستمرارية + Top 3 AI cards + Quick actions. تخطيط sidebar + main content.',
+    mock: 'home',
+    prompt: 'Student home dashboard in {lang}. Desktop layout: collapsible left sidebar navigation (5 items + avatar). Main area: large greeting headline. Dismissable "continue where you left off" banner. Row of 3 AI match cards. 4-item quick-action grid. Right column: weekly insight widget. Monochrome. Sidebar active state = black bg white text.',
+  },
+  {
+    id: '07',
+    g: 'Core Platform',
+    ar: 'University Finder',
+    desc: 'Search bar ثابت + فلترة شريطية + نتائج بطاقات مع match bar. سايدبار فلاتر على الديسكتوب.',
+    mock: 'finder',
+    prompt: 'College search page in {lang}. Desktop: left sidebar with filter groups (governorate checkboxes, type, score range slider, fees range). Right main area: sticky search bar at top. Results grid: cards with name, match bar (black fill), employment %, fees. Sort dropdown. Skeleton loaders on load. Pagination or infinite scroll. Monochrome.',
+  },
+  {
+    id: '08',
+    g: 'Core Platform',
+    ar: 'College Details',
+    desc: '4 metrics + tabs + save button. تخطيط hero-free مع 4-column stat bar ثابت في الأعلى.',
+    mock: 'college',
+    prompt: 'College detail page in {lang}. No hero image. Sticky top bar: college name + Save button (heart toggle 200ms animation). Below: 4-column stat bar (fees / min score / employment % / avg salary). Tab navigation: Overview · Specializations · Admission Requirements. Overview uses 2-column content layout on desktop. Share and Print actions. Monochrome.',
+  },
+  {
+    id: '09',
+    g: 'Core Platform',
+    ar: 'AI Quiz',
+    desc: 'سؤال واحد في الصفحة + 4 خيارات. تخطيط مركزي عريض على الديسكتوب مع sidebar للتقدم.',
+    mock: 'quiz',
+    prompt: 'One-question-per-page quiz in {lang}. Desktop: centered question card max-width 720px. Progress bar + question counter top. 4 answer option cards in 2×2 grid on wide screens: selected = black bg white text, keyboard shortcut label (A/B/C/D). Estimated time remaining. Back/Next navigation buttons. Auto-saves to localStorage. Keyboard arrow support. Monochrome.',
+  },
+  {
+    id: '10',
+    g: 'Core Platform',
+    ar: 'Quiz Results',
+    desc: 'نوع الشخصية + Top 10 توصيات في قائمة. تخطيط split: الشخصية يساراً والقائمة يميناً.',
+    mock: 'results',
+    prompt: 'Quiz results page in {lang}. Desktop split layout: left panel = personality type with fade-in animation, description, retake button; right panel = Top 10 ranked list: name, match bar, 1-sentence reason. AI suggestion chips below list. Share results button. Download PDF CTA. Monochrome.',
+  },
+  {
+    id: '11',
+    g: 'Core Platform',
+    ar: 'Compare Colleges',
+    desc: 'جدول مقارنة 2-3 كليات. sticky header للأعمدة. تمييز أفضل قيمة.',
+    mock: 'compare',
+    prompt: 'College comparison page in {lang}. Table layout with sticky first column (row labels). Up to 3 college columns + add column placeholder. Rows: fees / min score / employment % / avg salary / location / type. Best value per row: bold black background cell (no color). Horizontal scroll on smaller viewports. Export to PDF button. Monochrome.',
+  },
+  {
+    id: '12',
+    g: 'Core Platform',
+    ar: 'Saved Colleges',
+    desc: 'قائمة المحفوظة مع sort controls. تخطيط جدول أو بطاقات قابلة التبديل.',
+    mock: 'saved',
+    prompt: 'Saved colleges page in {lang}. Toggle between table view and card grid. Sort controls: match / fees / recently saved. Table row: name + match bar + fees + quick-compare checkbox + remove icon. Card: same + hover overlay. Empty state: friendly {lang} message centered + CTA button. Monochrome.',
+  },
+  {
+    id: '13',
+    g: 'Core Platform',
+    ar: 'Notifications',
+    desc: 'تنبيهات مجمعة حسب اليوم. panel جانبي قابل الطي أو صفحة مستقلة.',
+    mock: 'notif',
+    prompt: 'Notification center page in {lang}. Groups: Today / This Week / Earlier. Mark-all-read button top-right. Each row: icon + title + timestamp + dismiss X. Deadline alerts: bold text + dot indicator. Bulk delete. Empty state centered with icon. Filter tabs: All / Deadlines / AI Tips. Monochrome.',
+  },
+  {
+    id: '14',
+    g: 'Core Platform',
+    ar: 'Settings',
+    desc: 'صفحة إعدادات بتنقل sidebar داخلي. تغيير اللغة فوري.',
+    mock: 'settings',
+    prompt: 'Settings page in {lang}. Desktop: left settings sidebar navigation + right content panel. Sections: Account (name, phone, password) / Preferences (language AR/EN/FR with instant re-render, font size) / Notifications (toggle list) / Privacy (data export, delete account). Save changes button per section. Destructive actions: red-bordered button only (still monochrome dominant). Monochrome.',
+  },
+  {
+    id: '15',
+    g: 'Core Platform',
+    ar: 'Scholarships',
+    desc: 'قاعدة بيانات المنح + eligibility checker. سايدبار فلاتر + بطاقات نتائج.',
+    mock: 'scholar',
+    prompt: 'Scholarships page in {lang}. Same sidebar-filter + results-grid layout as college finder. Filter: type / amount range / deadline / eligibility. Cards: scholarship name, amount, deadline countdown, eligibility match bar. AI chip "Check My Eligibility" opens inline panel. Empty state. Monochrome.',
+  },
+
+  // ─── AI Features ─────────────────────────────────────────────────────────────
+  {
+    id: '16',
+    g: 'AI Features',
+    ar: 'AI Chatbot',
+    desc: 'تشات ثنائي اللغة مع streaming. تخطيط chat panel كامل الارتفاع مع سايدبار المحادثات.',
+    mock: 'chat',
+    prompt: 'AI chatbot page in {lang}. Desktop: left sidebar = conversation history list + new chat button; right = chat panel full height. System responds in user message language. RTL Arabic bubbles, LTR for EN/FR. Streaming token animation (blinking cursor). Suggestion chips below input. Inline college info cards in assistant bubbles. Input area: textarea + send button + attach. Monochrome.',
+  },
+  {
+    id: '17',
+    g: 'AI Features',
+    ar: 'Salary Predictor',
+    desc: 'تخصص + نوع جامعة + خبرة → bar chart. تخطيط form + results side by side.',
+    mock: 'salary',
+    prompt: 'Salary predictor page in {lang}. Desktop two-column: left = input form (specialization dropdown, university type 3 radio cards, experience slider 0–20 years, "Predict" button); right = live output panel with 3 animated horizontal bars min/median/max in EGP + comparison note. Results update on submit. Monochrome.',
+  },
+  {
+    id: '18',
+    g: 'AI Features',
+    ar: 'Career Path',
+    desc: 'Timeline: كلية → تدريب → وظيفة → نمو. تخطيط أفقي على الديسكتوب.',
+    mock: 'career',
+    prompt: 'Career path page in {lang}. Desktop: horizontal stepper/timeline (5 stages: college → internship → first job → growth → senior). Each stage card: title, duration, skills chips, salary range. Click stage = expands details panel below. Progress connector line. Vertical on mobile fallback note in prompt. Monochrome.',
+  },
+  {
+    id: '19',
+    g: 'AI Features',
+    ar: 'Learning Roadmap',
+    desc: 'شجرة المهارات + كورسات مقترحة. تخطيط tree بصري على الديسكتوب.',
+    mock: 'roadmap',
+    prompt: 'Learning roadmap page in {lang}. Desktop: visual skill tree with SVG connector lines — nodes: core (black filled) → advanced (outline) → optional (dashed). Click node = right panel shows course name + platform text label + bookmark toggle. Progress ring summary top-right. Filter: show completed / show bookmarked. Monochrome.',
+  },
+  {
+    id: '20',
+    g: 'AI Features',
+    ar: 'Alternatives',
+    desc: 'بدائل لمن لم يصل للدرجة. triggered alert banner + قائمة 5 بدائل.',
+    mock: 'alts',
+    prompt: 'Alternative colleges page in {lang}. Triggered when score < minimum. Top alert banner: target college name + score gap. 5 alternative rows: similarity bar, why-it-matches sentence, score delta badge, apply/save actions. Encouraging copywriting tone. AI chips below list. Sort by similarity/fees. Monochrome.',
+  },
+  {
+    id: '21',
+    g: 'AI Features',
+    ar: 'Admission Steps',
+    desc: 'Checklist خطوة بخطوة + progress ring. تخطيط two-column: checklist + documents panel.',
+    mock: 'admission',
+    prompt: 'Admission guide page in {lang}. Desktop two-column: left = tappable checklist rows with checkbox + step title + due date badge; right = required documents list with upload status indicators. Progress ring + percentage top of left column. Share / Export PDF / "Share with Parent" actions top-right. Completed rows strikethrough. Monochrome.',
+  },
+  {
+    id: '22',
+    g: 'AI Features',
+    ar: 'AI Insights',
+    desc: 'نظرة أسبوعية ذكية. widget بطاقة في الـ dashboard + صفحة تفصيلية.',
+    mock: 'insights',
+    prompt: 'Weekly AI insights page in {lang}. Full-page version of the dashboard widget. 3 AI insight cards each with icon + headline + 2-line detail. Match score trend line chart (SVG/Canvas) for past 4 weeks. Suggested next action CTA card. Dismiss week / archive actions. Next refresh countdown. Monochrome.',
+  },
+
+  // ─── Parent & Admin ───────────────────────────────────────────────────────────
+  {
+    id: '23',
+    g: 'Parent & Admin',
+    ar: 'Parent Dashboard',
+    desc: 'متابعة نشاط الابن. تخطيط parent portal منفصل مع sidebar.',
+    mock: 'parent',
+    prompt: 'Parent portal dashboard in {lang}. Separate layout from student app. Sidebar: student switcher (if multiple children) + nav items. Main: student activity card (name, avatar initials, last active, quiz completion %). Sections below: quiz results read-only table, saved colleges list read-only, time-on-platform chart. Notification preferences panel. Monochrome.',
+  },
+  {
+    id: '24',
+    g: 'Parent & Admin',
+    ar: 'Admin Analytics',
+    desc: 'KPIs + charts + heatmap. داشبورد SaaS كامل مع top nav + sidebar.',
+    mock: 'admin',
+    prompt: 'Admin analytics dashboard in {lang}. Full SaaS layout: top header bar + left sidebar with sections. KPI row: total users / DAU / quiz completions / revenue (EGP). Charts: user growth line (30 days), interest distribution bar chart, AI satisfaction score gauge. Egypt governorate heatmap placeholder SVG. Data table below. CSV export button. Date range picker. Monochrome SaaS.',
+  },
+  {
+    id: '25',
+    g: 'Parent & Admin',
+    ar: 'Empty / Error States',
+    desc: '404 + offline + empty states. صفحات مستقلة responsive.',
+    mock: 'empty',
+    prompt: 'Error and empty state pages in {lang}. 404: centered layout, oversized light-gray "404" numeral behind smaller heading + friendly message + "Go Home" button. Offline: geometric SVG icon (no illustrations) + "Check your connection" + Retry button. Empty saved list: centered within the saved page layout with {lang} message + CTA. All pages share site header/sidebar. Monochrome, no illustrations.',
+  },
+];
 const MOCKS={
   onboarding:()=>`<div style="background:linear-gradient(180deg,#0A0A0A 0%,#1a1a1a 100%);padding:36px 18px 18px;text-align:center">
     <div style="width:36px;height:36px;background:#fff;border-radius:8px;margin:0 auto 10px;"></div>

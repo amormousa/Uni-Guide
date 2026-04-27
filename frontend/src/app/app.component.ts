@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { HeaderComponent } from "./core/components/header/header.component";
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   standalone: true,
-  template: `<h1>نكمل بكرا</h1>`,
+  imports: [HeaderComponent],
+  templateUrl: "./app.component.html",
 })
-export class AppComponent { }
+export class AppComponent {}

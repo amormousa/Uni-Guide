@@ -1,0 +1,109 @@
+:host {
+  display: block;
+  font-family: 'Google Sans', Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  position: relative;
+  z-index: 100;
+}
+
+.main-header {
+  width: 100%;
+  padding: 16px 0;
+  background-color: transparent; /* Assuming it sits on top of the hero section as per the image */
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+}
+
+/* Logo Section */
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #202124;
+  letter-spacing: -0.5px;
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-left: -40px; /* Adjusting to perfectly center visually if needed */
+}
+
+.nav-item {
+  text-decoration: none;
+  color: #5f6368;
+  font-size: 15px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  color: #202124;
+}
+
+/* Actions Section */
+.actions-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Profile Icon Button */
+.profile-btn {
+  background: none;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a73e8; /* Google Blue */
+  background-color: #f1f3f4;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.profile-btn:hover {
+  background-color: #e8eaed;
+}
+
+.profile-btn:active {
+  transform: scale(0.95);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .nav-links {
+    display: none; /* Hide on mobile for now, would typically add a hamburger menu */
+  }
+  
+  .header-container {
+    padding: 0 20px;
+  }
+}

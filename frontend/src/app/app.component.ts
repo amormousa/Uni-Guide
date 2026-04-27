@@ -1,17 +1,10 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from "@angular/core";
+import { HeaderComponent } from "./core/components/header/header.component";
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   standalone: true,
-  imports: [RouterOutlet],
-  template: `
-    <div style="padding: 2rem; text-align: center;">
-      <h1 style="color: #1a6be0;">🎓 UniGuide</h1>
-      <p>منصتك الذكية للجامعة</p>
-      <router-outlet />
-    </div>
-  `,
-  styles: []
+  imports: [HeaderComponent],
+  templateUrl: "./app.component.html",
 })
 export class AppComponent {}

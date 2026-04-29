@@ -1,14 +1,21 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+import { LandingComponent } from './features/landing/landing.component';
 
 export const routes: Routes = [
 
   {
     path: '',
+    component: LandingComponent,
+    pathMatch: 'full'
+  },
+
+  {
+    path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', loadChildren: () => import('./features/onboarding/onboarding.routes').then(m => m.ONBOARDING_ROUTES) },
+      { path: 'onboarding', loadChildren: () => import('./features/onboarding/onboarding.routes').then(m => m.ONBOARDING_ROUTES) },
       { path: 'dashboard', loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES) },
       { path: 'colleges', loadChildren: () => import('./features/college-explorer/college-explorer.routes').then(m => m.COLLEGE_EXPLORER_ROUTES) },
       { path: 'quiz', loadChildren: () => import('./features/quiz/quiz.routes').then(m => m.QUIZ_ROUTES) },

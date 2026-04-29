@@ -1,0 +1,277 @@
+<div class="landing-wrapper" [attr.data-theme]="isDarkMode ? 'dark' : 'light'" dir="ltr">
+  <nav class="antigravity-nav" [class.mobile-open]="isMobileMenuOpen">
+    <div class="nav-container">
+      <div class="nav-left">
+        <div class="logo">
+          <i class="fas fa-graduation-cap logo-icon-font"></i>
+          <div class="logo-animated-text" data-text="UniGuide">
+            <span class="actual-text">&nbsp;UniGuide&nbsp;</span>
+            <span aria-hidden="true" class="hover-text">&nbsp;UniGuide&nbsp;</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="nav-center" [class.active]="isMobileMenuOpen">
+        <a routerLink="/" (click)="closeMobileMenu()">Home</a>
+        <a routerLink="/" (click)="closeMobileMenu()">Quiz</a>
+        <a routerLink="/" (click)="closeMobileMenu()">Pricing</a>
+        <a routerLink="/" (click)="closeMobileMenu()">Chat AI</a>
+        <div class="mobile-only-actions">
+           <a routerLink="/auth/register" class="download-btn">Register</a>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <button class="theme-toggle-premium" (click)="toggleTheme()" [class.dark]="isDarkMode">
+          <div class="toggle-circle">
+            <i class="fas fa-sun sun-icon"></i>
+            <i class="fas fa-moon moon-icon"></i>
+          </div>
+        </button>
+        <a routerLink="/auth/register" class="download-btn desktop-only">
+          <i class="fas fa-user-plus"></i> Register
+        </a>
+        <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-v3 section-container animate">
+      <div class="hero-logo-badge">
+        <i class="fas fa-graduation-cap logo-icon-font mini"></i>
+        <span>UniGuide AI</span>
+      </div>
+      <h1 [class.typing-done]="isTypingDone">{{ displayText }}</h1>
+      <p class="hero-subtitle">Data-driven guidance for high school graduates to discover their perfect university and career path.</p>
+      <div class="hero-actions">
+        <a routerLink="/auth/register" class="btn-pill-black">
+          Take 15-Question Quiz <i class="fas fa-chevron-right" style="margin-left: 8px;"></i>
+        </a>
+        <a href="#" class="btn-pill-ghost">Explore Roadmap</a>
+      </div>
+
+      <!-- UNIVERSITY LOGO MARQUEE -->
+      <div class="trusted-marquee">
+        <div class="marquee-content">
+          <div class="marquee-item"><i class="fas fa-university"></i> <span>Stanford University</span></div>
+          <div class="marquee-item"><i class="fas fa-graduation-cap"></i> <span>MIT</span></div>
+          <div class="marquee-item"><i class="fas fa-school"></i> <span>Harvard</span></div>
+          <div class="marquee-item"><i class="fas fa-book-reader"></i> <span>Oxford</span></div>
+          <div class="marquee-item"><i class="fas fa-university"></i> <span>NUST</span></div>
+          <div class="marquee-item"><i class="fas fa-graduation-cap"></i> <span>FAST-NU</span></div>
+          <!-- Repeat for smooth loop -->
+          <div class="marquee-item"><i class="fas fa-university"></i> <span>Stanford University</span></div>
+          <div class="marquee-item"><i class="fas fa-graduation-cap"></i> <span>MIT</span></div>
+          <div class="marquee-item"><i class="fas fa-school"></i> <span>Harvard</span></div>
+          <div class="marquee-item"><i class="fas fa-book-reader"></i> <span>Oxford</span></div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <div class="mouse"><div class="wheel"></div></div>
+        <span>Scroll down</span>
+      </div>
+    </section>
+
+    <!-- THE PROBLEM SECTION (REMASTERED) -->
+    <section class="section-container problem-section-v2">
+      <div class="section-header">
+        <span class="badge red">The Crisis</span>
+        <h2>Choosing a university shouldn't be a gamble.</h2>
+        <p class="description-large">Every year, thousands of students make life-altering decisions based on guesswork. We're here to change that with data-driven clarity.</p>
+      </div>
+      
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="card-icon red-glow"><i class="fas fa-exclamation-triangle"></i></div>
+          <div class="card-stats">
+            <h3>80%</h3>
+            <div class="stat-progress"><div class="progress-fill" style="width: 80%"></div></div>
+          </div>
+          <p>Students report feeling extreme stress and confusion when picking their major.</p>
+        </div>
+
+        <div class="problem-card">
+          <div class="card-icon purple-glow"><i class="fas fa-random"></i></div>
+          <div class="card-stats">
+            <h3>1/3</h3>
+            <div class="stat-progress"><div class="progress-fill purple" style="width: 33%"></div></div>
+          </div>
+          <p>Of graduates regret their degree choice or switch paths within 2 years.</p>
+        </div>
+
+        <div class="problem-card">
+          <div class="card-icon blue-glow"><i class="fas fa-clock"></i></div>
+          <div class="card-stats">
+            <h3>$40k+</h3>
+            <div class="stat-progress"><div class="progress-fill blue" style="width: 60%"></div></div>
+          </div>
+          <p>Average cost of a "wrong" degree in lost tuition and delayed career start.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOLUTIONS / CORE FEATURES -->
+    <section class="section-container features-grid">
+      <div class="section-header">
+        <span class="badge">Our Solution</span>
+        <h2>Bridging the gap with AI Intelligence</h2>
+      </div>
+
+      <div class="bento-layout">
+        <div class="bento-box feature-quiz">
+          <div class="icon-wrap"><i class="fas fa-brain"></i></div>
+          <h3>AI Personality Quiz</h3>
+          <p>A structured 15-question assessment to decode your true interests and aptitude.</p>
+        </div>
+        <div class="bento-box feature-bot">
+          <div class="icon-wrap"><i class="fas fa-comments"></i></div>
+          <h3>Real-time Chatbot</h3>
+          <p>Instant academic assistance and university insights, available 24/7.</p>
+        </div>
+        <div class="bento-box feature-salary">
+          <div class="icon-wrap"><i class="fas fa-chart-line"></i></div>
+          <h3>Salary Predictor</h3>
+          <p>Data-backed estimates for your future earnings based on chosen majors.</p>
+        </div>
+        <div class="bento-box feature-roadmap">
+          <div class="icon-wrap"><i class="fas fa-map-signs"></i></div>
+          <h3>Visual Roadmaps</h3>
+          <p>Actionable, step-by-step guidance from high school to your dream career.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS (REMASTERED) -->
+    <section class="section-container how-it-works-v2">
+      <div class="section-header">
+        <span class="badge blue">The Process</span>
+        <h2>Your journey to success in 3 simple steps</h2>
+      </div>
+      
+      <div class="process-roadmap">
+        <div class="roadmap-line"></div>
+        
+        <div class="step-card">
+          <div class="step-icon-wrap">
+            <div class="step-number">01</div>
+            <i class="fas fa-edit"></i>
+          </div>
+          <h3>Take the Quiz</h3>
+          <p>Answer 15 targeted questions about your skills and passions.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-icon-wrap">
+            <div class="step-number">02</div>
+            <i class="fas fa-microchip"></i>
+          </div>
+          <h3>AI Analysis</h3>
+          <p>Our algorithms match you with top universities and career fields.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-icon-wrap">
+            <div class="step-number">03</div>
+            <i class="fas fa-map-marked-alt"></i>
+          </div>
+          <h3>Get Roadmap</h3>
+          <p>Receive a personalized career roadmap with actionable milestones.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS 3D -->
+    <section class="section-container testimonials-v3 animate">
+      <div class="section-header">
+        <span class="badge">Success Stories</span>
+        <h2>What our students say</h2>
+      </div>
+
+      <div class="testimonial-slider-wrapper">
+        <div class="testimonial-track" [style.transform]="'translateX(' + (-activeTestimonialIndex * (100 / (testimonials.length > 3 ? 3 : testimonials.length))) + '%)'">
+          <div *ngFor="let testi of testimonials; let i = index" class="testi-card-modern">
+            <div class="card-glow" [style.background]="testi.color"></div>
+            <div class="card-content">
+              <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+              <p>"{{ testi.quote }}"</p>
+              <div class="user-meta">
+                <div class="avatar" [style.background]="testi.color">{{ testi.avatar }}</div>
+                <div class="info">
+                  <strong>{{ testi.author }}</strong>
+                  <span>{{ testi.role }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slider-controls">
+        <button *ngFor="let t of testimonials; let i = index" 
+                [class.active]="i === activeTestimonialIndex"
+                (click)="setTestimonial(i)">
+        </button>
+      </div>
+    </section>
+
+    <footer class="footer-premium-v2">
+      <div class="footer-top">
+        <div class="footer-brand-column">
+          <div class="footer-logo">
+            <img src="assets/images/landing/logo.jpeg" alt="UniGuide Logo" class="brand-img">
+            <span>UniGuide</span>
+          </div>
+          <p class="brand-desc">Empowering the next generation of leaders through AI-driven career guidance and university matching.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-nav-column">
+          <h4>Platform</h4>
+          <a href="#">AI Personality Quiz</a>
+          <a href="#">University Matcher</a>
+          <a href="#">Salary Predictor</a>
+          <a href="#">Career Roadmaps</a>
+        </div>
+
+        <div class="footer-nav-column">
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Success Stories</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+
+        <div class="footer-newsletter-column">
+          <h4>Join the Future</h4>
+          <p>Get the latest AI career insights delivered to your inbox.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Enter your email">
+            <button class="btn-subscribe"><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-bottom-v2">
+        <p>&copy; 2024 UniGuide Platform. Built with AI for future leaders.</p>
+        <div class="footer-bottom-links">
+          <span>English (US)</span>
+          <span>Status: All Systems Operational</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>

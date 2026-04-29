@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-language-switcher',
   standalone: true,
   imports: [],
-  template: `<!-- TODO: UI Buttons for AR / EN / FR -->`,
+  template: ``,
   styles: []
 })
 export class LanguageSwitcherComponent {}

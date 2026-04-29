@@ -6,7 +6,7 @@ export type SpinnerSize = 'sm' | 'md' | 'lg';
   selector: 'app-loading-spinner',
   standalone: true,
   imports: [],
-  template: `<!-- TODO: Spinner markup -->`,
+  template: ``,
   styles: []
 })
 export class LoadingSpinnerComponent {

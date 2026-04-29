@@ -12,7 +12,7 @@ export interface CollegePreview {
   selector: 'app-college-card',
   standalone: true,
   imports: [],
-  template: `<!-- TODO: Card UI with image, title, location -->`,
+  template: ``,
   styles: []
 })
 export class CollegeCardComponent {

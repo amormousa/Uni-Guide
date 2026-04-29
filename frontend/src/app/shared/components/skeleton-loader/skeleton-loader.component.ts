@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-skeleton-loader',
   standalone: true,
   imports: [],
-  template: `<!-- TODO: Skeleton blocks structure -->`,
+  template: ``,
   styles: []
 })
 export class SkeletonLoaderComponent {}

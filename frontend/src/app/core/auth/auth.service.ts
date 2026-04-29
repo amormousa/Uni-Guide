@@ -16,8 +16,8 @@ export class AuthService {
 
   isAuthenticated = computed(() => !!this.token());
 
-  // TODO: login(phone: string, otp: string): Observable<void>
-  // TODO: logout(): void
-  // TODO: register(): Observable<void>
-  // TODO: refreshToken(): Observable<void>
+  
+  
+  
+  
 }

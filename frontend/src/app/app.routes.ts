@@ -17,7 +17,7 @@ export const routes: Routes = [
     ],
   },
 
-  // 🔐 مسار المصادقة (Auth Layout)
+  
   {
     path: 'auth',
     component: AuthLayoutComponent,
@@ -28,6 +28,6 @@ export const routes: Routes = [
     ],
   },
 
-  // 🔄 إعادة التوجيه الافتراضية
+  
   { path: '**', redirectTo: '' }
 ];

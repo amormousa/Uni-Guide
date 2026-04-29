@@ -5,7 +5,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-admin-layout',
   standalone: true,
   imports: [RouterOutlet],
-  template: `<!-- TODO: Admin Sidebar, Topbar, Content Area -->
+  template: `
              <router-outlet />`,
   styles: []
 })

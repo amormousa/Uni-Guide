@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-theme-toggle',
   standalone: true,
   imports: [],
-  template: `<!-- TODO: Light/Dark toggle button -->`,
+  template: ``,
   styles: []
 })
 export class ThemeToggleComponent {}

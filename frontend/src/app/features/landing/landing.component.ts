@@ -1,5 +1,5 @@
 
-import { Component, HostListener, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, HostListener, ElementRef, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -10,12 +10,24 @@ import { RouterModule } from '@angular/router';
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
-export class LandingComponent implements AfterViewInit {
-  @ViewChild('heroVisual') heroVisual!: ElementRef;
+export class LandingComponent implements AfterViewInit, OnInit {
+
 
   isDarkMode = false;
   isLoading = false;
   isMobileMenuOpen = false;
+
+  ngOnInit() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      this.isDarkMode = savedTheme === 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    } else {
+      // Default to dark mode if no preference is saved
+      this.isDarkMode = true; 
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  }
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
@@ -24,7 +36,7 @@ export class LandingComponent implements AfterViewInit {
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
   }
-  fullText = "Experience liftoff with the next-gen agent platform";
+  fullText = "Choose your future wisely";
   displayText = "";
   isTypingDone = false;
   private typingSpeed = 50;
@@ -71,9 +83,7 @@ export class LandingComponent implements AfterViewInit {
 
   setTestimonial(index: number) {
     this.activeTestimonialIndex = index;
-  }
-
-  startTyping() {
+  }  startTyping() {
     let i = 0;
     const type = () => {
       if (i <= this.fullText.length) {
@@ -87,24 +97,34 @@ export class LandingComponent implements AfterViewInit {
     type();
   }
 
-  @HostListener('document:mousemove', ['$event'])
-  onMouseMove(e: MouseEvent) {
-    if (!this.heroVisual) return;
+  @ViewChild('liquidGlow') liquidGlow!: ElementRef;
+
+  onHeroMouseMove(e: MouseEvent) {
+    const section = e.currentTarget as HTMLElement;
+    const rect = section.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
     
-    const x = e.clientX;
-    const y = e.clientY;
-    const rect = this.heroVisual.nativeElement.getBoundingClientRect();
-    const visualCenterX = rect.left + rect.width / 2;
-    const visualCenterY = rect.top + rect.height / 2;
-    const deltaX = (x - visualCenterX) / 50;
-    const deltaY = (y - visualCenterY) / 50;
-    
-    this.heroVisual.nativeElement.style.transform = `perspective(1000px) rotateX(${10 - deltaY}deg) rotateY(${deltaX}deg)`;
+    if (this.liquidGlow) {
+      // Direct following for the glow center
+      this.liquidGlow.nativeElement.style.left = `${x}px`;
+      this.liquidGlow.nativeElement.style.top = `${y}px`;
+    }
+
+    // Still keep the CSS variables for any secondary effects
+    section.style.setProperty('--mouse-x', `${x}px`);
+    section.style.setProperty('--mouse-y', `${y}px`);
+  }
+
+  resetHeroTilt() {
+    // No longer needed for liquid glow, but keeping it empty to avoid errors if called
   }
 
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
-    document.documentElement.setAttribute('data-theme', this.isDarkMode ? 'dark' : 'light');
+    const theme = this.isDarkMode ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
   }
 
 }

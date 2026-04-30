@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
+import { OtpVerifyComponent } from './otp-verify.component';
 
-@Component({ template: '', standalone: true }) class TempOTP {}
-
-export const OTP_VERIFY_ROUTES: Routes = [{ path: '', component: TempOTP }];
+export const OTP_VERIFY_ROUTES: Routes = [
+  {
+    path: '',
+    component: OtpVerifyComponent
+  }
+];

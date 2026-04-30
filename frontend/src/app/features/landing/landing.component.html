@@ -1,44 +1,5 @@
 <div class="landing-wrapper" [attr.data-theme]="isDarkMode ? 'dark' : 'light'" dir="ltr">
-  <nav class="antigravity-nav" [class.mobile-open]="isMobileMenuOpen">
-    <div class="nav-container">
-      <div class="nav-left">
-        <div class="logo">
-          <i class="fas fa-graduation-cap logo-icon-font"></i>
-          <div class="logo-animated-text" data-text="UniGuide">
-            <span class="actual-text">&nbsp;UniGuide&nbsp;</span>
-            <span aria-hidden="true" class="hover-text">&nbsp;UniGuide&nbsp;</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="nav-center" [class.active]="isMobileMenuOpen">
-        <a routerLink="/" (click)="closeMobileMenu()">Home</a>
-        <a routerLink="/" (click)="closeMobileMenu()">Quiz</a>
-        <a routerLink="/" (click)="closeMobileMenu()">Pricing</a>
-        <a routerLink="/" (click)="closeMobileMenu()">Chat AI</a>
-        <div class="mobile-only-actions">
-           <a routerLink="/auth/register" class="download-btn">Register</a>
-        </div>
-      </div>
-
-      <div class="nav-right">
-        <button class="theme-toggle-premium" (click)="toggleTheme()" [class.dark]="isDarkMode">
-          <div class="toggle-circle">
-            <i class="fas fa-sun sun-icon"></i>
-            <i class="fas fa-moon moon-icon"></i>
-          </div>
-        </button>
-        <a routerLink="/auth/register" class="download-btn desktop-only">
-          <i class="fas fa-user-plus"></i> Register
-        </a>
-        <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-  </nav>
+  <app-navbar></app-navbar>
 
   <main>
     <!-- HERO SECTION RESTORED (LIQUID GLOW INTERACTION) -->

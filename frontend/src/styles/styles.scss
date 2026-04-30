@@ -1,9 +1,50 @@
-@use 'tokens';
 @use 'dark';
 @use 'rtl';
 @use 'typography';
 @use 'mixins';
 @use 'a11y';
 
+/* Global CSS Variables (Tokens) */
+:root {
+  --color-primary: #4387f4;
+  --color-surface: #ffffff;
+  --color-on-surface: #0f172a;
+  
+  // Light Theme (Default)
+  --bg: #ffffff;
+  --text: #000000;
+  --text-rgb: 0, 0, 0;
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --btn-bg: #111111;
+  --btn-text: #ffffff;
+  --accent: #4387f4;
+  --card-bg: #f8fafc;
+  --border: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] {
+  --bg: #000000;
+  --text: #ffffff;
+  --text-rgb: 255, 255, 255;
+  --nav-bg: rgba(0, 0, 0, 0.8);
+  --btn-bg: #ffffff;
+  --btn-text: #000000;
+  --card-bg: #111111;
+  --border: rgba(255, 255, 255, 0.1);
+  --color-surface: #111111;
+  --color-on-surface: #ffffff;
+}
+
 /* Global Reset & Base */
-html, body { height: 100%; margin: 0; }
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+// Support for older browsers/fallback
+.dark-mode {
+  @extend [data-theme="dark"];
+}

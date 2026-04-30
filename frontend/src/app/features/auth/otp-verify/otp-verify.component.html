@@ -1,0 +1,54 @@
+<div class="auth-page-v2">
+  <!-- Left Section: Branding & Info -->
+  <div class="branding-section">
+    <div class="brand-content">
+      <div class="logo" routerLink="/">
+        <i class="fas fa-graduation-cap"></i>
+        <span>UniGuide</span>
+      </div>
+      <h1>Security is Our Top Priority</h1>
+      <p>We've sent a 6-digit verification code to your email. Please enter it to verify your identity and protect your account.</p>
+      
+      <div class="feature-pills">
+        <div class="pill"><i class="fas fa-shield-alt"></i> Secure Login</div>
+        <div class="pill"><i class="fas fa-lock"></i> Privacy Protected</div>
+        <div class="pill"><i class="fas fa-user-check"></i> Identity Verified</div>
+      </div>
+    </div>
+    <div class="brand-bg-glow"></div>
+  </div>
+
+  <!-- Right Section: Form -->
+  <div class="form-section">
+    <div class="form-container">
+      <div class="form-header">
+        <div class="icon-circle">
+          <i class="fas fa-envelope-open-text"></i>
+        </div>
+        <h2>Verify OTP</h2>
+        <p>Please enter the code sent to your email</p>
+      </div>
+
+      <form class="auth-form">
+        <div class="otp-inputs">
+          <input *ngFor="let i of [0,1,2,3,4,5]" 
+                 type="text" 
+                 maxlength="1" 
+                 class="otp-field"
+                 (input)="onInput($event, i)"
+                 (keydown)="onKeyDown($event, i)">
+        </div>
+
+        <button type="submit" class="submit-btn">Verify & Proceed</button>
+
+        <p class="resend-text">
+          Didn't receive the code? <a href="javascript:void(0)">Resend Code</a>
+        </p>
+
+        <p class="footer-text">
+          <a routerLink="/auth/login"><i class="fas fa-arrow-left"></i> Back to Login</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

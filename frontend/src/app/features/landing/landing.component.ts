@@ -3,10 +3,12 @@ import { Component, HostListener, ElementRef, ViewChild, AfterViewInit, OnInit }
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, NavbarComponent],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
@@ -18,15 +20,7 @@ export class LandingComponent implements AfterViewInit, OnInit {
   isMobileMenuOpen = false;
 
   ngOnInit() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      this.isDarkMode = savedTheme === 'dark';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    } else {
-      // Default to dark mode if no preference is saved
-      this.isDarkMode = true; 
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
+    // Theme is now managed globally by NavbarComponent
   }
 
   toggleMobileMenu() {

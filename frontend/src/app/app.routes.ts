@@ -31,6 +31,7 @@ export const routes: Routes = [
     children: [
       { path: 'login', loadChildren: () => import('./features/auth/login/login.routes').then(m => m.LOGIN_ROUTES) },
       { path: 'register', loadChildren: () => import('./features/auth/register/register.routes').then(m => m.REGISTER_ROUTES) },
+      { path: 'forgot-password', loadChildren: () => import('./features/auth/forgot-password/forgot-password.routes').then(m => m.FORGOT_PASSWORD_ROUTES) },
       { path: 'otp', loadChildren: () => import('./features/auth/otp-verify/otp-verify.routes').then(m => m.OTP_VERIFY_ROUTES) },
     ],
   },

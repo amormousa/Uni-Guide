@@ -5,8 +5,17 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-auth-layout',
   standalone: true,
   imports: [RouterOutlet],
-  template: `<!-- TODO: Auth wrapper (centered card/background) -->
-             <router-outlet />`,
-  styles: []
+  template: `
+    <div class="auth-layout-wrapper" dir="ltr">
+      <router-outlet />
+    </div>
+  `,
+  styles: [`
+    .auth-layout-wrapper {
+      min-height: 100vh;
+      width: 100%;
+      direction: ltr !important;
+    }
+  `]
 })
 export class AuthLayoutComponent {}

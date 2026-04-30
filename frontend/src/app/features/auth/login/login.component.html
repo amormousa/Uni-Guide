@@ -1,17 +1,61 @@
-<div class="auth-card">
-  <h2>تسجيل الدخول</h2>
-  
-  <form>
-    <label>رقم الهاتف</label>
-    <input type="tel" placeholder="01xxxxxxxxx" />
-    
-    <button type="submit">إرسال رمز التحقق</button>
-  </form>
+<div class="auth-page-v2">
+  <!-- Left Section: Branding & Info -->
+  <div class="branding-section">
+    <div class="brand-content">
+      <div class="logo" routerLink="/">
+        <i class="fas fa-graduation-cap"></i>
+        <span>UniGuide</span>
+      </div>
+      <h1>Empowering Your Academic Journey</h1>
+      <p>Join thousands of students who found their perfect university and career path through our AI-driven insights.</p>
+      
+      <div class="feature-pills">
+        <div class="pill"><i class="fas fa-check"></i> AI Quiz</div>
+        <div class="pill"><i class="fas fa-check"></i> University Match</div>
+        <div class="pill"><i class="fas fa-check"></i> Career Roadmap</div>
+      </div>
+    </div>
+    <div class="brand-bg-glow"></div>
+  </div>
 
-  <div class="divider">أو</div>
-  <button class="btn-social google">متابعة باستخدام Google</button>
-  
-  <p class="link">
-    ليس لديك حساب؟ <a href="#">إنشاء حساب جديد</a>
-  </p>
+  <!-- Right Section: Form -->
+  <div class="form-section">
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Welcome Back</h2>
+        <p>Enter your details to access your account</p>
+      </div>
+
+      <form class="auth-form">
+        <div class="wave-group">
+          <input required type="text" class="input">
+          <span class="bar"></span>
+          <label class="label">
+            <span *ngFor="let char of getLabelChars('Email'); let i = index" class="label-char" [style.--index]="i">{{ char }}</span>
+          </label>
+        </div>
+
+        <div class="wave-group">
+          <input required type="password" class="input">
+          <span class="bar"></span>
+          <label class="label">
+            <span *ngFor="let char of getLabelChars('Password'); let i = index" class="label-char" [style.--index]="i">{{ char }}</span>
+          </label>
+        </div>
+
+        <div class="form-options">
+          <label class="remember">
+            <input type="checkbox"> <span>Remember me</span>
+          </label>
+          <a routerLink="/auth/forgot-password" class="forgot">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="submit-btn">Sign In</button>
+
+        <p class="footer-text">
+          Don't have an account? <a routerLink="/auth/register">Create one</a>
+        </p>
+      </form>
+    </div>
+  </div>
 </div>

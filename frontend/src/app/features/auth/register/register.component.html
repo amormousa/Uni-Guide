@@ -1,0 +1,62 @@
+<div class="auth-page-v2">
+  <!-- Left Section: Branding & Info -->
+  <div class="branding-section">
+    <div class="brand-content">
+      <div class="logo" routerLink="/">
+        <i class="fas fa-graduation-cap"></i>
+        <span>UniGuide</span>
+      </div>
+      <h1>Start Your Future with Confidence</h1>
+      <p>Create your account to unlock personalized university recommendations and detailed career roadmaps.</p>
+      
+      <div class="feature-pills">
+        <div class="pill"><i class="fas fa-check"></i> Free Assessment</div>
+        <div class="pill"><i class="fas fa-check"></i> Expert Insights</div>
+        <div class="pill"><i class="fas fa-check"></i> Multi-Campus Explorer</div>
+      </div>
+    </div>
+    <div class="brand-bg-glow"></div>
+  </div>
+
+  <!-- Right Section: Form -->
+  <div class="form-section">
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Create Account</h2>
+        <p>Join our community of students today</p>
+      </div>
+
+      <form class="auth-form">
+        <div class="wave-group">
+          <input required type="text" class="input">
+          <span class="bar"></span>
+          <label class="label">
+            <span *ngFor="let char of getLabelChars('Full Name'); let i = index" class="label-char" [style.--index]="i">{{ char }}</span>
+          </label>
+        </div>
+
+        <div class="wave-group">
+          <input required type="email" class="input">
+          <span class="bar"></span>
+          <label class="label">
+            <span *ngFor="let char of getLabelChars('Email'); let i = index" class="label-char" [style.--index]="i">{{ char }}</span>
+          </label>
+        </div>
+
+        <div class="wave-group">
+          <input required type="password" class="input">
+          <span class="bar"></span>
+          <label class="label">
+            <span *ngFor="let char of getLabelChars('Password'); let i = index" class="label-char" [style.--index]="i">{{ char }}</span>
+          </label>
+        </div>
+
+        <button type="submit" class="submit-btn">Create Account</button>
+
+        <p class="footer-text">
+          Already have an account? <a routerLink="/auth/login">Sign in</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

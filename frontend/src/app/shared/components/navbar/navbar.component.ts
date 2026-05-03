@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -7,11 +7,12 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <nav class="antigravity-nav" [class.mobile-open]="isMobileMenuOpen">
+    <nav class="antigravity-nav" [class.mobile-open]="isMobileMenuOpen" [class.scrolled]="isScrolled">
       <div class="nav-container">
         <div class="nav-left">
           <div class="logo" routerLink="/">
-            <i class="fas fa-graduation-cap logo-icon-font"></i>
+            <img [src]="isDarkMode ? 'assets/images/landing/lightlogo.png' : 'assets/images/landing/darklogo.png'" 
+                 alt="UniGuide Logo" class="logo-img">
             <div class="logo-animated-text" data-text="UniGuide">
               <span class="actual-text">&nbsp;UniGuide&nbsp;</span>
               <span aria-hidden="true" class="hover-text">&nbsp;UniGuide&nbsp;</span>
@@ -26,12 +27,9 @@ import { RouterModule } from '@angular/router';
           <a routerLink="/chat" routerLinkActive="active" (click)="closeMobileMenu()">Chat AI</a>
           
           <div class="mobile-only-actions">
-             <!-- Theme Toggle in Mobile Menu -->
              <div class="theme-switch-wrapper" (click)="toggleTheme()">
                 <div class="theme-switch" [class.dark]="isDarkMode">
-                   <div class="switch-handle">
-                      <i class="fas fa-cog"></i>
-                   </div>
+                   <div class="switch-handle"><i class="fas fa-cog"></i></div>
                 </div>
              </div>
              <a routerLink="/auth/register" class="download-btn" (click)="closeMobileMenu()">Register</a>
@@ -39,23 +37,16 @@ import { RouterModule } from '@angular/router';
         </div>
 
         <div class="nav-right">
-          <!-- Theme Toggle in Desktop Navbar -->
           <div class="theme-switch-wrapper" (click)="toggleTheme()">
              <div class="theme-switch" [class.dark]="isDarkMode">
-                <div class="switch-handle">
-                   <i class="fas fa-cog"></i>
-                </div>
+                <div class="switch-handle"><i class="fas fa-cog"></i></div>
              </div>
           </div>
-
           <a routerLink="/auth/register" class="download-btn desktop-only">
             <i class="fas fa-user-plus"></i> Register
           </a>
-          
           <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
           </button>
         </div>
       </div>
@@ -66,13 +57,24 @@ import { RouterModule } from '@angular/router';
 export class NavbarComponent implements OnInit {
   isDarkMode = true;
   isMobileMenuOpen = false;
+  isScrolled = false;
 
   ngOnInit() {
+    this.checkScroll();
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       this.isDarkMode = savedTheme === 'dark';
     }
     this.applyTheme();
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.checkScroll();
+  }
+
+  private checkScroll() {
+    this.isScrolled = window.scrollY > 20;
   }
 
   toggleMobileMenu() {

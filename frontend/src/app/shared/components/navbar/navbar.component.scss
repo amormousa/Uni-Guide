@@ -1,13 +1,31 @@
 .antigravity-nav {
   position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   z-index: 2000;
-  backdrop-filter: blur(20px);
-  background: var(--nav-bg, rgba(255, 255, 255, 0.8));
-  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.08));
-  transition: background-color 0.4s ease;
+  background: transparent;
+  border-bottom: none;
+  backdrop-filter: none;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   direction: ltr !important;
+  padding: 10px 0;
+
+  &.scrolled {
+    top: 15px;
+    left: 7.5%;
+    right: 7.5%;
+    width: 85%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--nav-bg, rgba(255, 255, 255, 0.85));
+    backdrop-filter: blur(25px);
+    border: none;
+    border-radius: 100px;
+    padding: 0;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+  }
 
   .nav-container {
     max-width: 1400px;
@@ -17,6 +35,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 5%;
+    transition: all 0.5s ease;
   }
 
   .nav-center {
@@ -162,9 +181,20 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   font-weight: 800;
   cursor: pointer;
+
+  .logo-img {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover .logo-img {
+    transform: scale(1.1);
+  }
 }
 
 .logo-animated-text {

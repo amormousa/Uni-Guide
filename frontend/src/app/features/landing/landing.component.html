@@ -5,12 +5,29 @@
     <!-- HERO SECTION RESTORED (LIQUID GLOW INTERACTION) -->
     <section class="hero-v3 section-container animate" (mousemove)="onHeroMouseMove($event)">
       
+      <div class="floating-lines-wrapper">
+        <app-floating-lines 
+          [enabledWaves]="['top','middle','bottom']"
+          [lineCount]="[6, 8, 10]"
+          [lineDistance]="[10, 12, 14]"
+          [bendRadius]="8"
+          [bendStrength]="-3.5"
+          [interactive]="true"
+          [parallax]="true"
+          [animationSpeed]="0.8"
+          [externalMouse]="heroMousePos"
+          [linesGradient]="isDarkMode ? darkLinesGradient : lightLinesGradient"
+          [mixBlendMode]="isDarkMode ? 'screen' : 'multiply'">
+        </app-floating-lines>
+      </div>
+      
       <!-- Liquid Glow Follower -->
       <div class="liquid-glow" #liquidGlow></div>
 
       <div class="hero-content-wrapper">
         <div class="hero-logo-badge">
-          <i class="fas fa-graduation-cap logo-icon-font mini"></i>
+          <img [src]="isDarkMode ? 'assets/images/landing/lightlogo.png' : 'assets/images/landing/darklogo.png'" 
+               alt="UniGuide Logo" class="badge-logo-img">
           <span>UniGuide AI</span>
         </div>
         <h1 [class.typing-done]="isTypingDone">{{ displayText }}</h1>
@@ -170,34 +187,34 @@
 
     <section class="section-container testimonials-v3 animate">
       <div class="section-header">
-        <span class="badge">Success Stories</span>
+        <span class="badge blue">Success Stories</span>
         <h2>What our students say</h2>
       </div>
 
-      <div class="testimonial-slider-wrapper">
-        <div class="testimonial-track" [style.transform]="'translateX(' + (-activeTestimonialIndex * (100 / (testimonials.length > 3 ? 3 : testimonials.length))) + '%)'">
-          <div *ngFor="let testi of testimonials; let i = index" class="testi-card-modern">
-            <div class="card-glow" [style.background]="testi.color"></div>
-            <div class="card-content">
-              <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
-              <p>"{{ testi.quote }}"</p>
-              <div class="user-meta">
-                <div class="avatar" [style.background]="testi.color">{{ testi.avatar }}</div>
-                <div class="info">
-                  <strong>{{ testi.author }}</strong>
-                  <span>{{ testi.role }}</span>
+      <div class="testimonial-marquee-container">
+        <div class="testimonial-track-marquee">
+          <div *ngFor="let testi of duplicatedTestimonials" class="testi-card-premium">
+            <div class="card-bg-gradient" [style.background]="'linear-gradient(135deg, ' + testi.color + '22, transparent)'"></div>
+            <div class="card-border-glow" [style.background]="testi.color"></div>
+            
+            <div class="card-inner">
+              <div class="quote-icon-top" [style.color]="testi.color">
+                <i class="fas fa-quote-left"></i>
+              </div>
+              <p class="testi-quote">"{{ testi.quote }}"</p>
+              
+              <div class="user-profile">
+                <div class="user-avatar" [style.background]="testi.color">
+                  <span>{{ testi.avatar }}</span>
+                </div>
+                <div class="user-info">
+                  <h4 class="user-name">{{ testi.author }}</h4>
+                  <p class="user-role">{{ testi.role }}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="slider-controls">
-        <button *ngFor="let t of testimonials; let i = index" 
-                [class.active]="i === activeTestimonialIndex"
-                (click)="setTestimonial(i)">
-        </button>
       </div>
     </section>
 

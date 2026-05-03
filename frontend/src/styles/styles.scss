@@ -44,6 +44,31 @@ html, body {
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+  border: 3px solid var(--bg);
+  
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
+// Firefox support
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--bg);
+}
+
 // Support for older browsers/fallback
 .dark-mode {
   @extend [data-theme="dark"];

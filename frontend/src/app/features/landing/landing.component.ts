@@ -1,26 +1,52 @@
-
-import { Component, HostListener, ElementRef, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Component, HostListener, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { FloatingLinesComponent } from '../../shared/components/floating-lines/floating-lines.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, RouterModule, NavbarComponent],
+  imports: [CommonModule, RouterModule, NavbarComponent, FloatingLinesComponent],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
 export class LandingComponent implements AfterViewInit, OnInit {
 
 
-  isDarkMode = false;
+  isDarkMode = true;
+  heroMousePos = { x: 0, y: 0 };
+  
+  // Theme-aware line gradients
+  lightLinesGradient = ['#ff00e5', '#00d2ff', '#4387f4', '#ffffff'];
+  darkLinesGradient = ['#e945f5', '#4387f4', '#333333', '#111111'];
   isLoading = false;
   isMobileMenuOpen = false;
 
+  private themeObserver?: MutationObserver;
+
   ngOnInit() {
-    // Theme is now managed globally by NavbarComponent
+    this.detectTheme();
+    this.setupThemeObserver();
+  }
+
+  private detectTheme() {
+    const theme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('theme') || 'dark';
+    this.isDarkMode = theme === 'dark';
+  }
+
+  private setupThemeObserver() {
+    this.themeObserver = new MutationObserver(() => {
+      this.detectTheme();
+    });
+    this.themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  }
+
+  ngOnDestroy() {
+    if (this.themeObserver) {
+      this.themeObserver.disconnect();
+    }
   }
 
   toggleMobileMenu() {
@@ -37,18 +63,20 @@ export class LandingComponent implements AfterViewInit, OnInit {
 
   activeTestimonialIndex = 0;
   testimonials = [
-    { author: 'Sarah Jenkins', role: 'Stanford Freshman', quote: 'UniGuide didn\'t just suggest a college; it revealed a career path I never knew I was perfect for.', avatar: 'SJ', color: '#4387f4' },
-    { author: 'Marcus Chen', role: 'HS Senior', quote: 'The AI quiz was scarily accurate. It understood my strengths better than my guidance counselor did.', avatar: 'MC', color: '#a855f7' },
-    { author: 'Elena Rodriguez', role: 'MIT Sophomore', quote: 'Finding the right financial fit was my biggest worry. UniGuide made the scholarship search effortless.', avatar: 'ER', color: '#22c55e' },
-    { author: 'David Kim', role: 'UC Berkeley Student', quote: 'The roadmaps are a game changer. I know exactly what steps to take for my future in AI.', avatar: 'DK', color: '#f59e0b' },
-    { author: 'Aisha Omar', role: 'Oxford Applicant', quote: 'A premium experience that takes the stress out of university applications. Highly recommended!', avatar: 'AO', color: '#ec4899' }
+    { quote: "The AI quiz was scarily accurate. It understood my strengths better than my guidance counselor did.", author: "Marcus Chen", role: "HS Senior", avatar: "MC", color: "#a855f7" },
+    { quote: "Finding the right financial fit was my biggest worry. UniGuide made the scholarship search effortless.", author: "Elena Rodriguez", role: "MIT Sophomore", avatar: "ER", color: "#22c55e" },
+    { quote: "The roadmap showed me exactly what skills I need to learn. I now know exactly where I'm headed.", author: "David Kim", role: "University of Toronto Freshmen", avatar: "DK", color: "#f59e0b" },
+    { quote: "UniGuide helped me pivot from Medicine to Data Science. The personalized advice was a game changer.", author: "Sarah Johnson", role: "Stanford Graduate", avatar: "SJ", color: "#3b82f6" },
+    { quote: "I was lost between multiple career choices. The personality matching narrowed it down perfectly.", author: "Omar Hassan", role: "FAST-NU Junior", avatar: "OH", color: "#ec4899" }
   ];
+
+  // Duplicate for infinite marquee
+  duplicatedTestimonials = [...this.testimonials, ...this.testimonials, ...this.testimonials];
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.setupIntersectionObserver();
       this.startTyping();
-      this.startTestimonialSlider();
     }, 100);
   }
 
@@ -67,12 +95,6 @@ export class LandingComponent implements AfterViewInit, OnInit {
 
     const targets = document.querySelectorAll('.section-container, .hero-v3, .animate');
     targets.forEach(el => observer.observe(el));
-  }
-
-  startTestimonialSlider() {
-    setInterval(() => {
-      this.activeTestimonialIndex = (this.activeTestimonialIndex + 1) % this.testimonials.length;
-    }, 5000);
   }
 
   setTestimonial(index: number) {
@@ -99,6 +121,8 @@ export class LandingComponent implements AfterViewInit, OnInit {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
+    this.heroMousePos = { x, y };
+
     if (this.liquidGlow) {
       // Direct following for the glow center
       this.liquidGlow.nativeElement.style.left = `${x}px`;

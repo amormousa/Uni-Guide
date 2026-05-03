@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  template: `<h1>نكمل بكرا</h1>`,
+  imports: [RouterOutlet],
+  template: `
+    <router-outlet />
+  `,
+  styles: []
 })
-export class AppComponent { }
+export class AppComponent {}

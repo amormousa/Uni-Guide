@@ -1,0 +1,11 @@
+{
+  "app": {
+    "title": "Your Smart University Guide",
+    "welcome": "Welcome to UniGuide"
+  },
+  "nav": {
+    "home": "Home",
+    "colleges": "Colleges",
+    "quiz": "Aptitude Quiz"
+  }
+}

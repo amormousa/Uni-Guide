@@ -1,0 +1,11 @@
+{
+  "app": {
+    "title": "Votre Guide Universitaire Intelligent",
+    "welcome": "Bienvenue sur UniGuide"
+  },
+  "nav": {
+    "home": "Accueil",
+    "colleges": "Facultés",
+    "quiz": "Test d'aptitude"
+  }
+}

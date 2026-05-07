@@ -7,13 +7,23 @@
         <span>UniGuide</span>
       </div>
       <h1>Start Your Future with Confidence</h1>
-      <p>Create your account to unlock personalized university recommendations and detailed career roadmaps.</p>
-      
+      <p>
+        Create your account to unlock personalized university recommendations
+        and detailed career roadmaps.
+      </p>
+
       <div class="feature-pills">
         <div class="pill"><i class="fas fa-check"></i> Free Assessment</div>
         <div class="pill"><i class="fas fa-check"></i> Expert Insights</div>
-        <div class="pill"><i class="fas fa-check"></i> Multi-Campus Explorer</div>
+        <div class="pill">
+          <i class="fas fa-check"></i> Multi-Campus Explorer
+        </div>
       </div>
+      
+      <div class="back-button-container">
+        <app-back-button />
+      </div>
+
     </div>
     <div class="brand-bg-glow"></div>
   </div>
@@ -26,32 +36,165 @@
         <p>Join our community of students today</p>
       </div>
 
-      <form class="auth-form">
+      <!-- Success Message -->
+      <div *ngIf="successMessage()" class="alert alert-success">
+        ✓ {{ successMessage() }}
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage()" class="alert alert-error">
+        ✗ {{ errorMessage() }}
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+        <!-- Full Name -->
         <div class="wave-group">
-          <input required type="text" class="input">
+          <input
+            required
+            type="text"
+            class="input"
+            formControlName="name"
+            placeholder=" "
+          />
           <span class="bar"></span>
           <label class="label">
-            <span *ngFor="let char of getLabelChars('Full Name'); let i = index" class="label-char" [style.--index]="i">{{ char }}</span>
+            <span
+              *ngFor="let char of getLabelChars('Full Name'); let i = index"
+              class="label-char"
+              [style.--index]="i"
+              >{{ char }}</span
+            >
+          </label>
+          <div
+            *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
+            class="error-text"
+          >
+            Name must be at least 3 characters
+          </div>
+        </div>
+
+        <!-- Email Address -->
+        <div class="wave-group">
+          <input
+            required
+            type="email"
+            class="input"
+            formControlName="email"
+            placeholder=" "
+            autocomplete="email"
+          />
+          <span class="bar"></span>
+          <label class="label">
+            <span
+              *ngFor="let char of getLabelChars('Email'); let i = index"
+              class="label-char"
+              [style.--index]="i"
+              >{{ char }}</span
+            >
+          </label>
+          <div
+            *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+            class="error-text"
+          >
+            Please enter a valid email address
+          </div>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="wave-group">
+          <select class="input" formControlName="role">
+            <option value="student">Student</option>
+            <option value="parent">Parent</option>
+            <option value="admin">Admin</option>
+          </select>
+          <span class="bar"></span>
+          <label class="label">
+            <span
+              *ngFor="let char of getLabelChars('Role'); let i = index"
+              class="label-char"
+              [style.--index]="i"
+              >{{ char }}</span
+            >
           </label>
         </div>
 
+        <!-- Governorate (Optional) -->
         <div class="wave-group">
-          <input required type="email" class="input">
+          <input
+            type="text"
+            class="input"
+            formControlName="governorate"
+            placeholder=" "
+          />
           <span class="bar"></span>
           <label class="label">
-            <span *ngFor="let char of getLabelChars('Email'); let i = index" class="label-char" [style.--index]="i">{{ char }}</span>
+            <span
+              *ngFor="let char of getLabelChars('Governorate'); let i = index"
+              class="label-char"
+              [style.--index]="i"
+              >{{ char }}</span
+            >
           </label>
         </div>
 
+        <!-- Password -->
         <div class="wave-group">
-          <input required type="password" class="input">
+          <input
+            required
+            type="password"
+            class="input"
+            formControlName="password"
+            placeholder=" "
+          />
           <span class="bar"></span>
           <label class="label">
-            <span *ngFor="let char of getLabelChars('Password'); let i = index" class="label-char" [style.--index]="i">{{ char }}</span>
+            <span
+              *ngFor="let char of getLabelChars('Password'); let i = index"
+              class="label-char"
+              [style.--index]="i"
+              >{{ char }}</span
+            >
           </label>
+          <div
+            *ngIf="
+              form.get('password')?.invalid && form.get('password')?.touched
+            "
+            class="error-text"
+          >
+            Password must be at least 8 characters
+          </div>
         </div>
 
-        <button type="submit" class="submit-btn">Create Account</button>
+        <!-- Confirm Password -->
+        <div class="wave-group">
+          <input
+            required
+            type="password"
+            class="input"
+            formControlName="confirmPassword"
+            placeholder=" "
+          />
+          <span class="bar"></span>
+          <label class="label">
+            <span
+              *ngFor="let char of getLabelChars('Confirm'); let i = index"
+              class="label-char"
+              [style.--index]="i"
+              >{{ char }}</span
+            >
+          </label>
+          <div *ngIf="passwordMismatch" class="error-text">
+            Passwords do not match
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="loading() || form.invalid"
+        >
+          {{ loading() ? 'Creating Account...' : 'Create Account' }}
+        </button>
 
         <p class="footer-text">
           Already have an account? <a routerLink="/auth/login">Sign in</a>

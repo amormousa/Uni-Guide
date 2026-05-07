@@ -1,13 +1,19 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, inject } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { TranslocoModule } from '@jsverse/transloco';
+import { RegisterButtonComponent } from '../register-button/register-button.component';
+import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
+
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RegisterButtonComponent, TranslocoModule, LanguageSwitcherComponent],
+
   template: `
-    <nav class="antigravity-nav" [class.mobile-open]="isMobileMenuOpen" [class.scrolled]="isScrolled">
+    <nav class="antigravity-nav" [class.mobile-open]="isMobileMenuOpen" [class.scrolled]="isScrolled" *transloco="let t">
       <div class="nav-container">
         <div class="nav-left">
           <div class="logo" routerLink="/">
@@ -21,10 +27,10 @@ import { RouterModule } from '@angular/router';
         </div>
         
         <div class="nav-center" [class.active]="isMobileMenuOpen">
-          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">Home</a>
-          <a routerLink="/colleges" routerLinkActive="active" (click)="closeMobileMenu()">Universities</a>
-          <a routerLink="/quiz" routerLinkActive="active" (click)="closeMobileMenu()">Quiz</a>
-          <a routerLink="/chat" routerLinkActive="active" (click)="closeMobileMenu()">Chat AI</a>
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">{{ t('nav.home') }}</a>
+          <a routerLink="/colleges" routerLinkActive="active" (click)="closeMobileMenu()">{{ t('nav.universities') }}</a>
+          <a routerLink="/quiz" routerLinkActive="active" (click)="closeMobileMenu()">{{ t('nav.quiz') }}</a>
+          <a routerLink="/chat" routerLinkActive="active" (click)="closeMobileMenu()">{{ t('nav.chat') }}</a>
           
           <div class="mobile-only-actions">
              <div class="theme-switch-wrapper" (click)="toggleTheme()">
@@ -32,7 +38,11 @@ import { RouterModule } from '@angular/router';
                    <div class="switch-handle"><i class="fas fa-cog"></i></div>
                 </div>
              </div>
-             <a routerLink="/auth/register" class="download-btn" (click)="closeMobileMenu()">Register</a>
+             <app-language-switcher />
+             <div class="mobile-btns">
+                <app-register-button [label]="t('nav.login')" (btnClick)="onLogin(); closeMobileMenu()" />
+                <app-register-button [label]="t('nav.register')" (btnClick)="onRegister(); closeMobileMenu()" />
+             </div>
           </div>
         </div>
 
@@ -42,9 +52,12 @@ import { RouterModule } from '@angular/router';
                 <div class="switch-handle"><i class="fas fa-cog"></i></div>
              </div>
           </div>
-          <a routerLink="/auth/register" class="download-btn desktop-only">
-            <i class="fas fa-user-plus"></i> Register
-          </a>
+          <app-language-switcher class="desktop-only" />
+          <div class="desktop-btns desktop-only">
+            <app-register-button [label]="t('nav.login')" (btnClick)="onLogin()" />
+            <app-register-button [label]="t('nav.register')" (btnClick)="onRegister()" />
+          </div>
+
           <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
             <span></span><span></span><span></span>
           </button>
@@ -55,7 +68,9 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+  private router = inject(Router);
   isDarkMode = true;
+
   isMobileMenuOpen = false;
   isScrolled = false;
 
@@ -98,4 +113,13 @@ export class NavbarComponent implements OnInit {
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
   }
+
+  onLogin() {
+    this.router.navigate(['/auth/login']);
+  }
+
+  onRegister() {
+    this.router.navigate(['/auth/register']);
+  }
 }
+

@@ -1,6 +1,7 @@
-import { Component, HostListener, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslocoService, TranslocoModule } from '@jsverse/transloco';
 
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { FloatingLinesComponent } from '../../shared/components/floating-lines/floating-lines.component';
@@ -8,11 +9,13 @@ import { FloatingLinesComponent } from '../../shared/components/floating-lines/f
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, RouterModule, NavbarComponent, FloatingLinesComponent],
+  imports: [CommonModule, RouterModule, NavbarComponent, FloatingLinesComponent, TranslocoModule],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
-export class LandingComponent implements AfterViewInit, OnInit {
+export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
+  private translocoService = inject(TranslocoService);
+  private langSubscription: any;
 
 
   isDarkMode = true;
@@ -29,6 +32,14 @@ export class LandingComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     this.detectTheme();
     this.setupThemeObserver();
+    
+    // Subscribe to language changes to update typing text
+    this.langSubscription = this.translocoService.langChanges$.subscribe(() => {
+      this.fullText = this.translocoService.translate('hero.title');
+      this.displayText = "";
+      this.isTypingDone = false;
+      this.startTyping();
+    });
   }
 
   private detectTheme() {
@@ -47,6 +58,9 @@ export class LandingComponent implements AfterViewInit, OnInit {
     if (this.themeObserver) {
       this.themeObserver.disconnect();
     }
+    if (this.langSubscription) {
+      this.langSubscription.unsubscribe();
+    }
   }
 
   toggleMobileMenu() {
@@ -56,7 +70,7 @@ export class LandingComponent implements AfterViewInit, OnInit {
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
   }
-  fullText = "Choose your future wisely";
+  fullText = "";
   displayText = "";
   isTypingDone = false;
   private typingSpeed = 50;
@@ -99,7 +113,9 @@ export class LandingComponent implements AfterViewInit, OnInit {
 
   setTestimonial(index: number) {
     this.activeTestimonialIndex = index;
-  }  startTyping() {
+  }
+
+  startTyping() {
     let i = 0;
     const type = () => {
       if (i <= this.fullText.length) {

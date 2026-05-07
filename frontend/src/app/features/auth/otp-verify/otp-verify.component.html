@@ -7,14 +7,24 @@
         <span>UniGuide</span>
       </div>
       <h1>Security is Our Top Priority</h1>
-      <p>We've sent a 6-digit verification code to your email. Please enter it to verify your identity and protect your account.</p>
-      
+      <p>
+        We've sent a 6-digit verification code to your email address. Please enter
+        it below to verify your identity and activate your account.
+      </p>
+
       <div class="feature-pills">
         <div class="pill"><i class="fas fa-shield-alt"></i> Secure Login</div>
         <div class="pill"><i class="fas fa-lock"></i> Privacy Protected</div>
-        <div class="pill"><i class="fas fa-user-check"></i> Identity Verified</div>
+        <div class="pill">
+          <i class="fas fa-user-check"></i> Identity Verified
+        </div>
+      </div>
+
+      <div class="back-button-container">
+        <app-back-button />
       </div>
     </div>
+
     <div class="brand-bg-glow"></div>
   </div>
 
@@ -26,27 +36,57 @@
           <i class="fas fa-envelope-open-text"></i>
         </div>
         <h2>Verify OTP</h2>
-        <p>Please enter the code sent to your email</p>
+        <p>We sent a code to <strong>{{ emailAddress() }}</strong></p>
       </div>
 
-      <form class="auth-form">
-        <div class="otp-inputs">
-          <input *ngFor="let i of [0,1,2,3,4,5]" 
-                 type="text" 
-                 maxlength="1" 
-                 class="otp-field"
-                 (input)="onInput($event, i)"
-                 (keydown)="onKeyDown($event, i)">
+      <!-- Success Message -->
+      <div *ngIf="successMessage()" class="alert alert-success">
+        {{ successMessage() }}
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage()" class="alert alert-error">
+        {{ errorMessage() }}
+      </div>
+
+      <form (ngSubmit)="onVerify()" class="auth-form">
+        <div class="otp-inputs" (paste)="onPaste($event)">
+          <input
+            #otpInput
+            *ngFor="let i of [0, 1, 2, 3, 4, 5]; let index = index"
+            type="text"
+            inputmode="numeric"
+            maxlength="1"
+            class="otp-field"
+            [value]="otpValues()[index]"
+            (input)="onInput($event, index)"
+            (keydown)="onKeyDown($event, index)"
+          />
         </div>
 
-        <button type="submit" class="submit-btn">Verify & Proceed</button>
+        <button type="submit" class="submit-btn" [disabled]="loading()">
+          {{ loading() ? 'Verifying...' : 'Verify & Proceed' }}
+        </button>
 
         <p class="resend-text">
-          Didn't receive the code? <a href="javascript:void(0)">Resend Code</a>
+          Didn't receive the code?
+          <a
+            href="javascript:void(0)"
+            (click)="onResend()"
+            [class.disabled]="resendTimer() > 0"
+          >
+            {{
+              resendTimer() > 0
+                ? 'Resend in ' + resendTimer() + 's'
+                : 'Resend Code'
+            }}
+          </a>
         </p>
 
         <p class="footer-text">
-          <a routerLink="/auth/login"><i class="fas fa-arrow-left"></i> Back to Login</a>
+          <a routerLink="/auth/login"
+            ><i class="fas fa-arrow-left"></i> Back to Login</a
+          >
         </p>
       </form>
     </div>

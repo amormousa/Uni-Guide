@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Routes } from '@angular/router';
+import { Routes } from "@angular/router";
+import { AiChatComponent } from "./ai-chat.component";
 
-@Component({ template: '', standalone: true }) class TempAIChat {}
-
-export const AI_CHAT_ROUTES: Routes = [{ path: '', component: TempAIChat }];
+export const AI_CHAT_ROUTES: Routes = [
+  { path: "", component: AiChatComponent },
+];

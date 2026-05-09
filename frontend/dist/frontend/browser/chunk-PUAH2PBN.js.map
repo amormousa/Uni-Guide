@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/quiz/quiz.routes.ts"],
+  "sourcesContent": ["import { Component } from '@angular/core';\r\nimport { Routes } from '@angular/router';\r\n\r\n@Component({ template: '', standalone: true }) class TempQuiz {}\r\n\r\nexport const QUIZ_ROUTES: Routes = [{ path: '', component: TempQuiz }];"],
+  "mappings": ";;;;;;;;AAGA,IAAqD,WAArD,MAAqD,UAAQ;;qCAAR,WAAQ;EAAA;yEAAR,WAAQ,WAAA,CAAA,CAAA,cAAA,CAAA,GAAA,YAAA,MAAA,UAAA,CAAA,6BAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,kBAAA,IAAA,KAAA;EAAA,GAAA,eAAA,EAAA,CAAA;;;6EAAR,UAAQ,EAAA,WAAA,YAAA,UAAA,4CAAA,YAAA,EAAA,CAAA;AAAA,GAAA;AAEtD,IAAM,cAAsB,CAAC,EAAE,MAAM,IAAI,WAAW,SAAQ,CAAE;",
+  "names": []
+}

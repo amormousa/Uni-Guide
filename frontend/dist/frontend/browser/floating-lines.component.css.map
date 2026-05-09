@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["angular:styles/component:css;908206858acacf1cc1e9cc45ce16695965944d880424e3e9506a63e2b2a32a28;C:/Users/ZEDAN/Desktop/UNI/Uni-Guide/frontend/src/app/shared/components/floating-lines/floating-lines.component.ts"],
+  "sourcesContent": ["\n    .floating-lines-container {\n      width: 100%;\n      height: 100%;\n      overflow: hidden;\n      display: block;\n    }\n  "],
+  "mappings": ";AACI,CAAC;AACC,SAAO;AACP,UAAQ;AACR,YAAU;AACV,WAAS;AACX;",
+  "names": []
+}

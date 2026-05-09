@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["angular:styles/component:css;aef643d4ca6cfd2b89714c98b2d5633b8191afcbcb99a14e6197b519da6c0ece;C:/Users/ZEDAN/Desktop/UNI/Uni-Guide/frontend/src/app/layouts/auth-layout/auth-layout.component.ts"],
+  "sourcesContent": ["\n    .auth-layout-wrapper {\n      min-height: 100vh;\n      width: 100%;\n      direction: ltr !important;\n    }\n  "],
+  "mappings": ";AACI,CAAC;AACC,cAAY;AACZ,SAAO;AACP,aAAW;AACb;",
+  "names": []
+}

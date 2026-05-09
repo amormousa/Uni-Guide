@@ -1,0 +1,109 @@
+/* src/styles/styles.scss */
+[data-theme=dark],
+.dark-mode {
+  --color-surface: #0f172a;
+  --color-on-surface: #e2e8f0;
+}
+[dir=rtl] {
+  font-family:
+    "Almarai",
+    "Cairo",
+    "Inter",
+    sans-serif;
+}
+[dir=rtl] .hero-v3 .hero-logo-badge i {
+  margin-left: 8px;
+  margin-right: 0;
+}
+[dir=rtl] .footer-premium-v3 .footer-glow {
+  right: auto;
+  left: -100px;
+}
+[dir=rtl] .footer-premium-v3 .links-column i {
+  margin-left: 8px;
+  margin-right: 0;
+  transform: rotate(180deg);
+}
+[dir=rtl] .footer-premium-v3 .status-indicator .pulse {
+  margin-left: 10px;
+  margin-right: 0;
+}
+[dir=rtl] .step-icon-wrap .step-number {
+  right: auto;
+  left: -10px;
+}
+[dir=rtl] .uni-guide-btn .sparkle {
+  left: auto;
+  right: -20px;
+}
+:root {
+  --color-primary: #4387f4;
+  --color-surface: #ffffff;
+  --color-on-surface: #0f172a;
+  --bg: #ffffff;
+  --text: #000000;
+  --text-rgb:
+    0,
+    0,
+    0;
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --btn-bg: #111111;
+  --btn-text: #ffffff;
+  --accent: #4387f4;
+  --card-bg: #f8fafc;
+  --border: rgba(0, 0, 0, 0.08);
+}
+[data-theme=dark],
+.dark-mode {
+  --bg: #000000;
+  --text: #ffffff;
+  --text-rgb:
+    255,
+    255,
+    255;
+  --nav-bg: rgba(0, 0, 0, 0.8);
+  --btn-bg: #ffffff;
+  --btn-text: #000000;
+  --card-bg: #111111;
+  --border: rgba(255, 255, 255, 0.1);
+  --color-surface: #111111;
+  --color-on-surface: #ffffff;
+}
+html {
+  min-height: 100%;
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.4s ease, color 0.4s ease;
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow: visible;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+  border: 3px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  filter: brightness(0.9);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--bg);
+}
+
+/* angular:styles/global:styles */
+/*# sourceMappingURL=styles.css.map */

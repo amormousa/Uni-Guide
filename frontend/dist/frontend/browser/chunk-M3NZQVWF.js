@@ -1,0 +1,8 @@
+import "./chunk-WDMUDEB6.js";
+
+// src/app/features/dashboard/dashboard.routes.ts
+var DASHBOARD_ROUTES = [{ path: "", loadComponent: () => import("./chunk-KN6PGWAY.js").then((m) => m.DashboardComponent) }];
+export {
+  DASHBOARD_ROUTES
+};
+//# sourceMappingURL=chunk-M3NZQVWF.js.map

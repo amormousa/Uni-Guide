@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/parent-dashboard/parent-dashboard.routes.ts"],
+  "sourcesContent": ["import { Component } from '@angular/core';\r\nimport { Routes } from '@angular/router';\r\n\r\n@Component({ template: '', standalone: true }) class TempParent {}\r\n\r\nexport const PARENT_DASHBOARD_ROUTES: Routes = [{ path: '', component: TempParent }];"],
+  "mappings": ";;;;;;;;AAGA,IAAqD,aAArD,MAAqD,YAAU;;qCAAV,aAAU;EAAA;yEAAV,aAAU,WAAA,CAAA,CAAA,cAAA,CAAA,GAAA,YAAA,MAAA,UAAA,CAAA,6BAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,oBAAA,IAAA,KAAA;EAAA,GAAA,eAAA,EAAA,CAAA;;;6EAAV,YAAU,EAAA,WAAA,cAAA,UAAA,oEAAA,YAAA,EAAA,CAAA;AAAA,GAAA;AAExD,IAAM,0BAAkC,CAAC,EAAE,MAAM,IAAI,WAAW,WAAU,CAAE;",
+  "names": []
+}

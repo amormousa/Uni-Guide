@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/dashboard/dashboard.component.ts"],
+  "sourcesContent": ["import { Component } from '@angular/core';\r\n\r\n@Component({\r\n  selector: 'app-dashboard',\r\n  template: `<p>Dashboard Feature</p>`,\r\n  standalone: true\r\n})\r\nexport class DashboardComponent {} "],
+  "mappings": ";;;;;;;;;;;AAOM,IAAO,qBAAP,MAAO,oBAAkB;;qCAAlB,qBAAkB;EAAA;yEAAlB,qBAAkB,WAAA,CAAA,CAAA,eAAA,CAAA,GAAA,YAAA,MAAA,UAAA,CAAA,6BAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,4BAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;AAHlB,MAAA,yBAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,mBAAA;AAAiB,MAAA,uBAAA;;;;;6EAGpB,oBAAkB,EAAA,WAAA,sBAAA,UAAA,yDAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

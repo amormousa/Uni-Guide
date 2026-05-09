@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/layouts/main-layout/main-layout.component.scss"],
+  "sourcesContent": [":host {\r\n  display: flex;\r\n  flex-direction: column;\r\n  min-height: 100vh;\r\n}\r\n\r\n.main-content {\r\n  flex: 1;\r\n  padding: 70px 0 0 0; // 70px for fixed navbar\r\n  width: 100%;\r\n  background: var(--bg, #f8fafc);\r\n  transition: background-color 0.4s ease;\r\n}"],
+  "mappings": ";AAAA;AACE,WAAA;AACA,kBAAA;AACA,cAAA;;AAGF,CAAA;AACE,QAAA;AACA,WAAA,KAAA,EAAA,EAAA;AACA,SAAA;AACA,cAAA,IAAA,IAAA,EAAA;AACA,cAAA,iBAAA,KAAA;;",
+  "names": []
+}

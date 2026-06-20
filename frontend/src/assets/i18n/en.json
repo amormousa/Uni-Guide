@@ -5,7 +5,8 @@
     "quiz": "Quiz",
     "chat": "Chat AI",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "pricing": "Pricing"
   },
   "hero": {
     "badge": "UniGuide AI",

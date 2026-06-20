@@ -12,31 +12,52 @@ export class UsersService {
   ) {}
 
   async findById(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({
+      where: { id },
+    });
+
     if (!user) {
-      throw new NotFoundAppException('USER_NOT_FOUND', { message: 'User not found' });
+      throw new NotFoundAppException(
+        'USER_NOT_FOUND',
+        {
+          message: 'User not found',
+        },
+      );
     }
+
     return user;
   }
 
-  async findByEmail(email: string): Promise<User | null> {
-    return this.userRepository.findOne({ where: { email } });
+  async findByEmail(
+    email: string,
+  ): Promise<User | null> {
+    return this.userRepository.findOne({
+      where: { email },
+    });
   }
 
-  async findByEmailWithPassword(email: string): Promise<User | null> {
+  async findByEmailWithPassword(
+    email: string,
+  ): Promise<User | null> {
     return this.userRepository
       .createQueryBuilder('user')
       .addSelect('user.password')
-      .where('user.email = :email', { email })
+      .where('user.email = :email', {
+        email,
+      })
       .getOne();
   }
 
-  async findByIdWithRefreshToken(id: string): Promise<User | null> {
+  async findByIdWithRefreshToken(
+    id: string,
+  ): Promise<User | null> {
     return this.userRepository
       .createQueryBuilder('user')
       .addSelect('user.refreshToken')
       .addSelect('user.refreshTokenExpiresAt')
-      .where('user.id = :id', { id })
+      .where('user.id = :id', {
+        id,
+      })
       .getOne();
   }
 }

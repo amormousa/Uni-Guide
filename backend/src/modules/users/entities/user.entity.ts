@@ -9,30 +9,55 @@ export enum UserRole {
 
 @Entity('users')
 export class User extends BaseEntity {
-  @Column()
-  name!: string;
+  @Column({ type: 'text' })
+  name: string;
 
-  @Column({ unique: true })
-  email!: string;
+  @Column({ type: 'text', unique: true })
+  email: string;
 
-  @Column({ nullable: true, select: false })
-  password!: string | null;
+  @Column({ type: 'text', nullable: true, select: false })
+  password: string | null;
 
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.STUDENT })
-  role!: UserRole;
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.STUDENT,
+  })
+  role: UserRole;
 
-  @Column({ nullable: true })
-  governorate!: string | null;
+  @Column({ type: 'text', nullable: true })
+  governorate: string | null;
 
   @Column({ default: false, name: 'is_verified' })
-  isVerified!: boolean;
+  isVerified: boolean;
 
-  @Column({ nullable: true, name: 'google_id' })
-  googleId!: string | null;
+  @Column({ type: 'text', nullable: true, name: 'google_id' })
+  googleId: string | null;
 
-  @Column({ nullable: true, select: false, name: 'refresh_token' })
-  refreshToken!: string | null;
+  @Column({
+    type: 'text',
+    nullable: true,
+    select: false,
+    name: 'refresh_token',
+  })
+  refreshToken: string | null;
 
-  @Column({ type: 'timestamptz', nullable: true, select: false, name: 'refresh_token_expires_at' })
-  refreshTokenExpiresAt!: Date | null;
+  @Column({ type: 'text', nullable: true, select: false, name: 'otp_code' })
+  otpCode: string | null;
+
+  @Column({
+    type: 'timestamptz',
+    nullable: true,
+    select: false,
+    name: 'otp_expires_at',
+  })
+  otpExpiresAt: Date | null;
+
+  @Column({
+    type: 'timestamptz',
+    nullable: true,
+    select: false,
+    name: 'refresh_token_expires_at',
+  })
+  refreshTokenExpiresAt: Date | null;
 }

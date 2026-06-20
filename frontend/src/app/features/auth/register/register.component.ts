@@ -73,7 +73,7 @@ export class RegisterComponent {
         this.loading.set(false);
         // Navigate to OTP verification page, pass email as query param
         setTimeout(() => {
-          this.router.navigate(['/auth/otp-verify'], {
+          this.router.navigate(['/auth/otp'], {
             queryParams: { email: this.form.value.email },
           });
         }, 1500);

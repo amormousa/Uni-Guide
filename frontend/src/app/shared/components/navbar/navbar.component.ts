@@ -5,7 +5,7 @@ import { RouterModule, Router } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 import { RegisterButtonComponent } from '../register-button/register-button.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
-
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -31,6 +31,7 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
           <a routerLink="/colleges" routerLinkActive="active" (click)="closeMobileMenu()">{{ t('nav.universities') }}</a>
           <a routerLink="/quiz" routerLinkActive="active" (click)="closeMobileMenu()">{{ t('nav.quiz') }}</a>
           <a routerLink="/chat" routerLinkActive="active" (click)="closeMobileMenu()">{{ t('nav.chat') }}</a>
+          <a routerLink="/pricing" routerLinkActive="active" (click)="closeMobileMenu()">{{ t('nav.pricing') }}</a>
           
           <div class="mobile-only-actions">
              <div class="theme-switch-wrapper" (click)="toggleTheme()">
@@ -39,9 +40,17 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
                 </div>
              </div>
              <app-language-switcher />
-             <div class="mobile-btns">
+             <div class="mobile-btns" *ngIf="!authService.isAuthenticated()">
                 <app-register-button [label]="t('nav.login')" (btnClick)="onLogin(); closeMobileMenu()" />
                 <app-register-button [label]="t('nav.register')" (btnClick)="onRegister(); closeMobileMenu()" />
+             </div>
+             <div class="mobile-btns logged-in" *ngIf="authService.isAuthenticated()">
+                <div class="user-greeting" style="color: var(--text-color); font-weight: 600; margin-bottom: 10px;">
+                  👋 Hi, {{ authService.currentUser()?.name?.split(' ')?.[0] }}
+                </div>
+                <button class="logout-btn" (click)="onLogout(); closeMobileMenu()" style="background: none; border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 16px; border-radius: 8px; cursor: pointer; width: 100%;">
+                  Logout
+                </button>
              </div>
           </div>
         </div>
@@ -53,9 +62,19 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
              </div>
           </div>
           <app-language-switcher class="desktop-only" />
-          <div class="desktop-btns desktop-only">
+          
+          <div class="desktop-btns desktop-only" *ngIf="!authService.isAuthenticated()">
             <app-register-button [label]="t('nav.login')" (btnClick)="onLogin()" />
             <app-register-button [label]="t('nav.register')" (btnClick)="onRegister()" />
+          </div>
+
+          <div class="desktop-user-menu desktop-only" *ngIf="authService.isAuthenticated()" style="display: flex; align-items: center; gap: 15px;">
+             <div class="user-greeting" style="color: var(--text-color); font-weight: 600;">
+               👋 Welcome, {{ authService.currentUser()?.name?.split(' ')?.[0] }}
+             </div>
+             <button class="logout-btn" (click)="onLogout()" style="background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;">
+               Logout
+             </button>
           </div>
 
           <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
@@ -69,6 +88,7 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
 })
 export class NavbarComponent implements OnInit {
   private router = inject(Router);
+  public authService = inject(AuthService);
   isDarkMode = true;
 
   isMobileMenuOpen = false;
@@ -120,6 +140,10 @@ export class NavbarComponent implements OnInit {
 
   onRegister() {
     this.router.navigate(['/auth/register']);
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 }
 

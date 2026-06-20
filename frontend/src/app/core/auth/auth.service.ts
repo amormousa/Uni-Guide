@@ -68,11 +68,15 @@ export class AuthService {
   }
 
   // ── Login ───────────────────────────────────────────────────────────────────
-  login(payload: LoginRequest): Observable<AuthResponse> {
-    return this.apiService.post<AuthResponse>('/auth/login', payload).pipe(
+  login(payload: LoginRequest): Observable<any> {
+    return this.apiService.post<any>('/auth/login', payload).pipe(
       tap((response) => {
         this.setTokens(response.accessToken, response.refreshToken);
-        this.fetchAndStoreUser();
+        if (response.user) {
+          this.user.set(response.user);
+          localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
+          this.authState$.next({ isAuthenticated: true, user: response.user });
+        }
       }),
     );
   }
@@ -83,16 +87,9 @@ export class AuthService {
   }
 
   // ── Verify OTP ──────────────────────────────────────────────────────────────
-  verifyOtp(payload: OtpVerifyRequest): Observable<AuthResponse> {
+  verifyOtp(payload: OtpVerifyRequest): Observable<any> {
     return this.apiService
-      .post<AuthResponse>('/auth/otp/verify', payload)
-      .pipe(
-        tap((response) => {
-          // After verification the backend returns tokens — store them
-          this.setTokens(response.accessToken, response.refreshToken);
-          this.fetchAndStoreUser();
-        }),
-      );
+      .post<any>('/auth/otp/verify', payload);
   }
 
   // ── Refresh Token ───────────────────────────────────────────────────────────

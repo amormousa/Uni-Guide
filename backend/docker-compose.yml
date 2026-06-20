@@ -9,8 +9,8 @@ services:
       - '5432:5432'
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: your_secure_password
-      POSTGRES_DB: uniguide_db
+      POSTGRES_PASSWORD: "12qwaszx"
+      POSTGRES_DB: uniguide
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

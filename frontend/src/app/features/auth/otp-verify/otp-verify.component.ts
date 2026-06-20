@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/auth/auth.service';
 import { OtpVerifyRequest } from '../../../models/auth.models';
 
@@ -9,7 +10,7 @@ import { BackButtonComponent } from '../../../shared/components/back-button/back
 @Component({
   selector: 'app-otp-verify',
   standalone: true,
-  imports: [CommonModule, RouterModule, BackButtonComponent],
+  imports: [CommonModule, RouterModule, FormsModule, BackButtonComponent],
 
   templateUrl: './otp-verify.component.html',
   styleUrls: ['./otp-verify.component.scss'],
@@ -81,9 +82,9 @@ export class OtpVerifyComponent {
     this.authService.verifyOtp(payload).subscribe({
       next: () => {
         this.loading.set(false);
-        this.successMessage.set('✓ Email verified! Redirecting to dashboard…');
+        this.successMessage.set('✓ Email verified! Redirecting to login…');
         setTimeout(() => {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/auth/login']);
         }, 2000);
       },
       error: (error) => {

@@ -5,11 +5,12 @@ import { TranslocoService, TranslocoModule } from '@jsverse/transloco';
 
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { FloatingLinesComponent } from '../../shared/components/floating-lines/floating-lines.component';
+import { FooterComponent } from '../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, RouterModule, NavbarComponent, FloatingLinesComponent, TranslocoModule],
+  imports: [CommonModule, RouterModule, NavbarComponent, FloatingLinesComponent, TranslocoModule, FooterComponent],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
@@ -19,6 +20,7 @@ export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
 
 
   isDarkMode = true;
+  isYearly = false;
   heroMousePos = { x: 0, y: 0 };
   
   // Theme-aware line gradients
@@ -29,16 +31,23 @@ export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private themeObserver?: MutationObserver;
 
+  private typingTimeoutId: any;
+
   ngOnInit() {
     this.detectTheme();
     this.setupThemeObserver();
     
-    // Subscribe to language changes to update typing text
-    this.langSubscription = this.translocoService.langChanges$.subscribe(() => {
-      this.fullText = this.translocoService.translate('hero.title');
-      this.displayText = "";
-      this.isTypingDone = false;
-      this.startTyping();
+    // Subscribe to language changes asynchronously to update typing text
+    this.langSubscription = this.translocoService.selectTranslate('hero.title').subscribe((translation) => {
+      if (this.typingTimeoutId) {
+        clearTimeout(this.typingTimeoutId);
+      }
+      if (translation && translation !== 'hero.title') {
+        this.fullText = translation;
+        this.displayText = "";
+        this.isTypingDone = false;
+        this.startTyping();
+      }
     });
   }
 
@@ -60,6 +69,9 @@ export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
     }
     if (this.langSubscription) {
       this.langSubscription.unsubscribe();
+    }
+    if (this.typingTimeoutId) {
+      clearTimeout(this.typingTimeoutId);
     }
   }
 
@@ -116,12 +128,15 @@ export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   startTyping() {
+    if (this.typingTimeoutId) {
+      clearTimeout(this.typingTimeoutId);
+    }
     let i = 0;
     const type = () => {
       if (i <= this.fullText.length) {
         this.displayText = this.fullText.substring(0, i);
         i++;
-        setTimeout(type, this.typingSpeed);
+        this.typingTimeoutId = setTimeout(type, this.typingSpeed);
       } else {
         this.isTypingDone = true;
       }

@@ -5,7 +5,7 @@ import {
   inject,
   isDevMode,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import {
   provideHttpClient,
   withInterceptors,
@@ -47,7 +47,13 @@ export const appConfig: ApplicationConfig = {
       useClass: JwtInterceptor,
       multi: true,
     },
-    provideRouter(routes),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        anchorScrolling: 'enabled',
+        scrollPositionRestoration: 'enabled',
+      })
+    ),
 
     provideTransloco({
       config: {

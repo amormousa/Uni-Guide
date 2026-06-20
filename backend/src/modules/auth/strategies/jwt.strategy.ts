@@ -7,8 +7,7 @@ import { AuthErrorCodes } from '../auth.enums';
 
 export interface JwtPayload {
   sub: string;
-  email: string;
-  name: string;
+  phone: string;
   role: string;
 }
 
@@ -23,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   validate(payload: JwtPayload): JwtPayload {
-    if (!payload.sub || !payload.email) {
+    if (!payload.sub || !payload.phone) {
       throw new UnauthorizedAppException(AuthErrorCodes.INVALID_TOKEN_PAYLOAD, {
         message: 'Invalid token payload',
       });

@@ -129,85 +129,49 @@ const QUERY_ERROR_MAP: Record<string, { statusCode: number; code: string; messag
 export class GlobalExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(GlobalExceptionFilter.name);
 
-  private handleAppException(exception: AppException): { statusCode: number; body: ErrorResponse } {
-    const statusCode = exception.getStatus();
-    const body = new ErrorResponse({
-      code: exception.code,
-      message: exception.appMessage,
-      details: exception.appDetails.length ? exception.appDetails : undefined,
-    });
-    return { statusCode, body };
-  }
-
-  private handleHttpException(exception: HttpException): { statusCode: number; body: ErrorResponse } {
-    const statusCode = exception.getStatus();
-    const res = exception.getResponse();
-    const resBody = typeof res === 'object' ? (res as Record<string, unknown>) : {};
-    const rawMessage = typeof res === 'string' ? res : resBody.message;
-    const details = Array.isArray(rawMessage) ? rawMessage : undefined;
-    const message = Array.isArray(rawMessage) ? '' : (rawMessage as string) ?? '';
-    const body = new ErrorResponse({
-      code: HTTP_STATUS_CODE_MAP[statusCode] ?? HttpStatusCodes.INTERNAL_ERROR,
-      message,
-      details,
-    });
-    return { statusCode, body };
-  }
-
-  private handleQueryFailedError(exception: QueryFailedError): { statusCode: number; body: ErrorResponse } {
-    const driverError = exception.driverError as { code?: string };
-    const mapped = driverError?.code ? QUERY_ERROR_MAP[driverError.code] : undefined;
-    const statusCode = mapped?.statusCode ?? HttpStatus.INTERNAL_SERVER_ERROR;
-    const body = new ErrorResponse(
-      mapped ?? { code: DbStatusCodes.DATABASE_ERROR, message: 'A database error occurred' },
-    );
-    return { statusCode, body };
-  }
-
-  private handleEntityNotFoundError(): { statusCode: number; body: ErrorResponse } {
-    const statusCode = HttpStatus.NOT_FOUND;
-    const body = new ErrorResponse({
-      code: HttpStatusCodes.NOT_FOUND,
-      message: 'The requested resource was not found',
-    });
-    return { statusCode, body };
-  }
-
-  private handleUnknownError(): { statusCode: number; body: ErrorResponse } {
-    const statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-    const body = new ErrorResponse({
-      code: HttpStatusCodes.INTERNAL_ERROR,
-      message: 'An unexpected error occurred',
-    });
-    return { statusCode, body };
-  }
-
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    let result: { statusCode: number; body: ErrorResponse };
+    let statusCode: number;
+    let body: ErrorResponse;
 
     if (exception instanceof AppException) {
-      result = this.handleAppException(exception);
+      statusCode = exception.getStatus();
+      body = new ErrorResponse({ code: exception.code, message: exception.appMessage, details: exception.appDetails.length ? exception.appDetails : undefined });
+
     } else if (exception instanceof HttpException) {
-      result = this.handleHttpException(exception);
+      statusCode = exception.getStatus();
+      const res = exception.getResponse();
+      const resBody = typeof res === 'object' ? (res as Record<string, unknown>) : {};
+      const rawMessage = typeof res === 'string' ? res : resBody.message;
+      const details = Array.isArray(rawMessage) ? rawMessage : undefined;
+      const message = Array.isArray(rawMessage) ? '' : (rawMessage as string) ?? '';
+      body = new ErrorResponse({ code: HTTP_STATUS_CODE_MAP[statusCode] ?? HttpStatusCodes.INTERNAL_ERROR, message, details });
+
     } else if (exception instanceof QueryFailedError) {
-      result = this.handleQueryFailedError(exception);
+      const driverError = exception.driverError as { code?: string };
+      const mapped = driverError?.code ? QUERY_ERROR_MAP[driverError.code] : undefined;
+      statusCode = mapped?.statusCode ?? HttpStatus.INTERNAL_SERVER_ERROR;
+      body = new ErrorResponse(mapped ?? { code: DbStatusCodes.DATABASE_ERROR, message: 'A database error occurred' });
+
     } else if (exception instanceof EntityNotFoundError) {
-      result = this.handleEntityNotFoundError();
+      statusCode = HttpStatus.NOT_FOUND;
+      body = new ErrorResponse({ code: HttpStatusCodes.NOT_FOUND, message: 'The requested resource was not found' });
+
     } else {
-      result = this.handleUnknownError();
+      statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+      body = new ErrorResponse({ code: HttpStatusCodes.INTERNAL_ERROR, message: 'An unexpected error occurred' });
     }
 
     if (request.method !== 'OPTIONS') {
       this.logger.error(
-        `[${request.method}] ${request.url} → ${result.statusCode} ${result.body.code}: ${result.body.message}`,
+        `[${request.method}] ${request.url} → ${statusCode} ${body.code}: ${body.message}`,
         exception instanceof Error ? exception.stack : undefined,
       );
     }
 
-    response.status(result.statusCode).json(result.body);
+    response.status(statusCode).json(body);
   }
 }

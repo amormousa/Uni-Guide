@@ -17,7 +17,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
   }
 
   validate(payload: JwtPayload): JwtPayload {
-    if (!payload.sub || !payload.email) {
+    if (!payload.sub || !payload.phone) {
       throw new UnauthorizedAppException(AuthErrorCodes.INVALID_TOKEN_PAYLOAD, {
         message: 'Invalid refresh token payload',
       });

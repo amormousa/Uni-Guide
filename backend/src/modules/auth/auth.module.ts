@@ -10,7 +10,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { User } from '../users/entities/user.entity';
 import { Otp } from './entities/otp.entity';
-import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [
@@ -18,12 +17,14 @@ import { NotificationsModule } from '../notifications/notifications.module';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.getOrThrow<string>('JWT_SECRET'),
-        signOptions: { expiresIn: configService.get('JWT_EXPIRES_IN', '15m') as any },
-      }),
+      useFactory: (configService: ConfigService) => {
+        const expiresIn = configService.get('JWT_EXPIRES_IN', '15m');
+        return {
+          secret: configService.getOrThrow<string>('JWT_SECRET'),
+          signOptions: { expiresIn: expiresIn as any },
+        };
+      },
     }),
-    NotificationsModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, JwtRefreshStrategy],

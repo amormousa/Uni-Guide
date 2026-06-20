@@ -1,0 +1,96 @@
+<footer class="footer-premium-v3" *transloco="let t">
+  <div class="footer-glow"></div>
+  
+  <!-- Pre-footer CTA -->
+  <div class="footer-cta">
+    <div class="cta-content">
+      <h3>{{ t('footer.cta_title') }}</h3>
+      <p>{{ t('footer.cta_desc') }}</p>
+    </div>
+    <div class="cta-action">
+      <button class="btn-glow-v3" routerLink="/auth/register">{{ t('footer.cta_btn') }} <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- ── 3D Team Showcase ── -->
+  <div class="team-showcase">
+    <div class="team-showcase__header">
+      <span class="team-showcase__eyebrow">Our Professional Crew</span>
+      <h3 class="team-showcase__title">Meet The Uni-Guide Team</h3>
+      <p class="team-showcase__subtitle">10 dedicated innovators shaping the future of university admission</p>
+    </div>
+    <div class="team-showcase__gallery-wrapper">
+      <app-circular-gallery [items]="teamMembers" [bend]="3.5" textColor="#4387f4" [borderRadius]="0.08" [scrollEase]="0.04" />
+    </div>
+  </div>
+
+  <div class="footer-main">
+    <div class="footer-column brand-column">
+      <div class="footer-logo">
+        <div class="logo-icon">
+          <img src="assets/images/landing/logo.jpeg" alt="UniGuide Logo">
+        </div>
+        <span>UniGuide</span>
+      </div>
+      <p class="brand-description">
+        {{ t('footer.brand_desc') }}
+      </p>
+      <div class="social-grid">
+        <a href="#" class="social-item" data-tooltip="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-item" data-tooltip="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-item" data-tooltip="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-item" data-tooltip="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+
+    <div class="footer-column links-column">
+      <h4>{{ t('footer.platform') }}</h4>
+      <ul>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> {{ t('solution.quiz_title') }}</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> {{ t('nav.universities') }}</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> {{ t('solution.salary_title') }}</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> {{ t('process.step3_title') }}</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column links-column">
+      <h4>{{ t('footer.company') }}</h4>
+      <ul>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> {{ t('footer.support') }}</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> {{ t('testimonials.badge') }}</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> {{ t('footer.security') }}</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> {{ t('footer.support') }}</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column newsletter-column">
+      <h4>{{ t('footer.join_title') }}</h4>
+      <p>{{ t('footer.join_desc') }}</p>
+      <form class="newsletter-v3">
+        <div class="input-group">
+          <input type="email" placeholder="your@email.com" required>
+          <button type="submit" class="btn-send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </form>
+      <div class="status-indicator">
+        <span class="pulse"></span>
+        {{ t('footer.systems_ok') }}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="bottom-inner">
+      <div class="copyright">
+        &copy; 2026 {{ t('footer.copyright') }}
+      </div>
+      <div class="bottom-nav">
+        <a href="#">{{ t('footer.support') }}</a>
+        <a href="#">{{ t('footer.security') }}</a>
+        <div class="lang-selector">
+          <app-language-switcher />
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

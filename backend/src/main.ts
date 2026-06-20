@@ -1,39 +1,40 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const origin = process.env.FRONTEND_URL || 'http://localhost:4200';
 
   app.enableCors({
-    origin,
+    origin: ['http://localhost:4200'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
 
-  app.useGlobalFilters(new GlobalExceptionFilter());
+  app.setGlobalPrefix('api');
+
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true,
       whitelist: true,
+      transform: true,
     }),
   );
 
-  app.setGlobalPrefix('api', { exclude: ['health'] });
-
-  // ── Swagger ────────────────────────────────────────────────────────────────
-  const swaggerConfig = new DocumentBuilder()
+  const config = new DocumentBuilder()
     .setTitle('UniGuide API')
-    .setDescription('AI-Powered University Guidance Platform')
+    .setDescription('UniGuide Backend APIs')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  const document = SwaggerModule.createDocument(app, config);
+
   SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(3000);
+
+  console.log(`Server running on http://localhost:3000`);
 }
+
 bootstrap();

@@ -13,16 +13,30 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
-  teamMembers = [
-    { image: 'https://picsum.photos/seed/amr/800/600?grayscale', text: 'Amr Mousa - CEO' },
-    { image: 'https://picsum.photos/seed/sara/800/600?grayscale', text: 'Sara Ahmed - Lead AI' },
-    { image: 'https://picsum.photos/seed/moham/800/600?grayscale', text: 'Mohamed Ali - Fullstack' },
-    { image: 'https://picsum.photos/seed/fatma/800/600?grayscale', text: 'Fatma Hassan - UI/UX' },
-    { image: 'https://picsum.photos/seed/yousf/800/600?grayscale', text: 'Youssef Omar - Marketing' },
-    { image: 'https://picsum.photos/seed/nour/800/600?grayscale', text: 'Nour Ibrahim - Advisor' },
-    { image: 'https://picsum.photos/seed/karim/800/600?grayscale', text: 'Karim Mostafa - DevOps' },
-    { image: 'https://picsum.photos/seed/maria/800/600?grayscale', text: 'Mariam Mahmoud - Data' },
-    { image: 'https://picsum.photos/seed/ziad/800/600?grayscale', text: 'Ziad Tariq - Mobile' },
-    { image: 'https://picsum.photos/seed/laila/800/600?grayscale', text: 'Laila Hany - Success' }
-  ];
+  teamMembers: Array<{ image: string; text: string }> = [];
+
+  constructor() {
+    this.loadAndValidateTeam();
+  }
+
+  private loadAndValidateTeam() {
+    // Definitive data source matching the files in assets/images/team
+    const rawTeamData = [
+      { name: 'Amr Mousa', role: 'Frontend Developer', image: 'assets/images/team/amr-mousa-frontend.jpg' },
+      { name: 'Karaim', role: 'Backend Developer', image: 'assets/images/team/karaim-backend.jpeg' },
+      { name: 'Malak', role: 'UI/UX Designer', image: 'assets/images/team/malak-ui-ux.jpeg' },
+      { name: 'Malak 1', role: 'UI/UX Designer', image: 'assets/images/team/malak1-ui-ux.jpeg' },
+      { name: 'Malak 2', role: 'UI/UX Designer', image: 'assets/images/team/malak2-ui-ux.jpeg' },
+      { name: 'Malak 4', role: 'UI/UX Designer', image: 'assets/images/team/malak4-ui-ux.jpeg' },
+      { name: 'Malak 3', role: 'UI/UX Designer', image: 'assets/images/team/malk3-ui-ux.jpeg' },
+      { name: 'Mariem', role: 'UI/UX Designer', image: 'assets/images/team/mariem-ui-ux.jpeg' },
+      { name: 'Mohmed Halem', role: 'Backend Developer', image: 'assets/images/team/mohmed-halem-backend.jpeg' },
+      { name: 'Mohmed Samy', role: 'Backend Developer', image: 'assets/images/team/mohmed-samy-backend.jpeg' }
+    ];
+
+    this.teamMembers = rawTeamData.map(member => ({
+      image: member.image,
+      text: `${member.name} — ${member.role}`
+    }));
+  }
 }

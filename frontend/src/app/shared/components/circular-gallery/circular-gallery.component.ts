@@ -33,7 +33,7 @@ function getFontSize(font: string): number {
 function createTextTexture(
   gl: GL,
   text: string,
-  font: string = 'bold 30px monospace',
+  font: string = 'bold 30px Inter',
   color: string = 'black'
 ): { texture: Texture; width: number; height: number } {
   const canvas = document.createElement('canvas');
@@ -91,6 +91,17 @@ class Title {
   }
 
   createMesh() {
+    this._buildTextMesh();
+    // Re-render once web fonts are confirmed loaded
+    document.fonts.ready.then(() => {
+      if (this.mesh && this.mesh.parent) {
+        this.mesh.parent.removeChild(this.mesh);
+      }
+      this._buildTextMesh();
+    });
+  }
+
+  private _buildTextMesh() {
     const { texture, width, height } = createTextTexture(this.gl, this.text, this.font, this.textColor);
     const geometry = new Plane(this.gl);
     const program = new Program(this.gl, {
@@ -120,10 +131,10 @@ class Title {
     });
     this.mesh = new Mesh(this.gl, { geometry, program });
     const aspect = width / height;
-    const textHeightScaled = this.plane.scale.y * 0.15;
+    const textHeightScaled = this.plane.scale.y * 0.20;
     const textWidthScaled = textHeightScaled * aspect;
     this.mesh.scale.set(textWidthScaled, textHeightScaled, 1);
-    this.mesh.position.y = -this.plane.scale.y * 0.5 - textHeightScaled * 0.5 - 0.05;
+    this.mesh.position.y = -this.plane.scale.y * 0.5 - textHeightScaled * 0.5 - 0.15;
     this.mesh.setParent(this.plane);
   }
 }
@@ -232,13 +243,10 @@ class Media {
         attribute vec2 uv;
         uniform mat4 modelViewMatrix;
         uniform mat4 projectionMatrix;
-        uniform float uTime;
-        uniform float uSpeed;
         varying vec2 vUv;
         void main() {
           vUv = uv;
           vec3 p = position;
-          p.z = (sin(p.x * 4.0 + uTime) * 1.5 + cos(p.y * 2.0 + uTime) * 1.5) * (0.1 + uSpeed * 0.5);
           gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
         }
       `,
@@ -363,7 +371,7 @@ class Media {
       }
     }
     this.scale = this.screen.height / 1500;
-    this.plane.scale.y = (this.viewport.height * (900 * this.scale)) / this.screen.height;
+    this.plane.scale.y = (this.viewport.height * (750 * this.scale)) / this.screen.height;
     this.plane.scale.x = (this.viewport.width * (700 * this.scale)) / this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
     this.padding = 2;
@@ -421,7 +429,7 @@ class App {
       bend = 1,
       textColor = '#ffffff',
       borderRadius = 0,
-      font = 'bold 30px Figtree',
+      font = 'bold 30px Inter',
       scrollSpeed = 2,
       scrollEase = 0.05
     }: AppConfig
@@ -476,19 +484,7 @@ class App {
     borderRadius: number,
     font: string
   ) {
-    const defaultItems = [
-      { image: 'https://picsum.photos/seed/1/800/600?grayscale', text: 'Amr Mousa' },
-      { image: 'https://picsum.photos/seed/2/800/600?grayscale', text: 'Sara Ahmed' },
-      { image: 'https://picsum.photos/seed/3/800/600?grayscale', text: 'Mohamed Ali' },
-      { image: 'https://picsum.photos/seed/4/800/600?grayscale', text: 'Fatma Hassan' },
-      { image: 'https://picsum.photos/seed/5/800/600?grayscale', text: 'Youssef Omar' },
-      { image: 'https://picsum.photos/seed/16/800/600?grayscale', text: 'Nour Ibrahim' },
-      { image: 'https://picsum.photos/seed/17/800/600?grayscale', text: 'Karim Mostafa' },
-      { image: 'https://picsum.photos/seed/8/800/600?grayscale', text: 'Mariam Mahmoud' },
-      { image: 'https://picsum.photos/seed/9/800/600?grayscale', text: 'Ziad Tariq' },
-      { image: 'https://picsum.photos/seed/10/800/600?grayscale', text: 'Laila Hany' }
-    ];
-    const galleryItems = items && items.length ? items : defaultItems;
+    const galleryItems = items && items.length ? items : [];
     this.mediasImages = galleryItems.concat(galleryItems);
     this.medias = this.mediasImages.map((data, index) => {
       return new Media({
@@ -618,7 +614,7 @@ export class CircularGalleryComponent implements AfterViewInit, OnDestroy {
   @Input() bend = 3;
   @Input() textColor = '#ffffff';
   @Input() borderRadius = 0.05;
-  @Input() font = 'bold 30px Figtree';
+  @Input() font = 'bold 30px Inter';
   @Input() scrollSpeed = 2;
   @Input() scrollEase = 0.05;
 

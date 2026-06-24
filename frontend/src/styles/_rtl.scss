@@ -1,5 +1,23 @@
 // RTL Layout Utilities
 [dir="rtl"] {
-  // TODO: Add directional overrides if needed
-  // Example: border-inline-start -> border-inline-end
+  font-family: 'Almarai', 'Cairo', 'Inter', sans-serif;
+  
+  .hero-v3 {
+    .hero-logo-badge i { margin-left: 8px; margin-right: 0; }
+  }
+
+  .footer-premium-v3 {
+    .footer-glow { right: auto; left: -100px; }
+    .links-column i { margin-left: 8px; margin-right: 0; transform: rotate(180deg); }
+    .status-indicator .pulse { margin-left: 10px; margin-right: 0; }
+  }
+
+  .step-icon-wrap {
+    .step-number { right: auto; left: -10px; }
+  }
+
+  .uni-guide-btn .sparkle {
+    left: auto;
+    right: -20px;
+  }
 }

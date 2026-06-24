@@ -36,12 +36,48 @@
 }
 
 /* Global Reset & Base */
-html, body { 
-  height: 100%; 
+html { 
+  min-height: 100%; 
   margin: 0; 
   background-color: var(--bg);
   color: var(--text);
   transition: background-color 0.4s ease, color 0.4s ease;
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  overflow-y: scroll; /* Force primary scrollbar here */
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow: visible; /* Prevent body from having its own scrollbar */
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+  border: 3px solid var(--bg);
+  
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
+// Firefox support
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--bg);
 }
 
 // Support for older browsers/fallback

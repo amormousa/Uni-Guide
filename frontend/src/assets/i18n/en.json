@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "home": "Home",
+    "universities": "Universities",
+    "quiz": "Quiz",
+    "chat": "Chat AI",
+    "login": "Login",
+    "register": "Register",
+    "pricing": "Pricing"
+  },
+  "hero": {
+    "badge": "UniGuide AI",
+    "title": "Choose your future wisely",
+    "subtitle": "An integrated AI platform that analyzes student tendencies and suggests the appropriate college, major, and university with a clear career path roadmap",
+    "cta_start": "Start Testing Now",
+    "cta_browse": "Browse Universities",
+    "scroll_down": "Scroll down"
+  },
+  "problem": {
+    "badge": "The Crisis",
+    "title": "Choosing a university shouldn't be a gamble.",
+    "desc": "Every year, thousands of students make life-altering decisions based on guesswork. We're here to change that with data-driven clarity.",
+    "stress_factor": "The Stress Factor",
+    "stress_desc": "Students report feeling extreme stress and confusion when picking their major.",
+    "regret_factor": "The Regret Factor",
+    "regret_desc": "Of graduates regret their degree choice or switch paths within 2 years.",
+    "financial_factor": "The Financial Factor",
+    "financial_desc": "Average cost of a 'wrong' degree in lost tuition and delayed career start."
+  },
+  "solution": {
+    "badge": "Our Solution",
+    "title": "Bridging the gap with AI Intelligence",
+    "desc": "UniGuide provides a comprehensive suite of tools to help you navigate your academic future with confidence.",
+    "quiz_title": "AI Personality Quiz",
+    "quiz_desc": "A structured 15-question assessment to decode your true interests and aptitude.",
+    "chatbot_title": "Real-time Chatbot",
+    "chatbot_desc": "Instant academic assistance and university insights, available 24/7.",
+    "salary_title": "Salary Predictor",
+    "salary_desc": "Data-backed estimates for your future earnings based on chosen majors."
+  },
+  "process": {
+    "badge": "The Process",
+    "title": "Your journey to success in 3 simple steps",
+    "step1_title": "Take the Quiz",
+    "step1_desc": "Answer 15 targeted questions about your skills and passions.",
+    "step2_title": "AI Analysis",
+    "step2_desc": "Our algorithms match you with top universities and career fields.",
+    "step3_title": "Get Roadmap",
+    "step3_desc": "Receive a personalized career roadmap with actionable milestones."
+  },
+  "testimonials": {
+    "badge": "Success Stories",
+    "title": "What our students say"
+  },
+  "footer": {
+    "cta_title": "Ready to find your path?",
+    "cta_desc": "Join over 10,000 students who found their dream university with UniGuide.",
+    "cta_btn": "Get Started Free",
+    "brand_desc": "The world's most advanced AI-powered platform for academic and career guidance. We help you navigate the complex journey from student to professional.",
+    "platform": "Platform",
+    "company": "Company",
+    "join_title": "Join the Future",
+    "join_desc": "Stay updated with the latest in AI education and career trends.",
+    "systems_ok": "All systems operational",
+    "copyright": "UniGuide AI Platform. for future leaders.",
+    "support": "Support",
+    "security": "Security"
+  }
+}

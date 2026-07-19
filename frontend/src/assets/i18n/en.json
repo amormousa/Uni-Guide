@@ -9,7 +9,7 @@
     "pricing": "Pricing"
   },
   "hero": {
-    "badge": "UniGuide AI",
+    "badge": "FuturePath AI",
     "title": "Choose your future wisely",
     "subtitle": "An integrated AI platform that analyzes student tendencies and suggests the appropriate college, major, and university with a clear career path roadmap",
     "cta_start": "Start Testing Now",
@@ -30,7 +30,7 @@
   "solution": {
     "badge": "Our Solution",
     "title": "Bridging the gap with AI Intelligence",
-    "desc": "UniGuide provides a comprehensive suite of tools to help you navigate your academic future with confidence.",
+    "desc": "FuturePath provides a comprehensive suite of tools to help you navigate your academic future with confidence.",
     "quiz_title": "AI Personality Quiz",
     "quiz_desc": "A structured 15-question assessment to decode your true interests and aptitude.",
     "chatbot_title": "Real-time Chatbot",
@@ -54,7 +54,7 @@
   },
   "footer": {
     "cta_title": "Ready to find your path?",
-    "cta_desc": "Join over 10,000 students who found their dream university with UniGuide.",
+    "cta_desc": "Join over 10,000 students who found their dream university with FuturePath.",
     "cta_btn": "Get Started Free",
     "brand_desc": "The world's most advanced AI-powered platform for academic and career guidance. We help you navigate the complex journey from student to professional.",
     "platform": "Platform",
@@ -62,8 +62,27 @@
     "join_title": "Join the Future",
     "join_desc": "Stay updated with the latest in AI education and career trends.",
     "systems_ok": "All systems operational",
-    "copyright": "UniGuide AI Platform. for future leaders.",
+    "copyright": "FuturePath AI Platform. for future leaders.",
     "support": "Support",
     "security": "Security"
+  },
+  "explorer": {
+    "title": "Universities",
+    "found": "found",
+    "explore": "Explore Egyptian Universities",
+    "search_placeholder": "Search University...",
+    "about": "About University",
+    "faculties": "Faculties & Majors",
+    "available_majors": "Available Majors",
+    "annual_fee": "Annual Fee",
+    "egp": "EGP",
+    "view_map": "View on Map",
+    "interested": "Interested?",
+    "apply_desc": "Click below to apply to this university.",
+    "apply_now": "Apply Now",
+    "add_favorite": "Add to Favorites",
+    "remove_favorite": "Remove from Favorites",
+    "welcome": "Welcome to FuturePath",
+    "select_hint": "Select a university to view details."
   }
 }

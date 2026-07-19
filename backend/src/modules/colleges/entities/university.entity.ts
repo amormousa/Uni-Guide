@@ -14,10 +14,19 @@ export class University extends BaseEntity {
   location: string;
 
   @Column({ type: 'text', nullable: true })
+  mapsLink: string;
+
+  @Column({ type: 'text', nullable: true })
   website: string;
 
   @Column({ type: 'text', nullable: true })
   logo: string;
+
+  @Column({ type: 'text', nullable: true })
+  type: string;
+
+  @Column({ type: 'text', nullable: true })
+  applyLink: string;
 
   @OneToMany(() => College, (college) => college.university)
   colleges: College[];

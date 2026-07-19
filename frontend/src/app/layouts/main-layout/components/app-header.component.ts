@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   template: `
     <header class="app-header">
       <div class="brand-container">
-        <div class="brand" routerLink="/">🎓 UniGuide</div>
+        <div class="brand" routerLink="/">🎓 FuturePath</div>
         <nav class="main-nav">
           <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
           <a routerLink="/colleges" routerLinkActive="active">Universities</a>

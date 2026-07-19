@@ -1,13 +1,19 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   NgZone,
+  OnInit,
+  OnDestroy,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SseService } from './sse.service';
+import { Subscription } from 'rxjs';
 
 type ChatSender = 'user' | 'ai';
 
@@ -23,20 +29,30 @@ type ChatMessage = {
   imports: [CommonModule, FormsModule],
   template: `
     <div class="container_chat_bot">
-      <div class="ai-result" *ngIf="latestAiText">
-        {{ latestAiText }}
-      </div>
-
+      <!-- Chat Messages Area -->
       <div class="messages-container" #messagesContainer>
+        <!-- Welcome Message / System Instruction -->
+        <div class="message ai rtl">
+          مرحباً بك في المساعد الذكي لجامعة FuturePath! 🎓 
+          <br>
+          يمكنني مساعدتك في معرفة الكليات والتخصصات المتاحة بالجامعات المصرية، الرسوم الدراسية، وروابط التقديم الرسمية. اسألني أي سؤال!
+        </div>
+
         <div
           *ngFor="let msg of messages; trackBy: trackByMessageId"
           class="message"
-          [ngClass]="msg.sender"
+          [ngClass]="[msg.sender, isArabicText(msg.text) ? 'rtl' : 'ltr']"
         >
           {{ msg.text }}
         </div>
+
+        <!-- Current Streaming Token Indicator -->
+        <div *ngIf="isSending && latestAiText" class="message ai" [ngClass]="isArabicText(latestAiText) ? 'rtl' : 'ltr'">
+          {{ latestAiText }}<span class="cursor-blink">✦</span>
+        </div>
       </div>
 
+      <!-- Chat Form Options -->
       <form
         class="container-chat-options"
         (ngSubmit)="sendMessage()"
@@ -46,65 +62,25 @@ type ChatMessage = {
             <textarea
               id="chat_bot"
               name="chat_bot"
-              placeholder="Imagine Something...✦˚"
+              [placeholder]="isArabicMode ? 'اسألني أي شيء... ✦˚' : 'Imagine Something...✦˚'"
               [(ngModel)]="userInput"
               rows="1"
               (input)="onTextareaInput()"
+              (keydown.enter)="$event.preventDefault(); sendMessage()"
             ></textarea>
           </div>
 
           <div class="options">
             <div class="btns-add">
-              <button type="button" aria-label="Option 1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M7 8v8a5 5 0 1 0 10 0V6.5a3.5 3.5 0 1 0-7 0V15a2 2 0 0 0 4 0V8"
-                  ></path>
-                </svg>
+              <button type="button" aria-label="Clear History" (click)="clearHistory()" title="Clear Chat History">
+                <i class="fas fa-trash-alt" style="color: rgba(255, 255, 255, 0.4); font-size: 1.1rem;"></i>
               </button>
-              <button type="button" aria-label="Option 2">
-                <svg
-                  viewBox="0 0 24 24"
-                  height="20"
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm0 10a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm0-8h6m-3-3v6"
-                    stroke-width="2"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke="currentColor"
-                    fill="none"
-                  ></path>
-                </svg>
-              </button>
-              <button type="button" aria-label="Option 3">
-                <svg
-                  viewBox="0 0 24 24"
-                  height="20"
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m-2.29-2.333A17.9 17.9 0 0 1 8.027 13H4.062a8.01 8.01 0 0 0 5.648 6.667M10.03 13c.151 2.439.848 4.73 1.97 6.752A15.9 15.9 0 0 0 13.97 13zm9.908 0h-3.965a17.9 17.9 0 0 1-1.683 6.667A8.01 8.01 0 0 0 19.938 13M4.062 11h3.965A17.9 17.9 0 0 1 9.71 4.333A8.01 8.01 0 0 0 4.062 11m5.969 0h3.938A15.9 15.9 0 0 0 12 4.248A15.9 15.9 0 0 0 10.03 11m4.259-6.667A17.9 17.9 0 0 1 15.973 11h3.965a8.01 8.01 0 0 0-5.648-6.667"
-                    fill="currentColor"
-                  ></path>
-                </svg>
+              <button type="button" aria-label="Toggle Language Mode" (click)="toggleLanguageMode()" [title]="isArabicMode ? 'Switch to English' : 'تحويل للعربية'">
+                <i class="fas fa-globe" style="color: rgba(255, 255, 255, 0.4); font-size: 1.1rem;"></i>
               </button>
             </div>
 
-            <button class="btn-submit" type="submit" [disabled]="isSending">
+            <button class="btn-submit" type="submit" [disabled]="isSending || !userInput.trim()">
               <i>
                 <svg viewBox="0 0 512 512">
                   <path
@@ -118,10 +94,11 @@ type ChatMessage = {
         </div>
       </form>
 
+      <!-- Suggested Question Tags -->
       <div class="tags">
-        <span>Create An Image</span>
-        <span>Analyse Data</span>
-        <span>More</span>
+        <span *ngFor="let tag of suggestedQuestions" (click)="askSuggestedQuestion(tag)">
+          {{ tag }}
+        </span>
       </div>
     </div>
   `,
@@ -138,26 +115,12 @@ type ChatMessage = {
       font-size: clamp(14px, 1.8vw, 18px);
     }
 
-    .ai-result {
-      position: sticky;
-      top: 0;
-      background: rgba(27,27,27,0.9);
-      color: #fff;
-      padding: clamp(6px, 1.2vh, 12px) clamp(10px, 2vw, 16px);
-      font-size: 1rem;
-      border-bottom: 1px solid #363636;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      z-index: 5;
-    }
-
     .container_chat_bot .container-chat-options {
       position: relative;
       display: flex;
       background: linear-gradient(
         to bottom right,
-        #7e7e7e,
+        #4387f4,
         #363636,
         #363636,
         #363636,
@@ -191,7 +154,7 @@ type ChatMessage = {
     .container_chat_bot .container-chat-options .chat {
       display: flex;
       flex-direction: column;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.7);
       border-radius: 15px;
       width: 100%;
       overflow: hidden;
@@ -212,10 +175,10 @@ type ChatMessage = {
       font-family: sans-serif;
       font-size: 0.95rem;
       font-weight: 400;
-      padding: clamp(8px, 1.4vh, 12px);
+      padding: clamp(12px, 1.6vh, 18px);
       resize: none;
       outline: none;
-      min-height: 40px;
+      min-height: 48px;
       max-height: 160px;
       overflow-y: auto;
     }
@@ -240,7 +203,7 @@ type ChatMessage = {
     }
 
     .container_chat_bot .chat .chat-bot textarea::placeholder {
-      color: #f3f6fd;
+      color: #b0c4de;
       transition: all 0.3s ease;
     }
     .container_chat_bot .chat .chat-bot textarea:focus::placeholder {
@@ -267,16 +230,15 @@ type ChatMessage = {
       justify-content: center;
       width: clamp(36px, 4vw, 44px);
       height: clamp(36px, 4vw, 44px);
-      color: rgba(255, 255, 255, 0.12);
       background-color: transparent;
       border: none;
       cursor: pointer;
       transition: all 0.22s ease;
-    }
-
-    .container_chat_bot .chat .options .btns-add button:hover {
-      transform: translateY(-4px);
-      color: #ffffff;
+      border-radius: 50%;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        transform: translateY(-2px);
+      }
     }
 
     .container_chat_bot .chat .options .btn-submit {
@@ -294,7 +256,7 @@ type ChatMessage = {
 
     .container_chat_bot .chat .options .btn-submit:disabled {
       cursor: not-allowed;
-      opacity: 0.6;
+      opacity: 0.4;
     }
 
     .container_chat_bot .chat .options .btn-submit i {
@@ -314,18 +276,8 @@ type ChatMessage = {
     }
 
     .container_chat_bot .chat .options .btn-submit:hover:not(:disabled) svg {
-      color: #f3f6fd;
-      filter: drop-shadow(0 0 5px #ffffff);
-    }
-
-    .container_chat_bot .chat .options .btn-submit:focus:not(:disabled) svg {
-      color: #f3f6fd;
-      filter: drop-shadow(0 0 5px #ffffff);
-      transform: scale(1.12) rotate(45deg) translateX(-2px) translateY(1px);
-    }
-
-    .container_chat_bot .chat .options .btn-submit:active:not(:disabled) {
-      transform: scale(0.96);
+      color: #4387f4;
+      filter: drop-shadow(0 0 5px #4387f4);
     }
 
     .container_chat_bot .tags {
@@ -334,72 +286,141 @@ type ChatMessage = {
       color: #ffffff;
       font-size: 0.85rem;
       gap: clamp(6px, 1.2vw, 10px);
+      flex-wrap: wrap;
     }
 
     .container_chat_bot .tags span {
-      padding: clamp(4px, 0.8vh, 8px) clamp(6px, 1.2vw, 12px);
+      padding: clamp(6px, 1vh, 10px) clamp(10px, 1.5vw, 16px);
       background-color: #1b1b1b;
       border: 1.5px solid #363636;
       border-radius: 10px;
       cursor: pointer;
       user-select: none;
       font-size: 0.9em;
+      transition: all 0.25s;
+      
+      &:hover {
+        background-color: rgba(67, 135, 244, 0.1);
+        border-color: #4387f4;
+        color: #4387f4;
+      }
     }
 
     .messages-container {
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
       margin-bottom: 20px;
-      max-height: 500px;
+      height: 480px;
       overflow-y: auto;
-      padding-top: 42px;
+      padding: 16px;
       will-change: scroll-position;
       scrollbar-gutter: stable;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.2);
     }
 
     .message {
-      max-width: 75%;
-      padding: clamp(10px, 1.6vh, 14px) clamp(12px, 2vw, 18px);
-      border-radius: 14px;
+      max-width: 80%;
+      padding: clamp(12px, 1.6vh, 16px) clamp(14px, 2vw, 20px);
+      border-radius: 16px;
       color: white;
-      font-size: 1rem;
-      line-height: 1.4;
+      font-size: 0.98rem;
+      line-height: 1.6;
       word-break: break-word;
       contain: content;
+      white-space: pre-line;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
     .message.user {
       align-self: flex-end;
-      background: #4a4a4a;
+      background: #4387f4;
+      border-bottom-right-radius: 4px;
     }
 
     .message.ai {
       align-self: flex-start;
       background: #1b1b1b;
       border: 1px solid #363636;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.rtl {
+      direction: rtl;
+      text-align: right;
+      font-family: 'Outfit', 'Inter', sans-serif;
+    }
+
+    .message.ltr {
+      direction: ltr;
+      text-align: left;
+    }
+
+    .cursor-blink {
+      display: inline-block;
+      margin-left: 4px;
+      animation: blink 0.8s infinite;
+      color: #4387f4;
+      font-weight: bold;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
     }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AiChatComponent implements AfterViewInit {
+export class AiChatComponent implements OnInit, AfterViewInit, OnDestroy {
+  private sse = inject(SseService);
+  private cdr = inject(ChangeDetectorRef);
+
   messages: ChatMessage[] = [];
   userInput = '';
   latestAiText = '';
   isSending = false;
+  isArabicMode = true;
 
   @ViewChild('messagesContainer', { static: true })
   messagesContainer!: ElementRef<HTMLElement>;
 
   private rafScrollId: number | null = null;
   private maxMessages = 200;
+  private sseSub?: Subscription;
 
-  constructor(private zone: NgZone) { }
+  // Bilingual suggested questions (Arabic-first)
+  suggestedQuestionsAr = [
+    'ما هي كليات جامعة الجلالة؟',
+    'مصاريف الجامعة البريطانية',
+    'كليات الحاسبات في مصر',
+    'موقع جامعة المستقبل'
+  ];
+
+  suggestedQuestionsEn = [
+    'Galala University faculties',
+    'Tuition fees of British University',
+    'Computer Science in Egypt',
+    'Future University website'
+  ];
+
+  get suggestedQuestions(): string[] {
+    return this.isArabicMode ? this.suggestedQuestionsAr : this.suggestedQuestionsEn;
+  }
+
+  ngOnInit(): void {
+    this.loadHistory();
+  }
 
   ngAfterViewInit(): void {
     this.scrollToBottomRaf();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribeSse();
   }
 
   trackByMessageId(_: number, m: ChatMessage): string {
@@ -407,8 +428,46 @@ export class AiChatComponent implements AfterViewInit {
   }
 
   onTextareaInput(): void {
-    // Minor UX: keep scroll performance high by only scrolling after input changes settle.
     this.scrollToBottomRaf();
+  }
+
+  isArabicText(text: string): boolean {
+    return /[\u0600-\u06FF]/.test(text);
+  }
+
+  toggleLanguageMode() {
+    this.isArabicMode = !this.isArabicMode;
+    this.cdr.markForCheck();
+  }
+
+  loadHistory() {
+    try {
+      const hist = localStorage.getItem('futurepath_chat_history');
+      this.messages = hist ? JSON.parse(hist) : [];
+      this.cdr.markForCheck();
+    } catch (e) {
+      this.messages = [];
+    }
+  }
+
+  saveHistory() {
+    try {
+      localStorage.setItem('futurepath_chat_history', JSON.stringify(this.messages));
+    } catch (e) {
+      console.error('Failed to save chat history:', e);
+    }
+  }
+
+  clearHistory() {
+    this.messages = [];
+    this.saveHistory();
+    this.cdr.markForCheck();
+    this.scrollToBottomRaf();
+  }
+
+  askSuggestedQuestion(question: string) {
+    this.userInput = question;
+    this.sendMessage();
   }
 
   sendMessage(): void {
@@ -426,53 +485,68 @@ export class AiChatComponent implements AfterViewInit {
 
     this.messages = [...this.messages, userMsg];
     this.userInput = '';
+    this.saveHistory();
     this.scrollToBottomRaf();
+    this.cdr.markForCheck();
 
-    // Demo/mock AI (replace with your SSE service later if needed)
-    const fullAiText = 'Hello From AI✨';
+    // Prepare request parameters for the backend streaming SSE endpoint
+    const favorites = localStorage.getItem('uni_favorites') || '[]';
+    
+    // Build context history (limit to last 6 messages to keep it lightweight)
+    const contextHistory = this.messages.slice(-6).map(m => ({ sender: m.sender, text: m.text }));
+
+    const queryParams = new URLSearchParams({
+      message: text,
+      favoritesJson: favorites,
+      historyJson: JSON.stringify(contextHistory)
+    });
+
+    const url = `http://localhost:3000/api/ai/chat/stream?${queryParams.toString()}`;
+
+    // Connect to the Server-Sent Events stream
     const aiId = this.newId();
+    this.unsubscribeSse();
 
-    this.messages = [
-      ...this.messages,
-      { id: aiId, text: '', sender: 'ai' },
-    ];
-
-    const tokens = this.tokenize(fullAiText);
-    let i = 0;
-    const start = performance.now();
-
-    const tick = () => {
-      const elapsed = performance.now() - start;
-      // Adaptive rate: fewer UI updates on slower devices.
-      const msPerToken = Math.max(18, 70 - elapsed / 25);
-
-      i = Math.min(tokens.length, i + Math.max(1, Math.floor(msPerToken / 18)));
-      const nextText = tokens.slice(0, i).join('');
-
-      this.latestAiText = nextText;
-      this.messages = this.messages.map((m) =>
-        m.id === aiId ? { ...m, text: nextText } : m
-      );
-
-      if (i < tokens.length) {
-        // Run timers outside Angular to reduce change detection churn
-        this.zone.runOutsideAngular(() => {
-          setTimeout(() => this.zone.run(tick), msPerToken);
-        });
-      } else {
-        this.isSending = false;
+    this.sseSub = this.sse.getStream(url).subscribe({
+      next: (token) => {
+        this.latestAiText += token;
+        this.cdr.markForCheck();
         this.scrollToBottomRaf();
+      },
+      error: (err) => {
+        console.error('Error during chat stream:', err);
+        this.finalizeAiResponse(aiId);
+      },
+      complete: () => {
+        this.finalizeAiResponse(aiId);
       }
-
-      this.trimMessages();
-    };
-
-    this.zone.runOutsideAngular(() => setTimeout(() => this.zone.run(tick), 200));
+    });
   }
 
-  private trimMessages(): void {
-    if (this.messages.length <= this.maxMessages) return;
-    this.messages = this.messages.slice(this.messages.length - this.maxMessages);
+  private finalizeAiResponse(aiId: string) {
+    const finalResponse = this.latestAiText || (this.isArabicMode 
+      ? 'عذراً، حدث خطأ في الاتصال بالخادم.' 
+      : 'Sorry, a connection error occurred with the server.');
+
+    const aiMsg: ChatMessage = {
+      id: aiId,
+      text: finalResponse,
+      sender: 'ai',
+    };
+
+    this.messages = [...this.messages, aiMsg];
+    this.latestAiText = '';
+    this.isSending = false;
+    this.saveHistory();
+    this.scrollToBottomRaf();
+    this.cdr.markForCheck();
+  }
+
+  private unsubscribeSse() {
+    if (this.sseSub) {
+      this.sseSub.unsubscribe();
+      this.sseSub = undefined;
+    }
   }
 
   private scrollToBottomRaf(): void {
@@ -486,14 +560,7 @@ export class AiChatComponent implements AfterViewInit {
     });
   }
 
-  private tokenize(s: string): string[] {
-    // Simple tokenization for smooth streaming.
-    // Splitting by characters preserves emoji and punctuation reasonably.
-    return Array.from(s);
-  }
-
   private newId(): string {
     return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
   }
 }
-

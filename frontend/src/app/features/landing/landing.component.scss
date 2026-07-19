@@ -410,6 +410,13 @@
     
     i { font-size: 1.5rem; }
     span { font-size: 1.1rem; font-weight: 700; white-space: nowrap; }
+    
+    .uni-logo-small {
+      height: 24px;
+      width: 24px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
 
     &:hover {
       opacity: 1;
@@ -996,7 +1003,7 @@
   }
 }
 
-.uni-guide-btn {
+.future-path-btn {
   --black-700: hsla(0 0% 12% / 1);
   --border_radius: 9999px;
   --transtion: 0.3s ease-in-out;
@@ -1945,7 +1952,7 @@
       border: none;
       outline: none;
       
-      &.uni-guide-btn-outline {
+      &.future-path-btn-outline {
         background: transparent;
         border: 2px solid var(--border);
         color: var(--text);
@@ -1957,7 +1964,7 @@
         }
       }
       
-      &.uni-guide-btn {
+      &.future-path-btn {
         color: white;
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         

@@ -173,7 +173,7 @@ export class LanguageSwitcherComponent implements OnInit {
     this.translocoService.setActiveLang(langCode);
     this.updateLayout(langCode);
     this.showDropdown = false;
-    localStorage.setItem('uniguide_lang', langCode);
+    localStorage.setItem('futurepath_lang', langCode);
   }
 
   private updateLayout(lang: string) {

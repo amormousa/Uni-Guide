@@ -72,9 +72,11 @@
         <li>Ad-free experience</li>
       </ul>
 
-      <button class="buy-btn" routerLink="/auth/register" id="basic-plan-btn"
-              (click)="$event.stopPropagation()">
-        Buy Now
+      <button class="buy-btn" id="basic-plan-btn"
+              [disabled]="payingPlan !== null"
+              (click)="buyPlan('basic', $event)">
+        <span *ngIf="payingPlan !== 'basic'">Buy Now</span>
+        <span *ngIf="payingPlan === 'basic'" class="btn-spinner"></span>
       </button>
     </div>
 
@@ -103,9 +105,11 @@
         <li>Alerts (scholarships &amp; deadlines)</li>
       </ul>
 
-      <button class="buy-btn" routerLink="/auth/register" id="pro-plan-btn"
-              (click)="$event.stopPropagation()">
-        Subscribe Now
+      <button class="buy-btn" id="pro-plan-btn"
+              [disabled]="payingPlan !== null"
+              (click)="buyPlan('pro', $event)">
+        <span *ngIf="payingPlan !== 'pro'">Subscribe Now</span>
+        <span *ngIf="payingPlan === 'pro'" class="btn-spinner"></span>
       </button>
     </div>
 

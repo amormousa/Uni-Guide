@@ -1,6 +1,14 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
+
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { University } from './university.entity';
+import { Specialization } from './specialization.entity';
 
 @Entity('colleges')
 export class College extends BaseEntity {
@@ -11,10 +19,16 @@ export class College extends BaseEntity {
   description: string;
 
   @Column({ type: 'text', nullable: true })
-  type: string; // e.g., Engineering, Medicine, Arts
+  type: string;
 
   @Column({ type: 'jsonb', nullable: true })
   requirements: any;
+
+  @Column({
+    type: 'decimal',
+    nullable: true,
+  })
+  annualFee: number;
 
   @ManyToOne(() => University, (university) => university.colleges)
   @JoinColumn({ name: 'university_id' })
@@ -22,4 +36,14 @@ export class College extends BaseEntity {
 
   @Column({ name: 'university_id' })
   universityId: string;
+
+  // =========================
+  // MAJORS
+  // =========================
+
+  @OneToMany(
+    () => Specialization,
+    (specialization) => specialization.college,
+  )
+  specializations: Specialization[];
 }

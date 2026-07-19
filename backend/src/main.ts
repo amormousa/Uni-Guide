@@ -1,10 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
+
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({
     origin: ['http://localhost:4200'],
@@ -14,6 +17,10 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
+  app.useStaticAssets(join(process.cwd(), 'uploads'), {
+    prefix: '/uploads',
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -22,8 +29,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('UniGuide API')
-    .setDescription('UniGuide Backend APIs')
+    .setTitle('FuturePath API')
+    .setDescription('FuturePath Backend APIs')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

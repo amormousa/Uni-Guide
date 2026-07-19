@@ -1,4 +1,4 @@
-# 🔐 Uni-Guide — Auth API Contract Documentation
+# 🔐 FuturePath — Auth API Contract Documentation
 
 > هذا الملف يوضح **كل الـ Endpoints** اللي الفرونت إند محتاجها من الباك إند لنظام المصادقة (Authentication)،
 > مع شكل الداتا المرسلة والمستقبلة، وشكل الـ JWT Token.
@@ -23,8 +23,8 @@
 | البيئة | URL |
 |--------|-----|
 | **Development** | `http://localhost:3000/api` |
-| **Staging** | `https://staging-api.uniguide.com/api` |
-| **Production** | `https://api.uniguide.com/api` |
+| **Staging** | `https://staging-api.futurepath.com/api` |
+| **Production** | `https://api.futurepath.com/api` |
 
 ---
 
@@ -421,10 +421,10 @@ sequenceDiagram
 
 | Key | القيمة المخزنة | الشرح |
 |-----|---------------|-------|
-| `uniguide_access_token` | JWT Access Token | بيتبعت مع كل request محمي |
-| `uniguide_refresh_token` | Refresh Token | بيستخدم لتجديد الـ Access Token |
-| `uniguide_user` | `JSON.stringify(User)` | كاش لبيانات المستخدم |
-| `uniguide_lang` | `"ar"` / `"en"` / `"fr"` | اللغة الحالية |
+| `futurepath_access_token` | JWT Access Token | بيتبعت مع كل request محمي |
+| `futurepath_refresh_token` | Refresh Token | بيستخدم لتجديد الـ Access Token |
+| `futurepath_user` | `JSON.stringify(User)` | كاش لبيانات المستخدم |
+| `futurepath_lang` | `"ar"` / `"en"` / `"fr"` | اللغة الحالية |
 | `theme` | `"dark"` / `"light"` | الثيم الحالي |
 
 ---

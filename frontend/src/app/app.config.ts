@@ -25,7 +25,7 @@ export function initApp() {
   return () =>
     new Promise<void>((resolve) => {
       // Initialize Language
-      const lang = localStorage.getItem('uniguide_lang') || 'ar';
+      const lang = localStorage.getItem('futurepath_lang') || 'ar';
       doc.documentElement.lang = lang;
       doc.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
@@ -58,7 +58,7 @@ export const appConfig: ApplicationConfig = {
     provideTransloco({
       config: {
         availableLangs: ['ar', 'en', 'fr'],
-        defaultLang: localStorage.getItem('uniguide_lang') || 'ar',
+        defaultLang: localStorage.getItem('futurepath_lang') || 'ar',
         fallbackLang: 'en',
         reRenderOnLangChange: true,
         prodMode: !isDevMode(),

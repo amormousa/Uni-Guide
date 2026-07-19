@@ -1,7 +1,7 @@
-# UniGuide Master Auth Plan (Angular + NestJS)
+# FuturePath Master Auth Plan (Angular + NestJS)
 
 ## 1. Architecture Overview
-Project UniGuide follows a modern full-stack architecture using **NestJS** (v11) for the backend and **Angular** (v18+) for the frontend.
+Project FuturePath follows a modern full-stack architecture using **NestJS** (v11) for the backend and **Angular** (v18+) for the frontend.
 
 ### ── Full Authentication Flow ──
 ```mermaid

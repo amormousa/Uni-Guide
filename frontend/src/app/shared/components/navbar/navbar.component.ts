@@ -18,10 +18,10 @@ import { AuthService } from '../../../core/auth/auth.service';
         <div class="nav-left">
           <div class="logo" routerLink="/">
             <img [src]="isDarkMode ? 'assets/images/landing/lightlogo.png' : 'assets/images/landing/darklogo.png'" 
-                 alt="UniGuide Logo" class="logo-img">
-            <div class="logo-animated-text" data-text="UniGuide">
-              <span class="actual-text">&nbsp;UniGuide&nbsp;</span>
-              <span aria-hidden="true" class="hover-text">&nbsp;UniGuide&nbsp;</span>
+                 alt="FuturePath Logo" class="logo-img">
+            <div class="logo-animated-text" data-text="FuturePath">
+              <span class="actual-text">&nbsp;FuturePath&nbsp;</span>
+              <span aria-hidden="true" class="hover-text">&nbsp;FuturePath&nbsp;</span>
             </div>
           </div>
         </div>

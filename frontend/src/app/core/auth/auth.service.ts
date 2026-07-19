@@ -27,9 +27,9 @@ export class AuthService {
   private apiService = inject(ApiService);
   private router = inject(Router);
 
-  private readonly ACCESS_TOKEN_KEY = 'uniguide_access_token';
-  private readonly REFRESH_TOKEN_KEY = 'uniguide_refresh_token';
-  private readonly USER_KEY = 'uniguide_user';
+  private readonly ACCESS_TOKEN_KEY = 'futurepath_access_token';
+  private readonly REFRESH_TOKEN_KEY = 'futurepath_refresh_token';
+  private readonly USER_KEY = 'futurepath_user';
 
   private token = signal<string | null>(this.getStoredAccessToken());
   private user = signal<User | null>(this.getStoredUser());

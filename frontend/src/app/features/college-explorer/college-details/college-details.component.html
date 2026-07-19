@@ -1,0 +1,180 @@
+<div class="college-details-container">
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading College Details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-state">
+    <i class="fas fa-exclamation-triangle"></i>
+    <h2>Something went wrong</h2>
+    <p>{{ error }}</p>
+    <button (click)="goBack()" class="back-btn-error">
+      <i class="fas fa-arrow-left"></i> Go Back
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading && !error && college" class="college-card">
+
+    <!-- Header Banner -->
+    <header class="college-header">
+      <button class="back-nav-btn" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i>
+        <span>Back to Universities</span>
+      </button>
+
+      <div class="header-main-info">
+        <span class="college-badge" *ngIf="college.type">{{ college.type }}</span>
+        <h1>{{ college.name }}</h1>
+
+        <div class="university-meta">
+          <div class="uni-logo-wrapper" *ngIf="college.university.logo">
+            <img [src]="college.university.logo" [alt]="college.university.name">
+          </div>
+          <div class="uni-text-info">
+            <span class="uni-name">{{ college.university.name }}</span>
+            <span class="uni-loc" *ngIf="college.university.location">
+              <i class="fas fa-map-marker-alt"></i> Egypt
+            </span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Two-column layout -->
+    <div class="college-content-grid">
+
+      <!-- Left: Main sections -->
+      <main class="college-main-content">
+
+        <!-- About -->
+        <section class="details-section">
+          <div class="section-header">
+            <i class="fas fa-info-circle"></i>
+            <h2>About this Faculty</h2>
+          </div>
+          <div class="section-card">
+            <p class="college-description">
+              {{ college.description || ('Welcome to ' + college.name + ' at ' + college.university.name + '. This faculty is committed to delivering high-quality education and preparing graduates for competitive regional and global markets.') }}
+            </p>
+          </div>
+        </section>
+
+        <!-- Specializations -->
+        <section class="details-section">
+          <div class="section-header">
+            <i class="fas fa-graduation-cap"></i>
+            <h2>Majors &amp; Specializations</h2>
+          </div>
+          <div class="majors-grid" *ngIf="college.specializations.length > 0; else noMajors">
+            <div class="major-card" *ngFor="let spec of college.specializations">
+              <div class="major-icon"><i class="fas fa-bookmark"></i></div>
+              <span class="major-name">{{ spec.name }}</span>
+            </div>
+          </div>
+          <ng-template #noMajors>
+            <div class="section-card empty-card">
+              <p>General programme — no secondary specializations listed.</p>
+            </div>
+          </ng-template>
+        </section>
+
+        <!-- Requirements -->
+        <section class="details-section">
+          <div class="section-header">
+            <i class="fas fa-clipboard-list"></i>
+            <h2>Admission Requirements</h2>
+          </div>
+          <div class="section-card requirements-card">
+
+            <!-- String -->
+            <p *ngIf="isStringRequirements()" class="requirements-text">{{ college.requirements }}</p>
+
+            <!-- Array -->
+            <ul *ngIf="isArrayRequirements()" class="requirements-list">
+              <li *ngFor="let req of college.requirements">
+                <i class="fas fa-check-circle"></i>
+                <span>{{ req }}</span>
+              </li>
+            </ul>
+
+            <!-- Object -->
+            <div *ngIf="isObjectRequirements()" class="requirements-object">
+              <div class="req-item" *ngFor="let key of getObjectKeys(college.requirements)">
+                <span class="req-label">{{ key }}</span>
+                <span class="req-value">{{ college.requirements[key] }}</span>
+              </div>
+            </div>
+
+            <!-- Fallback checklist -->
+            <div *ngIf="!college.requirements">
+              <p class="fallback-note">General requirements for this faculty include:</p>
+              <ul class="requirements-list">
+                <li>
+                  <i class="fas fa-check-circle"></i>
+                  <div>
+                    <strong>Thanaweya Amma Certificate</strong>
+                    <span>Or equivalent (IGCSE / SAT / American Diploma) meeting the current year's minimum score.</span>
+                  </div>
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i>
+                  <div>
+                    <strong>Relevant High School Track</strong>
+                    <span>Mathematics, Science, or Literary track depending on the specialization.</span>
+                  </div>
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i>
+                  <div>
+                    <strong>Required Documents</strong>
+                    <span>Original certificate, birth certificate, national ID copy, 6 personal photos, military form (males).</span>
+                  </div>
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i>
+                  <div>
+                    <strong>Aptitude / Medical Tests</strong>
+                    <span>Faculty-specific tests where applicable.</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Right: Sidebar -->
+      <aside class="college-sidebar">
+
+        <!-- Annual Fee -->
+        <div class="sidebar-card fee-card">
+          <div class="fee-icon-bg"><i class="fas fa-coins"></i></div>
+          <h3>Annual Tuition Fee</h3>
+          <div class="fee-amount">
+            <span class="amount-number">{{ college.annualFee | number }}</span>
+            <span class="currency">EGP</span>
+          </div>
+          <p class="fee-disclaimer">Fees are subject to change by the university. Excludes accommodation &amp; admin charges.</p>
+        </div>
+
+        <!-- Apply -->
+        <div class="sidebar-card apply-card" *ngIf="college.university.website">
+          <h3>Apply to University</h3>
+          <p>Visit the official university portal to submit your application.</p>
+          <a [href]="college.university.website" target="_blank" class="apply-portal-btn">
+            <i class="fas fa-external-link-alt"></i>
+            <span>Visit Admission Portal</span>
+          </a>
+        </div>
+
+      </aside>
+    </div>
+
+  </div>
+</div>

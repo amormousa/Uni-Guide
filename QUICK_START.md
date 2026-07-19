@@ -1,4 +1,4 @@
-# 🚀 UniGuide - Quick Start
+# 🚀 FuturePath - Quick Start
 
 ## Step 1: تجهيز البيئة
 
@@ -34,7 +34,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=your_db_password
-DB_NAME=uniguide_db
+DB_NAME=futurepath_db
 ```
 
 #### تشغيل Backend
@@ -125,7 +125,7 @@ fetch('http://localhost:3000/api/auth/login', {
 })
   .then((r) => r.json())
   .then((d) => {
-    localStorage.setItem('uniguide_access_token', d.accessToken);
+    localStorage.setItem('futurepath_access_token', d.accessToken);
     console.log('Login Successful!', d);
   });
 ```
@@ -160,7 +160,7 @@ fetch('http://localhost:3000/api/auth/otp/verify', {
 ### 5. Get Current User (Protected)
 
 ```javascript
-const token = localStorage.getItem('uniguide_access_token');
+const token = localStorage.getItem('futurepath_access_token');
 fetch('http://localhost:3000/api/users/me', {
   headers: { Authorization: `Bearer ${token}` },
 })
@@ -184,8 +184,8 @@ npm run start:dev
 
 ```javascript
 // في browser console
-localStorage.getItem('uniguide_access_token');
-localStorage.getItem('uniguide_refresh_token');
+localStorage.getItem('futurepath_access_token');
+localStorage.getItem('futurepath_refresh_token');
 ```
 
 ### Check CORS
@@ -291,5 +291,5 @@ SELECT * FROM otp;
 
 ---
 
-**Made with ❤️ for UniGuide**
+**Made with ❤️ for FuturePath**
 Version: 1.0 | Date: 2026-05-05

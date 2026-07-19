@@ -25,6 +25,9 @@ import * as Joi from 'joi';
         JWT_REFRESH_EXPIRES_IN: Joi.string().default('7d'),
 
         FRONTEND_URL: Joi.string().default('http://localhost:4200'),
+
+        MYFATOORAH_API_URL: Joi.string().default('https://apitest.myfatoorah.com'),
+        MYFATOORAH_TOKEN: Joi.string().allow(''),
       }),
     }),
   ],

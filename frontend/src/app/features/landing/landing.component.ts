@@ -6,6 +6,7 @@ import { TranslocoService, TranslocoModule } from '@jsverse/transloco';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { FloatingLinesComponent } from '../../shared/components/floating-lines/floating-lines.component';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
+import { ApiService } from '../../core/services/api.service';
 
 @Component({
   selector: 'app-landing',
@@ -16,6 +17,7 @@ import { FooterComponent } from '../../shared/components/footer/footer.component
 })
 export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
   private translocoService = inject(TranslocoService);
+  private api = inject(ApiService);
   private langSubscription: any;
 
 
@@ -33,9 +35,13 @@ export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private typingTimeoutId: any;
 
+  universities: any[] = [];
+  duplicatedUniversities: any[] = [];
+
   ngOnInit() {
     this.detectTheme();
     this.setupThemeObserver();
+    this.loadUniversitiesForMarquee();
     
     // Subscribe to language changes asynchronously to update typing text
     this.langSubscription = this.translocoService.selectTranslate('hero.title').subscribe((translation) => {
@@ -47,6 +53,59 @@ export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
         this.displayText = "";
         this.isTypingDone = false;
         this.startTyping();
+      }
+    });
+  }
+
+  loadUniversitiesForMarquee() {
+    this.api.get<any[]>('/colleges/universities').subscribe({
+      next: (data) => {
+        const dbUnis = data || [];
+        const preferred = [
+          'MSA University',
+          'MTI University',
+          'Galala University',
+          'Cairo University',
+          'Ain Shams University',
+          'Helwan University',
+          'Alexandria University',
+          'Future University in Egypt',
+          'British University in Egypt',
+          'October University for Modern Sciences and Arts'
+        ];
+
+        // Pick preferred universities that exist in database
+        const selected: any[] = [];
+        preferred.forEach(name => {
+          const found = dbUnis.find(u => {
+            const uName = (u.name || '').toLowerCase().trim();
+            const pName = name.toLowerCase().trim();
+            return uName === pName || uName.includes(pName) || pName.includes(uName);
+          });
+          if (found && !selected.some(s => s.id === found.id)) {
+            selected.push(found);
+          }
+        });
+
+        // Fill remaining slots up to 10 with other universities from the database
+        if (selected.length < 10) {
+          for (const u of dbUnis) {
+            if (selected.length >= 10) break;
+            if (!selected.some(s => s.id === u.id)) {
+              selected.push(u);
+            }
+          }
+        }
+
+        // Limit to maximum of 10 items
+        const finalSelected = selected.slice(0, 10);
+        this.universities = finalSelected;
+
+        // Duplicate exactly once for smooth infinite loop marquee
+        this.duplicatedUniversities = [...finalSelected, ...finalSelected];
+      },
+      error: (err) => {
+        console.error('Failed to load universities for landing marquee:', err);
       }
     });
   }
@@ -90,9 +149,9 @@ export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
   activeTestimonialIndex = 0;
   testimonials = [
     { quote: "The AI quiz was scarily accurate. It understood my strengths better than my guidance counselor did.", author: "Marcus Chen", role: "HS Senior", avatar: "MC", color: "#a855f7" },
-    { quote: "Finding the right financial fit was my biggest worry. UniGuide made the scholarship search effortless.", author: "Elena Rodriguez", role: "MIT Sophomore", avatar: "ER", color: "#22c55e" },
+    { quote: "Finding the right financial fit was my biggest worry. FuturePath made the scholarship search effortless.", author: "Elena Rodriguez", role: "MIT Sophomore", avatar: "ER", color: "#22c55e" },
     { quote: "The roadmap showed me exactly what skills I need to learn. I now know exactly where I'm headed.", author: "David Kim", role: "University of Toronto Freshmen", avatar: "DK", color: "#f59e0b" },
-    { quote: "UniGuide helped me pivot from Medicine to Data Science. The personalized advice was a game changer.", author: "Sarah Johnson", role: "Stanford Graduate", avatar: "SJ", color: "#3b82f6" },
+    { quote: "FuturePath helped me pivot from Medicine to Data Science. The personalized advice was a game changer.", author: "Sarah Johnson", role: "Stanford Graduate", avatar: "SJ", color: "#3b82f6" },
     { quote: "I was lost between multiple career choices. The personality matching narrowed it down perfectly.", author: "Omar Hassan", role: "FAST-NU Junior", avatar: "OH", color: "#ec4899" }
   ];
 

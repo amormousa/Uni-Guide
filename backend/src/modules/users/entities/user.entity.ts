@@ -25,6 +25,9 @@ export class User extends BaseEntity {
   })
   role: UserRole;
 
+  @Column({ type: 'text', default: 'free' })
+  plan: string; // 'free' | 'basic' | 'pro'
+
   @Column({ type: 'text', nullable: true })
   governorate: string | null;
 

@@ -198,12 +198,12 @@ export class AuthService {
       });
 
       await transporter.sendMail({
-        from: '"UniGuide" <uni.guides.ai@gmail.com>',
+        from: '"FuturePath" <uni.guides.ai@gmail.com>',
         to: email,
-        subject: 'UniGuide Verification Code',
+        subject: 'FuturePath Verification Code',
         html: `
           <div style="font-family: Arial, sans-serif; padding:20px; border: 1px solid #eee; border-radius: 10px;">
-            <h2 style="color: #2563eb;">UniGuide Verification</h2>
+            <h2 style="color: #2563eb;">FuturePath Verification</h2>
             <p>Your verification code is:</p>
             <h1 style="color: #1e40af; letter-spacing: 5px;">${otp}</h1>
             <p>This code is valid for 10 minutes.</p>

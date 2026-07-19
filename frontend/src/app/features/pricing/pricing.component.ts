@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { PaymentService } from '../../core/services/payment.service';
 
 @Component({
   selector: 'app-pricing',
@@ -11,8 +12,9 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./pricing.component.scss']
 })
 export class PricingComponent {
-  isYearly = false;                              // default: Monthly
-  selectedPlan: 'free' | 'basic' | 'pro' | null = null; // nothing selected by default
+  isYearly = false;
+  selectedPlan: 'free' | 'basic' | 'pro' | null = null;
+  payingPlan: 'basic' | 'pro' | null = null;  // tracks which plan is being purchased
 
   // Contact Form Properties
   form = {
@@ -24,9 +26,30 @@ export class PricingComponent {
   formState: 'idle' | 'sending' | 'sent' | 'error' = 'idle';
   sendLetters = 'SendMessage'.split('');
 
+  constructor(private paymentService: PaymentService) {}
+
   selectPlan(plan: 'free' | 'basic' | 'pro') {
-    // toggle off if same card clicked again
     this.selectedPlan = this.selectedPlan === plan ? null : plan;
+  }
+
+  buyPlan(plan: 'basic' | 'pro', event: Event) {
+    event.stopPropagation();
+
+    if (this.payingPlan) return; // prevent double-click
+
+    this.payingPlan = plan;
+
+    this.paymentService.initiatePayment(plan, this.isYearly).subscribe({
+      next: (res) => {
+        // Redirect to MyFatoorah payment page
+        window.location.href = res.paymentUrl;
+      },
+      error: (err) => {
+        console.error('Payment initiation failed:', err);
+        this.payingPlan = null;
+        alert('Could not initiate payment. Please make sure you are logged in and try again.');
+      }
+    });
   }
 
   onSubmit() {
@@ -40,7 +63,7 @@ export class PricingComponent {
     formData.append('fi-sender-fullName', this.form.name);
     formData.append('fi-sender-email', this.form.email);
     formData.append('fi-text-message', this.form.message);
-    formData.append('source', 'Uni-Guide Pricing Contact');
+    formData.append('source', 'FuturePath Pricing Contact');
 
     fetch('https://forminit.com/f/zafwr4ueqw2', {
       method: 'POST',

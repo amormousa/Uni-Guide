@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎓 Uni-Guide — Frontend
+# 🎓 FuturePath — Frontend
 
 **AI-Powered University Guidance Platform**
 
@@ -192,8 +192,8 @@ frontend/
 │   │
 │   └── environments/
 │       ├── environment.ts                 # ✅ Dev  → http://localhost:3000/api
-│       ├── environment.staging.ts         # ✅ Stag → https://staging-api.uniguide.com/api
-│       └── environment.prod.ts            # ✅ Prod → https://api.uniguide.com/api
+│       ├── environment.staging.ts         # ✅ Stag → https://staging-api.futurepath.com/api
+│       └── environment.prod.ts            # ✅ Prod → https://api.futurepath.com/api
 │
 ├── package.json
 ├── tsconfig.json
@@ -296,10 +296,10 @@ interface DecodedToken {
 
 | Key | Purpose |
 |:----|:--------|
-| `uniguide_access_token` | JWT Access Token for API requests |
-| `uniguide_refresh_token` | Refresh Token for silent renewal |
-| `uniguide_user` | Cached User object (`JSON.stringify`) |
-| `uniguide_lang` | Active language (`ar` / `en` / `fr`) |
+| `futurepath_access_token` | JWT Access Token for API requests |
+| `futurepath_refresh_token` | Refresh Token for silent renewal |
+| `futurepath_user` | Cached User object (`JSON.stringify`) |
+| `futurepath_lang` | Active language (`ar` / `en` / `fr`) |
 | `theme` | Active theme (`dark` / `light`) |
 
 ---
@@ -511,8 +511,8 @@ Output is generated in the `dist/` directory.
 | Environment | API Base URL | File |
 |:------------|:-------------|:-----|
 | **Development** | `http://localhost:3000/api` | `environment.ts` |
-| **Staging** | `https://staging-api.uniguide.com/api` | `environment.staging.ts` |
-| **Production** | `https://api.uniguide.com/api` | `environment.prod.ts` |
+| **Staging** | `https://staging-api.futurepath.com/api` | `environment.staging.ts` |
+| **Production** | `https://api.futurepath.com/api` | `environment.prod.ts` |
 
 ---
 

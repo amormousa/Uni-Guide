@@ -8,6 +8,7 @@ import { QuizModule } from './modules/quiz/quiz.module';
 import { AiModule } from './modules/ai/ai.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 
 import { AppController } from './app.controller';
 
@@ -22,6 +23,7 @@ import { AppController } from './app.controller';
     AiModule,
     AnalyticsModule,
     NotificationsModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
 })

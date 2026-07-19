@@ -1,6 +1,6 @@
 # Authentication Module Documentation
 
-The Authentication Module manages user identity, registration, login, and multi-factor authentication (OTP) for the UniGuide platform.
+The Authentication Module manages user identity, registration, login, and multi-factor authentication (OTP) for the FuturePath platform.
 
 ## ── Endpoints ──
 

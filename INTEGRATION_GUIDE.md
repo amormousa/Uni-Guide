@@ -1,4 +1,4 @@
-# UniGuide Frontend-Backend Integration Guide
+# FuturePath Frontend-Backend Integration Guide
 
 ## ✅ تم تنفيذه (What's Been Done)
 
@@ -60,7 +60,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=your_secure_password
-DB_NAME=uniguide_db
+DB_NAME=futurepath_db
 ```
 
 3. **Set JWT Secret**

@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
+import { QuizComponent } from './quiz.component';
 
-@Component({ template: '', standalone: true }) class TempQuiz {}
-
-export const QUIZ_ROUTES: Routes = [{ path: '', component: TempQuiz }];
+export const QUIZ_ROUTES: Routes = [
+  {
+    path: '',
+    component: QuizComponent,
+  },
+];

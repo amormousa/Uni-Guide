@@ -1,9 +1,9 @@
 
 <div align="center">
 
-<img src="https://img.shields.io/badge/🎓-UniGuide-1a6be0?style=for-the-badge&labelColor=050d1f" alt="UniGuide Logo" height="40"/>
+<img src="https://img.shields.io/badge/🎓-FuturePath-1a6be0?style=for-the-badge&labelColor=050d1f" alt="FuturePath Logo" height="40"/>
 
-# UniGuide — AI-Powered University Guidance Platform
+# FuturePath — AI-Powered University Guidance Platform
 
 **Your Intelligent Path from High School to Career**
 
@@ -52,7 +52,7 @@
 
 ## 📋 Description
 
-**UniGuide** is a comprehensive, AI-powered university guidance platform designed to help high school graduates make informed, data-driven decisions about their higher education and career paths.
+**FuturePath** is a comprehensive, AI-powered university guidance platform designed to help high school graduates make informed, data-driven decisions about their higher education and career paths.
 
 ### The Problem
 
@@ -60,7 +60,7 @@ Every year, hundreds of thousands of high school students face one of the most c
 
 ### The Solution
 
-UniGuide bridges this gap by combining a **15-question AI personality quiz**, a **real-time chatbot**, a **salary predictor**, and a **visual career roadmap** into a seamless, intelligent platform. The system analyzes each student's profile and delivers highly personalized college and major recommendations — complete with actionable next steps.
+FuturePath bridges this gap by combining a **15-question AI personality quiz**, a **real-time chatbot**, a **salary predictor**, and a **visual career roadmap** into a seamless, intelligent platform. The system analyzes each student's profile and delivers highly personalized college and major recommendations — complete with actionable next steps.
 
 | Detail | Info |
 |:---|:---|
@@ -164,7 +164,7 @@ UniGuide bridges this gap by combining a **15-question AI personality quiz**, a 
 
 ## 🏗️ Project Architecture
 
-UniGuide follows a **clean, decoupled, three-tier architecture** with modern best practices:
+FuturePath follows a **clean, decoupled, three-tier architecture** with modern best practices:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -440,7 +440,7 @@ devOps/
 
 ```
 monoRepo/
-└── uniguide/
+└── futurepath/
     ├── docs/                          # Architecture & Guidelines Docs
     │   ├── ai-prompting.md
     │   ├── architecture.md
@@ -479,8 +479,8 @@ Ensure the following tools are installed on your machine:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/uniguide.git
-cd uniguide
+git clone https://github.com/your-org/futurepath.git
+cd futurepath
 ```
 
 ---
@@ -523,7 +523,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=your_secure_password
-DB_NAME=uniguide_db
+DB_NAME=futurepath_db
 
 # ── Redis ────────────────────────────────────────
 REDIS_HOST=localhost
@@ -542,7 +542,7 @@ GOOGLE_CALLBACK_URL=http://localhost:3000/api/auth/google/callback
 
 # ── SMS (OTP) ────────────────────────────────────
 SMS_API_KEY=your_sms_provider_api_key
-SMS_SENDER_ID=UniGuide
+SMS_SENDER_ID=FuturePath
 
 # ── AI Services ──────────────────────────────────
 OPENAI_API_KEY=sk-...
@@ -570,7 +570,7 @@ export const environment = {
 psql -U postgres
 
 # Create the database
-CREATE DATABASE uniguide_db;
+CREATE DATABASE futurepath_db;
 \q
 ```
 
@@ -830,7 +830,7 @@ All endpoints are automatically documented via **Swagger UI** at:
 
 ```
 http://localhost:3000/api         ← Development
-https://api.uniguide.app/api      ← Production
+https://api.futurepath.app/api      ← Production
 ```
 
 ### Authentication
@@ -981,12 +981,12 @@ aws cloudfront create-invalidation --distribution-id YOUR_DIST_ID --paths "/*"
 ```bash
 # Build the Docker image
 cd backend
-docker build -t uniguide-api:latest .
+docker build -t futurepath-api:latest .
 
 # Push to ECR (Elastic Container Registry)
 aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin <account>.dkr.ecr.eu-central-1.amazonaws.com
-docker tag uniguide-api:latest <account>.dkr.ecr.eu-central-1.amazonaws.com/uniguide-api:latest
-docker push <account>.dkr.ecr.eu-central-1.amazonaws.com/uniguide-api:latest
+docker tag futurepath-api:latest <account>.dkr.ecr.eu-central-1.amazonaws.com/futurepath-api:latest
+docker push <account>.dkr.ecr.eu-central-1.amazonaws.com/futurepath-api:latest
 ```
 
 ### CI/CD — GitHub Actions
@@ -1061,7 +1061,7 @@ This project is licensed under the **MIT License**.
 ```
 MIT License
 
-Copyright (c) 2026 UniGuide
+Copyright (c) 2026 FuturePath
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1086,7 +1086,7 @@ See the [LICENSE](LICENSE) file for the full legal text.
 
 <br/>
 
-**UniGuide**
+**FuturePath**
 
 *Built with precision, tested with rigor, deployed for scale.*
 
@@ -1094,7 +1094,7 @@ See the [LICENSE](LICENSE) file for the full legal text.
 
 ---
 
-*© 2026 UniGuide Platform. All rights reserved.*
+*© 2026 FuturePath Platform. All rights reserved.*
 
 <br/>
 

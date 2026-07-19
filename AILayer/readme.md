@@ -1,4 +1,4 @@
-# 🧠 UniGuide AI System — Roadmap & Task Breakdown
+# 🧠 FuturePath AI System — Roadmap & Task Breakdown
 
 ## 🎯 Goal
 

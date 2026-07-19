@@ -1,11 +1,67 @@
 {
-  "app": {
-    "title": "Votre Guide Universitaire Intelligent",
-    "welcome": "Bienvenue sur UniGuide"
-  },
   "nav": {
     "home": "Accueil",
-    "colleges": "Facultés",
-    "quiz": "Test d'aptitude"
+    "universities": "Universités",
+    "quiz": "Quiz",
+    "chat": "Chat IA",
+    "register": "S'inscrire"
+  },
+  "hero": {
+    "badge": "FuturePath IA",
+    "title": "Choisissez votre avenir avec sagesse",
+    "subtitle": "Une plateforme IA intégrée qui analyse les tendances des étudiants et suggère le collège, la spécialisation et l'université appropriés avec une feuille de route claire.",
+    "cta_start": "Commencer le test",
+    "cta_browse": "Parcourir les universités",
+    "scroll_down": "Faire défiler"
+  },
+  "problem": {
+    "badge": "La Crise",
+    "title": "Choisir une université ne devrait pas être un pari.",
+    "desc": "Chaque année, des milliers d'étudiants prennent des décisions cruciales basées sur des suppositions. Nous sommes là pour changer cela avec une clarté basée sur les données.",
+    "stress_factor": "Le Facteur Stress",
+    "stress_desc": "Les étudiants signalent un stress et une confusion extrêmes lors du choix de leur spécialisation.",
+    "regret_factor": "Le Facteur Regret",
+    "regret_desc": "Des diplômés regrettent leur choix de diplôme ou changent de voie dans les 2 ans.",
+    "financial_factor": "Le Facteur Financier",
+    "financial_desc": "Coût moyen d'un 'mauvais' diplôme en frais de scolarité perdus et retard de début de carrière."
+  },
+  "solution": {
+    "badge": "Notre Solution",
+    "title": "Combler le fossé avec l'intelligence artificielle",
+    "desc": "FuturePath propose une suite complète d'outils pour vous aider à naviguer dans votre avenir académique en toute confiance.",
+    "quiz_title": "Quiz de personnalité IA",
+    "quiz_desc": "Une évaluation structurée de 15 questions pour décoder vos véritables intérêts et aptitudes.",
+    "chatbot_title": "Chatbot en temps réel",
+    "chatbot_desc": "Assistance académique instantanée et aperçus universitaires, disponibles 24h/24 et 7j/7.",
+    "salary_title": "Prédicteur de salaire",
+    "salary_desc": "Estimations basées sur des données pour vos futurs gains selon les spécialisations choisies."
+  },
+  "process": {
+    "badge": "Le Processus",
+    "title": "Votre voyage vers le succès en 3 étapes simples",
+    "step1_title": "Passez le Quiz",
+    "step1_desc": "Répondez à 15 questions ciblées sur vos compétences et vos passions.",
+    "step2_title": "Analyse IA",
+    "step2_desc": "Nos algorithmes vous associent aux meilleures universités et domaines de carrière.",
+    "step3_title": "Obtenez la Feuille de Route",
+    "step3_desc": "Recevez une feuille de route professionnelle personnalisée avec des étapes exploitables."
+  },
+  "testimonials": {
+    "badge": "Histoires de Succès",
+    "title": "Ce que disent nos étudiants"
+  },
+  "footer": {
+    "cta_title": "Prêt à trouver votre voie ?",
+    "cta_desc": "Rejoignez plus de 10 000 étudiants qui ont trouvé l'université de leurs rêves avec FuturePath.",
+    "cta_btn": "Commencer gratuitement",
+    "brand_desc": "La plateforme alimentée par l'IA la plus avancée au monde pour l'orientation académique et professionnelle. Nous vous aidons à naviguer dans le voyage complexe d'étudiant à professionnel.",
+    "platform": "Plateforme",
+    "company": "Entreprise",
+    "join_title": "Rejoignez l'Avenir",
+    "join_desc": "Restez informé des dernières tendances en matière d'éducation et de carrière par l'IA.",
+    "systems_ok": "Tous les systèmes sont opérationnels",
+    "copyright": "Plateforme FuturePath IA. Pour les futurs leaders.",
+    "support": "Support",
+    "security": "Sécurité"
   }
 }

@@ -21,6 +21,8 @@ export const routes: Routes = [
       { path: 'quiz', loadChildren: () => import('./features/quiz/quiz.routes').then(m => m.QUIZ_ROUTES) },
       { path: 'chat', loadChildren: () => import('./features/ai-chat/ai-chat.routes').then(m => m.AI_CHAT_ROUTES) },
       { path: 'parent', loadChildren: () => import('./features/parent-dashboard/parent-dashboard.routes').then(m => m.PARENT_DASHBOARD_ROUTES) },
+      // 💎 Pricing Page — ready for MyFatoorah integration
+      { path: 'pricing', loadChildren: () => import('./features/pricing/pricing.routes').then(m => m.PRICING_ROUTES) },
     ],
   },
 

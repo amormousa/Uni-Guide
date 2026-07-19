@@ -1,10 +1,10 @@
 @echo off
 setlocal enabledelayedexpansion
 echo ================================================
-echo    Creating Uniguide Monorepo Root Structure...
+echo    Creating FuturePath Monorepo Root Structure...
 echo ================================================
 
-set BASE=uniguide
+set BASE=futurepath
 
 :: Create root folder
 mkdir "%BASE%" 2>nul
@@ -35,7 +35,7 @@ type nul > "docs\ai-prompting.md"
 
 echo.
 echo ================================================
-echo ✅ Uniguide Monorepo root structure created successfully!
+echo ✅ FuturePath Monorepo root structure created successfully!
 echo ================================================
 echo.
 echo Location: %CD%

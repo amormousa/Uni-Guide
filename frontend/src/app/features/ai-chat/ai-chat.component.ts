@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   NgZone,
@@ -396,7 +397,10 @@ export class AiChatComponent implements AfterViewInit {
   private rafScrollId: number | null = null;
   private maxMessages = 200;
 
-  constructor(private zone: NgZone) { }
+  constructor(
+    private zone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngAfterViewInit(): void {
     this.scrollToBottomRaf();
@@ -407,11 +411,10 @@ export class AiChatComponent implements AfterViewInit {
   }
 
   onTextareaInput(): void {
-    // Minor UX: keep scroll performance high by only scrolling after input changes settle.
     this.scrollToBottomRaf();
   }
 
-  sendMessage(): void {
+  async sendMessage(): Promise<void> {
     const text = this.userInput.trim();
     if (!text || this.isSending) return;
 
@@ -426,16 +429,30 @@ export class AiChatComponent implements AfterViewInit {
 
     this.messages = [...this.messages, userMsg];
     this.userInput = '';
+    this.cdr.markForCheck();
     this.scrollToBottomRaf();
 
-    // Demo/mock AI (replace with your SSE service later if needed)
-    const fullAiText = 'Hello From AI✨';
     const aiId = this.newId();
-
     this.messages = [
       ...this.messages,
       { id: aiId, text: '', sender: 'ai' },
     ];
+    this.cdr.markForCheck();
+
+    let fullAiText = '';
+    try {
+      // Try to get response from Backend Node.js AI Endpoint
+      const response = await fetch('http://localhost:3000/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: text }),
+      });
+      const data = await response.json();
+      fullAiText = data?.answer || data?.response || 'مرحباً بك! كيف يمكنني مساعدتك اليوم؟✨';
+    } catch {
+      // Fallback if backend API is not running locally
+      fullAiText = 'أهلاً بك! أنا مساعد UniGuide الذكي. كيف يمكنني مساعدتك؟✨';
+    }
 
     const tokens = this.tokenize(fullAiText);
     let i = 0;
@@ -443,31 +460,31 @@ export class AiChatComponent implements AfterViewInit {
 
     const tick = () => {
       const elapsed = performance.now() - start;
-      // Adaptive rate: fewer UI updates on slower devices.
-      const msPerToken = Math.max(18, 70 - elapsed / 25);
+      const msPerToken = Math.max(15, 60 - elapsed / 25);
 
-      i = Math.min(tokens.length, i + Math.max(1, Math.floor(msPerToken / 18)));
+      i = Math.min(tokens.length, i + Math.max(1, Math.floor(msPerToken / 15)));
       const nextText = tokens.slice(0, i).join('');
 
       this.latestAiText = nextText;
       this.messages = this.messages.map((m) =>
         m.id === aiId ? { ...m, text: nextText } : m
       );
+      this.cdr.markForCheck();
 
       if (i < tokens.length) {
-        // Run timers outside Angular to reduce change detection churn
         this.zone.runOutsideAngular(() => {
           setTimeout(() => this.zone.run(tick), msPerToken);
         });
       } else {
         this.isSending = false;
+        this.cdr.markForCheck();
         this.scrollToBottomRaf();
       }
 
       this.trimMessages();
     };
 
-    this.zone.runOutsideAngular(() => setTimeout(() => this.zone.run(tick), 200));
+    this.zone.runOutsideAngular(() => setTimeout(() => this.zone.run(tick), 100));
   }
 
   private trimMessages(): void {

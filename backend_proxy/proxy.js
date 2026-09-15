@@ -1,5 +1,4 @@
 const express = require('express');
-const { default: fetch } = require('node-fetch');
 require('dotenv').config(); // loads .env from backend_proxy/ directory
 
 const app = express();
@@ -27,7 +26,7 @@ app.post(['/api/gemini', '/api/chat'], async (req, res) => {
   }
 
   const endpoint =
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent';
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
   const body = {
     contents: [{ role: 'user', parts: [{ text: prompt.trim() }] }],
@@ -55,5 +54,11 @@ app.post(['/api/gemini', '/api/chat'], async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Proxy listening on http://localhost:${PORT}`));
+const PORT = process.env.PORT || 3001;
+const server = app.listen(PORT, () => console.log(`Proxy listening on http://localhost:${PORT}`));
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    const ALT_PORT = 3002;
+    app.listen(ALT_PORT, () => console.log(`Port ${PORT} in use, proxy fallback listening on http://localhost:${ALT_PORT}`));
+  }
+});

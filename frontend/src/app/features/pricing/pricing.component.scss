@@ -3,7 +3,6 @@
 :host {
   display: block;
   width: 100%;
-  margin-top: 5px;
 }
 
 /* ═══════════════════════════════════════
@@ -16,7 +15,7 @@
   flex-direction: column;
   align-items: center;
   padding: 64px 24px 80px;
-  margin-top: 5px;
+  margin-top: 45px;
   font-family: 'Inter', sans-serif;
   position: relative;
   overflow: hidden;
@@ -31,9 +30,8 @@
     width: 700px;
     height: 400px;
     background: radial-gradient(ellipse,
-      rgba(67, 135, 244, 0.08) 0%,
-      transparent 70%
-    );
+        rgba(67, 135, 244, 0.08) 0%,
+        transparent 70%);
     pointer-events: none;
   }
 }
@@ -133,16 +131,19 @@
   &.card-left {
     border-radius: 22px 80px 110px 22px;
   }
+
   &.card-center {
     border-radius: 22px 22px 90px 90px;
     max-width: 330px;
     /* Popular card is slightly elevated */
     transform: translateY(-12px);
     z-index: 2;
+
     &:hover:not(.selected) {
       transform: translateY(-20px);
     }
   }
+
   &.card-right {
     border-radius: 80px 22px 22px 110px;
   }
@@ -160,15 +161,25 @@
       0 0 0 3px rgba(67, 135, 244, 0.18),
       0 20px 50px rgba(67, 135, 244, 0.15);
 
-    &.card-left  { transform: translateY(-12px); }
-    &.card-center { transform: translateY(-22px) scale(1.02); }
-    &.card-right { transform: translateY(-12px); }
+    &.card-left {
+      transform: translateY(-12px);
+    }
+
+    &.card-center {
+      transform: translateY(-22px) scale(1.02);
+    }
+
+    &.card-right {
+      transform: translateY(-12px);
+    }
 
     /* glowing accent top bar */
     &::after {
       content: '';
       position: absolute;
-      top: 0; left: 10%; right: 10%;
+      top: 0;
+      left: 10%;
+      right: 10%;
       height: 3px;
       border-radius: 0 0 4px 4px;
       background: linear-gradient(90deg, transparent, var(--accent), transparent);
@@ -280,7 +291,9 @@
     border-bottom: 1px solid var(--border);
     transition: opacity 0.2s;
 
-    &:first-child { border-top: 1px solid var(--border); }
+    &:first-child {
+      border-top: 1px solid var(--border);
+    }
   }
 }
 
@@ -346,9 +359,12 @@
     }
 
     &.selected {
+
       &.card-left,
       &.card-center,
-      &.card-right { transform: translateY(-6px); }
+      &.card-right {
+        transform: translateY(-6px);
+      }
     }
   }
 }
@@ -424,11 +440,13 @@
   &.cf__feedback--show {
     display: block;
   }
+
   &.cf__feedback--success {
     background: rgba(16, 185, 129, 0.1);
     border: 1px solid rgba(16, 185, 129, 0.3);
     color: #10b981;
   }
+
   &.cf__feedback--error {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
@@ -437,8 +455,15 @@
 }
 
 @keyframes slideDownFeedback {
-  from { opacity: 0; transform: translateY(-12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .cf__form {
@@ -494,8 +519,8 @@
   }
 
   /* Float label on focus & has content */
-  &:focus ~ .cf__label,
-  &:not(:placeholder-shown) ~ .cf__label {
+  &:focus~.cf__label,
+  &:not(:placeholder-shown)~.cf__label {
     transform: translateY(-40px) scale(0.85);
     color: var(--accent);
     background: var(--card-bg);
@@ -541,6 +566,7 @@
     border-color: #ef4444 !important;
     box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15) !important;
   }
+
   .cf__label {
     color: #ef4444 !important;
     opacity: 1;
@@ -551,6 +577,7 @@
   .cf__input {
     border-color: #10b981 !important;
   }
+
   .cf__check {
     opacity: 1;
     transform: scale(1);
@@ -592,6 +619,7 @@
     color: #f5c518;
     opacity: 0.9;
   }
+
   &.cf__char--limit {
     color: #ef4444;
     opacity: 1;
@@ -610,9 +638,9 @@
   border-radius: var(--radius);
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
   border: none;
-  box-shadow: 
+  box-shadow:
     0 0.5px 0.5px 1px rgba(255, 255, 255, 0.1),
-    0 10px 20px rgba(0, 0, 0, 0.15), 
+    0 10px 20px rgba(0, 0, 0, 0.15),
     0 4px 5px 0px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
@@ -631,15 +659,15 @@
 
   &:hover {
     transform: scale(1.02);
-    box-shadow: 
+    box-shadow:
       0 0 1px 2px rgba(255, 255, 255, 0.15),
-      0 15px 30px rgba(0, 0, 0, 0.25), 
+      0 15px 30px rgba(0, 0, 0, 0.25),
       0 10px 3px -3px rgba(0, 0, 0, 0.04);
   }
 
   &:active {
     transform: scale(1);
-    box-shadow: 
+    box-shadow:
       0 0 1px 2px rgba(255, 255, 255, 0.1),
       0 10px 3px -3px rgba(0, 0, 0, 0.2);
   }
@@ -691,12 +719,10 @@
 .send-btn__outline-spin {
   position: absolute;
   inset: -100%;
-  background: conic-gradient(
-    from 180deg,
-    transparent 60%,
-    white 80%,
-    transparent 100%
-  );
+  background: conic-gradient(from 180deg,
+      transparent 60%,
+      white 80%,
+      transparent 100%);
   animation: spin 2s linear infinite;
   animation-play-state: paused;
 }
@@ -741,6 +767,7 @@
 /* Spinner */
 .send-btn__spinner {
   animation: spin 1s linear infinite;
+
   circle {
     stroke: var(--text);
   }
@@ -765,9 +792,18 @@
 }
 
 @keyframes wave {
-  30% { transform: translateY(4px) translateX(0) rotate(0); }
-  50% { transform: translateY(-3px) translateX(0) rotate(0); color: var(--primary); }
-  100% { transform: translateY(0) translateX(0) rotate(0); }
+  30% {
+    transform: translateY(4px) translateX(0) rotate(0);
+  }
+
+  50% {
+    transform: translateY(-3px) translateX(0) rotate(0);
+    color: var(--primary);
+  }
+
+  100% {
+    transform: translateY(0) translateX(0) rotate(0);
+  }
 }
 
 @keyframes slideDown {
@@ -777,9 +813,22 @@
     color: var(--primary);
     filter: blur(5px);
   }
-  30% { opacity: 1; transform: translateY(4px) translateX(0) rotate(0); filter: blur(0); }
-  50% { opacity: 1; transform: translateY(-3px) translateX(0) rotate(0); }
-  100% { opacity: 1; transform: translateY(0) translateX(0) rotate(0); }
+
+  30% {
+    opacity: 1;
+    transform: translateY(4px) translateX(0) rotate(0);
+    filter: blur(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-3px) translateX(0) rotate(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) rotate(0);
+  }
 }
 
 /* Loading & Sent States transitions */
@@ -789,6 +838,7 @@
     transform: translateY(10px);
     position: absolute;
   }
+
   .send-btn__state--loading {
     opacity: 1;
   }
@@ -800,6 +850,7 @@
     transform: translateY(10px);
     position: absolute;
   }
+
   .send-btn__state--sent {
     opacity: 1;
   }
@@ -807,7 +858,7 @@
   .send-btn__state--sent span {
     animation: slideDown 0.8s ease forwards calc(var(--i) * 0.2s);
   }
-  
+
   .send-btn__state--sent svg {
     animation: appear 1.2s ease forwards 0.8s;
   }
@@ -820,9 +871,23 @@
     color: var(--primary);
     filter: blur(4px);
   }
-  30% { opacity: 1; transform: scale(0.6); filter: blur(1px); }
-  50% { opacity: 1; transform: scale(1.2); filter: blur(0); }
-  100% { opacity: 1; transform: scale(1); }
+
+  30% {
+    opacity: 1;
+    transform: scale(0.6);
+    filter: blur(1px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Plane animations */
@@ -856,9 +921,19 @@
 }
 
 @keyframes takeOff {
-  0% { opacity: 1; }
-  60% { opacity: 1; transform: translateX(70px) rotate(45deg) scale(2); }
-  100% { opacity: 0; transform: translateX(160px) rotate(45deg) scale(0); }
+  0% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateX(70px) rotate(45deg) scale(2);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(160px) rotate(45deg) scale(0);
+  }
 }
 
 /* Contrail */
@@ -873,10 +948,24 @@
 }
 
 @keyframes contrail {
-  0% { width: 0; opacity: 1; }
-  8% { width: 15px; }
-  60% { opacity: 0.7; width: 80px; }
-  100% { opacity: 0; width: 160px; }
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+
+  8% {
+    width: 15px;
+  }
+
+  60% {
+    opacity: 0.7;
+    width: 80px;
+  }
+
+  100% {
+    opacity: 0;
+    width: 160px;
+  }
 }
 
 /* Responsive adjustment for row */
@@ -885,6 +974,7 @@
     flex-direction: column;
     gap: 28px;
   }
+
   .cf__card {
     padding: 32px 20px;
   }

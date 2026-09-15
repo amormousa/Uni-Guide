@@ -1,0 +1,14 @@
+{
+  "name": "backend-proxy",
+  "version": "0.0.1",
+  "private": true,
+  "main": "proxy.js",
+  "scripts": {
+    "start": "node proxy.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "node-fetch": "^3.3.2",
+    "dotenv": "^16.4.5"
+  }
+}

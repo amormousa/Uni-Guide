@@ -25,6 +25,7 @@ import * as Joi from 'joi';
         JWT_REFRESH_EXPIRES_IN: Joi.string().default('7d'),
 
         FRONTEND_URL: Joi.string().default('http://localhost:4200'),
+        AI_API_KEY: Joi.string().optional().allow(''),
       }),
     }),
   ],

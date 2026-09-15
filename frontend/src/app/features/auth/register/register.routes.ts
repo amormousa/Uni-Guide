@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
+import { RegisterComponent } from './register.component';
 
-@Component({ template: '', standalone: true }) class TempRegister {}
-
-export const REGISTER_ROUTES: Routes = [{ path: '', component: TempRegister }];
+export const REGISTER_ROUTES: Routes = [
+  { path: '', component: RegisterComponent }
+];

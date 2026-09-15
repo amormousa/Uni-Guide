@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.fursal-screen {
+  min-height: calc(100vh - 70px);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64px 24px 80px;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.fursal-title {
+  position: relative;
+  z-index: 1;
+  color: var(--text);
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 10px;
+}
+
+.fursal-subtitle {
+  position: relative;
+  z-index: 1;
+  color: var(--text);
+  opacity: 0.55;
+  font-size: 0.97rem;
+  text-align: center;
+  margin: 0;
+}

@@ -133,7 +133,8 @@ UniGuide bridges this gap by combining a **15-question AI personality quiz**, a 
 
 ### 💬 AI Chatbot (Arabic RAG)
 - Latest LLM powered chatbot with Retrieval-Augmented Generation over the college database
-- Fully Arabic, RTL-native chat interface with streaming text responses
+- Direct integration with NestJS Node.js Backend API (`/api/ai/chat`) and Gemini LLM model
+- Fully Arabic, RTL-native chat interface with automatic real-time async response streaming (with `ChangeDetectorRef` instant UI sync)
 - Suggested question chips for guided exploration
 - Conversation history persistence per user session
 

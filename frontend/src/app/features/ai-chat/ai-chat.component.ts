@@ -16,6 +16,7 @@ type ChatMessage = {
   id: string;
   text: string;
   sender: ChatSender;
+  sources?: Array<{ id: string; title: string; type: string }>;
 };
 
 @Component({
@@ -34,7 +35,13 @@ type ChatMessage = {
           class="message"
           [ngClass]="msg.sender"
         >
-          {{ msg.text }}
+          <div class="msg-text">{{ msg.text }}</div>
+          <div class="sources-list" *ngIf="msg.sources && msg.sources.length">
+            <span class="sources-header">📍 المصادر الموثوقة:</span>
+            <span *ngFor="let src of msg.sources" class="source-chip" [title]="src.type">
+              {{ src.title }}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -440,15 +447,20 @@ export class AiChatComponent implements AfterViewInit {
     this.cdr.markForCheck();
 
     let fullAiText = '';
+    let sources: Array<{ id: string; title: string; type: string }> = [];
+
     try {
-      // Try to get response from Backend Node.js AI Endpoint
-      const response = await fetch('http://localhost:3000/api/ai/chat', {
+      // Get RAG response from Backend NestJS AI Endpoint
+      const response = await fetch('http://localhost:3000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: text }),
       });
       const data = await response.json();
       fullAiText = data?.answer || data?.response || 'مرحباً بك! كيف يمكنني مساعدتك اليوم؟✨';
+      if (data?.sources) {
+        sources = data.sources;
+      }
     } catch {
       // Fallback if backend API is not running locally
       fullAiText = 'أهلاً بك! أنا مساعد UniGuide الذكي. كيف يمكنني مساعدتك؟✨';
@@ -467,7 +479,7 @@ export class AiChatComponent implements AfterViewInit {
 
       this.latestAiText = nextText;
       this.messages = this.messages.map((m) =>
-        m.id === aiId ? { ...m, text: nextText } : m
+        m.id === aiId ? { ...m, text: nextText, sources: sources.length ? sources : m.sources } : m
       );
       this.cdr.markForCheck();
 

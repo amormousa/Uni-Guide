@@ -9,6 +9,6 @@ import { CollegesController } from './colleges.controller';
   imports: [TypeOrmModule.forFeature([University, College])],
   providers: [CollegesService],
   controllers: [CollegesController],
-  exports: [TypeOrmModule],
+  exports: [CollegesService, TypeOrmModule],
 })
 export class CollegesModule {}

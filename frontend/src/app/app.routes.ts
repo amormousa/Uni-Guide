@@ -20,6 +20,7 @@ export const routes: Routes = [
       { path: 'colleges', loadChildren: () => import('./features/college-explorer/college-explorer.routes').then(m => m.COLLEGE_EXPLORER_ROUTES) },
       { path: 'quiz', loadChildren: () => import('./features/quiz/quiz.routes').then(m => m.QUIZ_ROUTES) },
       { path: 'chat', loadChildren: () => import('./features/ai-chat/ai-chat.routes').then(m => m.AI_CHAT_ROUTES) },
+      { path: 'salary', loadChildren: () => import('./features/salary-predictor/salary-predictor.routes').then(m => m.SALARY_PREDICTOR_ROUTES) },
       { path: 'parent', loadChildren: () => import('./features/parent-dashboard/parent-dashboard.routes').then(m => m.PARENT_DASHBOARD_ROUTES) },
       // 💎 Pricing Page — ready for MyFatoorah integration
       { path: 'pricing', loadChildren: () => import('./features/pricing/pricing.routes').then(m => m.PRICING_ROUTES) },
